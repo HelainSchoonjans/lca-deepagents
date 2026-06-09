@@ -34,7 +34,7 @@
     question="Where does your system_prompt sit in the assembled prompt the model receives?"
     choices='["After the BASE instructions, before the SUFFIX", "At the very front, before the BASE instructions", "At the end, after the SUFFIX", "It replaces the BASE instructions entirely"]'
     correctIndex={1}
-    explanation="The SDK slots the USER segment, your system_prompt, at the very front of the assembled prompt, ahead of the BASE behavior instructions and any SUFFIX. It is the first thing the model reads, which is why it reliably shapes tone and persona."
+    explanation="The SDK slots the USER segment, your system_prompt, at the very front of the assembled prompt, ahead of the BASE behavior instructions and any SUFFIX."
 />
 
 <MCQ

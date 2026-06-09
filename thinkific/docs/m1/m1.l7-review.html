@@ -542,7 +542,7 @@
 <li><strong>BASE</strong> is the SDK's built-in <em>behavior</em> prompt (<code>BASE_AGENT_PROMPT</code>), not the<br />
   provider's; the <strong>filesystem</strong> instructions and tools come from the mandatory<br />
 <code>FilesystemMiddleware</code>, not from BASE.</li>
-<li><strong>USER</strong> is your <code>system_prompt</code>; it sits at the front so your voice wins.</li>
+<li><strong>USER</strong> is your <code>system_prompt</code>; it sits at the front of the assembled prompt.</li>
 <li><strong>SUFFIX</strong> is harness-profile tuning; our <code>claude-haiku-4-5</code> default ships one.</li>
 <li>You can read the whole assembled <code>system</code> message for any run in <strong>LangSmith</strong>.</li>
 </ul>
