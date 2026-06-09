@@ -45,12 +45,9 @@
   <g opacity="0.2">
     <path d="M 410 260 L 416 260 L 416 382 L 410 382" fill="none" stroke="#D4834A" stroke-width="1.5"/>
     <line x1="416" y1="321" x2="424" y2="321" stroke="#D4834A" stroke-width="1.5"/>
-    <text x="430" y="313" font-size="10" font-weight="700" fill="#7A3A10">middleware append</text>
-    <text x="430" y="327" font-size="9" fill="#B5703A">mandatory · runs on</text>
-    <text x="430" y="340" font-size="9" fill="#B5703A">every request</text>
   </g>
 
-  <!-- "Coming up" label over faded middleware area -->
-  <text x="222" y="310" text-anchor="middle" font-size="13" font-weight="700" fill="#9AB0C8">+ middleware</text>
-  <text x="222" y="330" text-anchor="middle" font-size="11" fill="#B0C8E0">covered in a later lesson</text>
+  <!-- Middleware label to the side, outside the faded group -->
+  <text x="430" y="314" font-size="10" font-weight="700" fill="#B5703A">+ middleware</text>
+  <text x="430" y="329" font-size="9" fill="#9AB0C8">covered in a later lesson</text>
 </svg>
