@@ -633,6 +633,7 @@ buildSlideshow({
   ]
 });
 </script>
+<p>The diagram above shows the abstract structure. Here's what the assembled prompt actually looks like in a LangSmith trace:</p>
 <p><img src="images/m1.l3-scaffolding.svg" alt="LangSmith-style view of what the model receives: a system message assembled by the SDK (Core Behavior, Professional Objectivity, Doing Tasks, and more) followed by the user's question. The system section is identical for every model; only the engine reading it changes." style="width: 740px; max-width: 100%;" /></p>
 <h3 id="what-is-the-user">What is the USER?</h3>
 <p>The USER is the <code>system_prompt</code> argument you pass to <code>create_deep_agent</code>. It sits at the very front of the assembled prompt. It's optional: if you pass nothing, the agent still runs fine on the BASE alone.</p>
