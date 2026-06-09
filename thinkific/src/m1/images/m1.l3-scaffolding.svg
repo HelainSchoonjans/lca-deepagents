@@ -75,14 +75,14 @@
   <text x="472" y="273" font-size="10" fill="#6A8EB0">only the engine reading it,</text>
   <text x="472" y="288" font-size="10" fill="#6A8EB0">not what it reads.</text>
 
-  <!-- ═══ ARROW (points to user section) — amber, prominent ═══ -->
+  <!-- ═══ ARROW (points to user section): amber, prominent ═══ -->
   <line x1="430" y1="345" x2="457" y2="345" stroke="#D97706" stroke-width="2"/>
   <polygon points="453,341 461,345 453,349" fill="#D97706"/>
 
   <!-- User role disambiguation callout -->
   <rect x="461" y="326" width="240" height="76" rx="6" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
   <text x="472" y="344" font-size="9.5" font-weight="700" fill="#92400E">⚠ LangSmith's "user" = human message role</text>
-  <text x="472" y="359" font-size="9" fill="#78350F">This is the question you typed — not the</text>
+  <text x="472" y="359" font-size="9" fill="#78350F">This is the question you typed, not the</text>
   <text x="472" y="373" font-size="9" fill="#78350F">USER segment (your system_prompt).</text>
   <text x="472" y="387" font-size="9" fill="#B45309">USER lives inside the system section above.</text>
 
