@@ -755,12 +755,8 @@ SYSTEM_PROMPT = (
 <p>Each one changes the agent's voice without touching anything else. That single<br />
 string is your USER segment.</p>
 </details>
-<details class="run-code">
-<summary>&lt;/&gt; run this code</summary>
-<div class="run-code-content">
-<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;bash&quot;, &quot;code&quot;: &quot;uv run ./python/m1/scratch_agent.py&quot;, &quot;highlights&quot;: [], &quot;noHeader&quot;: true}]}"></div>
-</div>
-</details>
+<pre><code class="language-bash">uv run ./python/m1/scratch_agent.py
+</code></pre>
 <p>If you used the pirate persona, the reply should come back with 'arr' and nautical slang. That's the USER segment taking effect.</p>
 <h3 id="check-the-trace-in-langsmith">Check the trace in LangSmith</h3>
 <p>Open the run in <strong>LangSmith</strong>, click the LLM call, and read the first <code>system</code><br />

@@ -567,9 +567,25 @@ project's pyproject.toml, so no new dependencies are needed.
 Run it with (from the lca-deepagents repo root):
   uv run ./python/m1/scratch_agent.py
 </code></pre>
-<p>Once your coding agent has created the file, run it:</p>
-<details class="run-code"><summary>&lt;/&gt; run this code</summary><div class="run-code-content"><div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;bash&quot;, &quot;code&quot;: &quot;uv run ./python/m1/scratch_agent.py&quot;, &quot;highlights&quot;: [], &quot;noHeader&quot;: true}]}"></div></div></details>
+<details>
+<summary>Don't have a coding agent? Copy the code directly [click to expand]</summary>
+<p><br></p>
+<p>Create <code>python/m1/scratch_agent.py</code> with the following:</p>
+<pre><code class="language-python">import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from models import model
 
+from deepagents import create_deep_agent
+
+agent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)
+result = agent.invoke({&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is an LLM?&quot;}]})
+print(result[&quot;messages&quot;][-1].content)
+</code></pre>
+</details>
+<p>Once your coding agent has created the file, run it:</p>
+<pre><code class="language-bash">uv run ./python/m1/scratch_agent.py
+</code></pre>
 <div class="callout">
 <strong>Troubleshooting</strong>
 <ul>

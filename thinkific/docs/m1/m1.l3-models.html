@@ -598,21 +598,13 @@ the notes at the top of <code>models.py</code>.</p>
 <div class="lt-panel" id="p-lab1" role="tabpanel">
 <h2 id="lab-1-models-the-base-system-prompt">Lab 1: Models &amp; the Base System Prompt</h2>
 <p>Run your scratch agent (the file you created in the previous lesson) if you haven't already:</p>
-<details class="run-code">
-<summary>&lt;/&gt; run this code</summary>
-<div class="run-code-content">
-<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;bash&quot;, &quot;code&quot;: &quot;uv run ./python/m1/scratch_agent.py&quot;, &quot;highlights&quot;: [], &quot;noHeader&quot;: true}]}"></div>
-</div>
-</details>
+<pre><code class="language-bash">uv run ./python/m1/scratch_agent.py
+</code></pre>
 <p>Now <strong>switch the model in <code>python/models.py</code></strong> (comment the current line for<br />
 Haiku and uncomment another line for the model you want to use) and run it<br />
 again, so you have two runs to compare.</p>
-<details class="run-code">
-<summary>&lt;/&gt; run this code</summary>
-<div class="run-code-content">
-<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;bash&quot;, &quot;code&quot;: &quot;uv run ./python/m1/scratch_agent.py&quot;, &quot;highlights&quot;: [], &quot;noHeader&quot;: true}]}"></div>
-</div>
-</details>
+<pre><code class="language-bash">uv run ./python/m1/scratch_agent.py
+</code></pre>
 <p>The SDK (Software Development Kit) wraps the same BASE instructions around every model, and middleware adds the same filesystem tools on top; the model itself still determines how it responds.</p>
 <p>Here are two real responses to "What is an LLM?", one from each model:</p>
 <div style="display:flex;gap:20px;align-items:flex-start;margin:1.5rem 0;">
