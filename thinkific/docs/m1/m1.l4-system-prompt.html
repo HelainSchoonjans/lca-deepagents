@@ -660,10 +660,10 @@ buildSlideshow({
 <tbody>
 <tr>
 <td style="vertical-align:top">
-<p>When you pass no <code>system_prompt</code>, the model still receives the <strong>BASE</strong> prompt. Which means that the model still has behavior guidance (Core Behavior, Professional Objectivity, Doing Tasks) and includes the filesystem tools and task-planning instructions the SDK adds automatically.</p>
+<p>No <code>system_prompt</code> passed. The agent runs on BASE alone.</p>
 </td>
 <td style="vertical-align:top">
-<p>You can add your own instructions to the prompt by passing <code>system_prompt=...</code>. This is the <strong>USER</strong> segment, and it can be anything: constraints, a domain, or just a voice/persona (Shakespearean, pirate, cowboy). We'll add one in Lab 2. Your text doesn't replace the SDK's BASE guidance; the agent keeps that and gains your steering as well.</p>
+<p><code>system_prompt</code> passed. Your text becomes the USER segment and sits in front of BASE; both are active.</p>
 </td>
 </tr>
 </tbody>
