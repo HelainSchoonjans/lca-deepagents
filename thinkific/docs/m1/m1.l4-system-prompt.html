@@ -634,7 +634,7 @@ buildSlideshow({
 });
 </script>
 <h3 id="what-is-the-user">What is the USER?</h3>
-<p>The USER is the <code>system_prompt</code> argument you pass to <code>create_deep_agent</code>. It sits at the very front of the assembled prompt, so it's the first thing the model reads; that's what makes it so effective for shaping tone and persona. It's optional: if you pass nothing, the agent still runs fine on the BASE alone.</p>
+<p>The USER is the <code>system_prompt</code> argument you pass to <code>create_deep_agent</code>. It sits at the very front of the assembled prompt. It's optional: if you pass nothing, the agent still runs fine on the BASE alone.</p>
 <p>In Lab 2, you'll experiment with different personas (pirate, cowboy, Shakespeare) to see how a single line of text steers the agent's voice without touching anything else.</p>
 <h3 id="what-is-the-base">What is the BASE?</h3>
 <p>The BASE is the "batteries included" part: built-in behavior guidance and tooling the SDK injects on every call, regardless of what you pass.</p>
