@@ -73,3 +73,32 @@ model = init_chat_model("anthropic:claude-sonnet-4-6")
 # Requires GOOGLE_API_KEY in .env
 #
 # model = init_chat_model("google_genai:gemini-2.5-flash")
+
+
+# ---- Open-Source / Alternative Hosted Models --------------------------------
+
+# Groq: fast hosted inference for Llama, Mixtral, and others (free tier available)
+# Install first:  uv add langchain-groq
+# Requires GROQ_API_KEY in .env  (get one at console.groq.com)
+#
+# model = init_chat_model("groq:llama-3.3-70b-versatile")
+# model = init_chat_model("groq:mixtral-8x7b-32768")
+
+
+# Ollama: run models locally — no API key required
+# Install first:  uv add langchain-ollama  (and install Ollama: https://ollama.com)
+# Pull a model first, e.g.:  ollama pull llama3.2
+#
+# model = init_chat_model("ollama:llama3.2")
+# model = init_chat_model("ollama:qwen2.5:7b")
+
+
+# Kimi (Moonshot AI): OpenAI-compatible hosted API
+# No extra install needed (langchain-openai is already a default dep)
+# Requires MOONSHOT_API_KEY in .env  (get one at platform.moonshot.cn)
+#
+# from langchain_openai import ChatOpenAI
+# model = ChatOpenAI(
+#     model="moonshot-v1-8k",
+#     base_url="https://api.moonshot.cn/v1",
+# )
