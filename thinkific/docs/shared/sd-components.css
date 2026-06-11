@@ -196,6 +196,15 @@ details > summary {
   border-radius: 6px;
 }
 details > summary::-webkit-details-marker { display: none; }
+details > summary::before {
+  content: '▶';
+  display: inline-block;
+  margin-right: 7px;
+  font-size: 0.65em;
+  transition: transform 0.2s;
+  vertical-align: 1px;
+}
+details[open] > summary::before { transform: rotate(90deg); }
 details[open] > summary {
   border-bottom: 1px solid #CCE9FF;
   border-radius: 6px 6px 0 0;
