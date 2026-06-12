@@ -628,9 +628,6 @@ buildSlideshow({
 <p><img src="images/m1.l3-scaffolding.svg" alt="LangSmith-style view of what the model receives: a system message assembled by the SDK (Core Behavior, Professional Objectivity, Doing Tasks, and more) followed by the user's question. The system section is identical for every model; only the engine reading it changes." style="width: 740px; max-width: 100%;" /></p>
 <h3 id="what-is-the-user">What is the USER?</h3>
 <p>The USER is the <code>system_prompt</code> argument you pass to <code>create_deep_agent</code>. It sits at the very front of the assembled prompt.</p>
-<blockquote>
-<p><strong>Not to be confused with the "user" label in the assembled prompt structure diagram above.</strong> That label is the message role for the human's chat turn. The USER segment here is part of the <em>system</em> message; it's your instructions to the agent, not the question you asked it.</p>
-</blockquote>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
 In Lab 2, you'll add a **system prompt** for the first time by passing a persona (pirate, cowboy, Shakespeare) and see how that single line steers the agent's voice without touching anything else.
 
