@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m1-models-systemprompt-quiz</title>
+    <title>m1.l5-tools-quiz</title>
     <meta name="description" content="">
 
     <!-- Syntax highlighting -->
@@ -526,91 +526,78 @@
     </style>
 </head>
 <body>
-    <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1-models-systemprompt-quiz.html" target="_blank" rel="noopener noreferrer">🔗 For translation, open lesson in new tab and use Chrome translate</a></p>
+    <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1.l5-tools-quiz.html" target="_blank" rel="noopener noreferrer">🔗 For translation, open lesson in new tab and use Chrome translate</a></p>
 <style>@import url('../shared/sd-components.css');</style>
 <script src="../shared/sd-components.js"></script>
 
-<h1 id="quiz-models-the-system-prompt">Quiz: Models &amp; the System Prompt</h1>
-<div class="mcq-container" id="mcq-54ea92d1">
+<h1 id="quiz-tools">Quiz: Tools</h1>
+<div class="mcq-container" id="mcq-e6c89cc3">
     <div class="mcq-question">
-        <strong>Question:</strong> What does the string 'anthropic:claude-haiku-4-5' in init_chat_model('anthropic:claude-haiku-4-5') specify?
+        <strong>Question:</strong> You pass tools=[my_tool] to create_deep_agent. What happens to the built-in tools like read_file and write_todos?
     </div>
     <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, '54ea92d1')"><strong>A)</strong> Just the model; the provider is inferred from the API key</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '54ea92d1')"><strong>B)</strong> Just the provider; the model defaults to the latest version</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, '54ea92d1')"><strong>C)</strong> Both the provider and the model, letting one function target any LangChain-supported backend</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '54ea92d1')"><strong>D)</strong> The API endpoint URL to call</div>
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'e6c89cc3')"><strong>A)</strong> They are replaced by my_tool</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e6c89cc3')"><strong>B)</strong> They are disabled until re-added explicitly</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'e6c89cc3')"><strong>C)</strong> They are merged with my_tool — both are available</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e6c89cc3')"><strong>D)</strong> They move to a separate tool list the agent accesses on request</div>
     </div>
-    <div id="mcq-answer-54ea92d1" class="mcq-answer" style="display: none;">
+    <div id="mcq-answer-e6c89cc3" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
-        <div class="mcq-explanation">The provider:model format tells init_chat_model which LangChain integration to use and which model to request. Changing the prefix (e.g. openai: vs anthropic:) switches the entire backend; changing the suffix swaps the model within that provider.</div>
+        <div class="mcq-explanation">The tools parameter is additive. Whatever you pass is merged with the SDK's built-in tool suite. Passing your own tools never removes read_file, write_todos, or any other built-in.</div>
     </div>
 </div>
 
-<div class="mcq-container" id="mcq-fb087222">
+<div class="mcq-container" id="mcq-503492c1">
     <div class="mcq-question">
-        <strong>Question:</strong> When you swap the model in models.py, what is the only thing that changes in the agent?
+        <strong>Question:</strong> When an LLM decides it needs to call a tool, what does it actually produce?
     </div>
     <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'fb087222')"><strong>A)</strong> The file tools available to the agent</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'fb087222')"><strong>B)</strong> The BASE instructions injected by the SDK</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, 'fb087222')"><strong>C)</strong> The model</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'fb087222')"><strong>D)</strong> The assembled system prompt</div>
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '503492c1')"><strong>A)</strong> It calls the Python function directly</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '503492c1')"><strong>B)</strong> An AIMessage with a tool_calls list specifying the name and arguments</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '503492c1')"><strong>C)</strong> A ToolMessage with the result already included</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '503492c1')"><strong>D)</strong> A plain text description of what it would do</div>
     </div>
-    <div id="mcq-answer-fb087222" class="mcq-answer" style="display: none;">
+    <div id="mcq-answer-503492c1" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
+        <div class="mcq-explanation">The LLM never executes code. It outputs an AIMessage containing a tool_calls list with the tool name and arguments. The Tool Node inside the deep agent reads that list and performs the actual execution.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-c63d2624">
+    <div class="mcq-question">
+        <strong>Question:</strong> Which part of a @tool definition does the model read to decide when to reach for that tool?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'c63d2624')"><strong>A)</strong> The function name</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'c63d2624')"><strong>B)</strong> The type annotations on the parameters</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'c63d2624')"><strong>C)</strong> The docstring</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'c63d2624')"><strong>D)</strong> The return type annotation</div>
+    </div>
+    <div id="mcq-answer-c63d2624" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
-        <div class="mcq-explanation">The model is the only thing that changes. The SDK wraps the same BASE instructions and file tools around every model; one-line swap in models.py, everything else stays put.</div>
+        <div class="mcq-explanation">The docstring is the description the model uses to decide when to call a tool versus another. It is the most important of the three parts. Write it as a clear, specific sentence describing when the tool should be used.</div>
     </div>
 </div>
 
-<hr style="border:none;border-top:1px solid #e5e7eb;margin:2rem 0;" />
-
-<p><em>Bonus: harness profiles are covered in a later lesson:</em></p>
-<div class="mcq-container" id="mcq-e845cdc3">
+<p><MCQ
+    question="Why does Human-in-the-Loop require a checkpointer?"
+    choices='["To log tool call arguments to a file for audit purposes", "To save graph state so execution can pause and resume from the same point after a human decision", "To validate that the human's approval matches the tool schema", "To prevent the LLM from calling the tool more than once"]'
+    correctIndex={1}
+    explanation="When interrupt() fires, the graph suspends and must save its current state so it can resume from exactly the same point once the human responds. A checkpointer handles that save-and-restore. Without one, the graph has no way to pause mid-run."
+/></p>
+<div class="mcq-container" id="mcq-997604bc">
     <div class="mcq-question">
-        <strong>Question:</strong> Which part of a Deep Agent's assembled system prompt is model-specific?
+        <strong>Question:</strong> In the SQL lab, write_sql calls interrupt() before db.run(). At that moment, has the database been modified?
     </div>
     <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'e845cdc3')"><strong>A)</strong> The BASE prompt; each provider ships its own version</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, 'e845cdc3')"><strong>B)</strong> The SUFFIX; it comes from a harness profile registered for that specific model</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e845cdc3')"><strong>C)</strong> The filesystem instructions; tailored per provider</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e845cdc3')"><strong>D)</strong> None; the entire system prompt is identical across all models</div>
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>A)</strong> Yes — the write runs first, then waits for approval to commit</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '997604bc')"><strong>B)</strong> No — interrupt() fires before db.run(), so nothing has been written yet</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>C)</strong> It depends on the checkpointer used</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>D)</strong> Yes — a draft write is created and rolled back on rejection</div>
     </div>
-    <div id="mcq-answer-e845cdc3" class="mcq-answer" style="display: none;">
+    <div id="mcq-answer-997604bc" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
-        <div class="mcq-explanation">The SUFFIX is the only model-specific segment, coming from a harness profile keyed to the model. claude-haiku-4-5 and claude-sonnet-4-6 each ship one; gpt-4.1-mini has no registered profile so its SUFFIX is empty. The BASE prompt and filesystem instructions are identical regardless of model.</div>
-    </div>
-</div>
-
-<div class="mcq-container" id="mcq-660603ff">
-    <div class="mcq-question">
-        <strong>Question:</strong> Where does your system_prompt sit in the assembled prompt the model receives?
-    </div>
-    <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, '660603ff')"><strong>A)</strong> After the BASE instructions, before the SUFFIX</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, '660603ff')"><strong>B)</strong> At the very front, before the BASE instructions</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '660603ff')"><strong>C)</strong> At the end, after the SUFFIX</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '660603ff')"><strong>D)</strong> It replaces the BASE instructions entirely</div>
-    </div>
-    <div id="mcq-answer-660603ff" class="mcq-answer" style="display: none;">
-        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
-        <div class="mcq-explanation">The SDK slots the USER segment, your system_prompt, at the very front of the assembled prompt, ahead of the BASE behavior instructions and any SUFFIX.</div>
-    </div>
-</div>
-
-<div class="mcq-container" id="mcq-b781f17a">
-    <div class="mcq-question">
-        <strong>Question:</strong> You define SYSTEM_PROMPT = 'You are a pirate captain.' in scratch_agent.py but the agent replies with no pirate tone. What is most likely wrong?
-    </div>
-    <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'b781f17a')"><strong>A)</strong> The BASE prompt overrides user-defined personas</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, 'b781f17a')"><strong>B)</strong> SYSTEM_PROMPT was defined but not passed to create_deep_agent</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'b781f17a')"><strong>C)</strong> The model requires a special setting to apply personas</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, 'b781f17a')"><strong>D)</strong> The SUFFIX overrides the USER segment</div>
-    </div>
-    <div id="mcq-answer-b781f17a" class="mcq-answer" style="display: none;">
-        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
-        <div class="mcq-explanation">Defining the string is not enough; it must be passed explicitly: create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT). Without the argument, the agent never receives the USER segment and falls back to the BASE behavior only.</div>
+        <div class="mcq-explanation">interrupt() fires before db.run(). The graph pauses and the pending SQL surfaces to your script. The database is untouched until you approve; only then does db.run() execute. If you reject, write_sql returns 'Write cancelled.' and db.run() is never called.</div>
     </div>
 </div>
 
