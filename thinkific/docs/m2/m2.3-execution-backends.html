@@ -578,6 +578,7 @@ document.addEventListener('DOMContentLoaded', function() { mermaid.run(); });</s
   </div>
   <div class="lt-group lt-wrap">
     <button class="lt-tab" data-p="lab1" role="tab" aria-selected="false">Lab 1</button>
+    <button class="lt-tab" data-p="lab2" role="tab" aria-selected="false">Lab 2</button>
   </div>
 </div>
 
@@ -626,9 +627,9 @@ graph TB
 <hr />
 <h2 id="configuring-a-langsmith-sandbox-as-a-tool">Configuring a LangSmith sandbox as a tool</h2>
 <p>Here's an example of a LangSmith sandbox being configured as a backend:</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/sandbox_agent.py\nfrom langsmith.sandbox import SandboxClient\nfrom deepagents.backends.langsmith import LangSmithSandbox\n\nclient = SandboxClient()\nls_sandbox = client.create_sandbox(name=\&quot;lca-deepagents-lab\&quot;, template_name=\&quot;deepagents-deploy\&quot;)\nbackend = LangSmithSandbox(sandbox=ls_sandbox)\n\nagent = create_deep_agent(\n    model=model,\n    backend=backend,\n)\n\ntry:\n    result = agent.invoke({\&quot;messages\&quot;: [{\&quot;role\&quot;: \&quot;user\&quot;, \&quot;content\&quot;: \&quot;...\&quot;}]})\n    print(result[\&quot;messages\&quot;][-1].content)\nfinally:\n    client.delete_sandbox(ls_sandbox.name)&quot;, &quot;highlights&quot;: [1, 2, 5, 6, 7, 11]}]"></div>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/sandbox_agent.py\nfrom langsmith.sandbox import SandboxClient\nfrom deepagents.backends.langsmith import LangSmithSandbox\n\nclient = SandboxClient()\nls_sandbox = client.create_sandbox(name=\&quot;lca-deepagents-lab\&quot;)\nbackend = LangSmithSandbox(sandbox=ls_sandbox)\n\nagent = create_deep_agent(\n    model=model,\n    backend=backend,\n)\n\ntry:\n    result = agent.invoke({\&quot;messages\&quot;: [{\&quot;role\&quot;: \&quot;user\&quot;, \&quot;content\&quot;: \&quot;...\&quot;}]})\n    print(result[\&quot;messages\&quot;][-1].content)\nfinally:\n    client.delete_sandbox(ls_sandbox.name)&quot;, &quot;highlights&quot;: [1, 2, 5, 6, 7, 11]}]"></div>
 <p>The <code>try/finally</code> block ensures the sandbox is deleted even if the agent raises. Sandboxes are billed resources — always clean them up.</p>
-<p><code>create_sandbox(template_name="deepagents-deploy")</code> provisions a sandbox image that includes Python and common packages. The sandbox starts fresh each run; no state persists between invocations unless you upload files first.</p>
+<p>The default sandbox includes Python and common packages. The sandbox starts fresh each run; no state persists between invocations unless you upload files first.</p>
 <hr />
 <h2 id="localshellbackend">LocalShellBackend</h2>
 <p><code>LocalShellBackend</code> runs commands directly on the host machine. It scopes filesystem <em>tools</em> to a <code>root_dir</code>, but <code>execute</code> itself runs with full host permissions — no process isolation is applied.</p>
@@ -715,11 +716,11 @@ graph TB
 </div>
 <div class="lt-panel" id="p-lab1" role="tabpanel">
 <h2 id="lab-1-sandbox-agent">Lab 1: Sandbox Agent</h2>
-<p>Build an agent that writes a Python script to a sandbox, executes it, and reports the output. You will see the write → execute sequence in LangSmith as a chain of tool calls.</p>
+<p>Build an agent that writes a Python script to a sandbox, executes it, and returns the output. You will see the write → execute sequence in LangSmith as a chain of tool calls.</p>
 <p>This lab uses <code>LangSmithSandbox</code> — commands run in an isolated LangSmith-managed environment, not on your local machine.</p>
 <hr />
-<p>Create <code>python/m2/sandbox_agent.py</code>:</p>
-<pre><code class="language-python"># python/m2/sandbox_agent.py
+<!-- code-highlight-0:11,12 -->
+<pre><code class="language-python"># python/m2/m2_3_sandbox_agent.py
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -729,7 +730,8 @@ from deepagents.backends.langsmith import LangSmithSandbox
 from langsmith.sandbox import SandboxClient
 
 client = SandboxClient()
-ls_sandbox = client.create_sandbox(name=&quot;lca-deepagents-lab&quot;, template_name=&quot;deepagents-deploy&quot;)
+ls_sandbox = client.create_sandbox(name=&quot;lca-deepagents-lab&quot;)
+print(f&quot;Sandbox: {ls_sandbox.name}  (id: {ls_sandbox.id})&quot;)
 backend = LangSmithSandbox(sandbox=ls_sandbox)
 
 agent = create_deep_agent(
@@ -760,24 +762,192 @@ finally:
     client.delete_sandbox(ls_sandbox.name)
 </code></pre>
 <pre><code class="language-bash">cd python
-uv run ./m2/sandbox_agent.py
+uv run ./m2/m2_3_sandbox_agent.py
 </code></pre>
 <hr />
-<p><strong>What to check:</strong></p>
-<p>Open <strong>LangSmith</strong> and look at the tool call sequence:</p>
-<ol>
-<li><code>write_file</code> — agent writes <code>fib.py</code> into the sandbox</li>
-<li><code>execute</code> — agent runs <code>python fib.py</code> inside the sandbox</li>
-<li>The tool result carries the stdout back to the LLM</li>
-<li>The LLM includes the output in its final answer</li>
-</ol>
-<p>If the script had an error, you will see the agent call <code>edit_file</code> to fix it and <code>execute</code> again. This self-correction loop is one of the key behaviors a sandbox enables.</p>
-<p><strong>Try a different task:</strong></p>
-<ul>
-<li><code>"Write a Python script that counts word frequencies in a short paragraph of your choice, save it to wordcount.py, and run it."</code></li>
-<li><code>"Write a Python script that generates a multiplication table for numbers 1 to 5, save it to times_table.py, and run it."</code></li>
-</ul>
+<p><strong>Expected output:</strong></p>
+<pre style="max-height:260px;overflow-y:auto;background:#0d1117;color:#e6edf3;padding:16px;border-radius:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.6;white-space:pre-wrap;">Sandbox: lca-deepagents-lab  (id: 41ee1fb1-757a-48f9-b288-2ea69bedc4d2)
+Done! The script has been saved to `/fib.py` and executed. It prints the first 15 Fibonacci numbers:
+
+The first 15 Fibonacci numbers:
+ 1: 0
+ 2: 1
+ 3: 1
+ 4: 2
+ 5: 3
+ 6: 5
+ 7: 8
+ 8: 13
+ 9: 21
+10: 34
+11: 55
+12: 89
+13: 144
+14: 233
+15: 377</pre>
+<p>The sandbox id in the first line links to your LangSmith trace. Look for the <code>write_file</code> → <code>execute</code> tool call sequence in the trace.</p>
 </div>
+<div class="lt-panel" id="p-lab2" role="tabpanel">
+<h2 id="lab-2-sales-chart-agent">Lab 2: Sales Chart Agent</h2>
+<p>Build an agent that queries the Chinook music store database inside a sandbox and generates a chart. The agent installs its own dependencies, writes and runs Python, and you retrieve the output file from the sandbox.</p>
+<p>This lab introduces two new patterns: <strong>uploading files</strong> to a sandbox before the agent runs, and <strong>reading files</strong> back from the sandbox after it finishes.</p>
+<hr />
+<!-- code-highlight-2:13,14,16,17,55,56,57 -->
+<pre><code class="language-python"># python/m2/m2_3_sales_agent.py
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from models import model
+from deepagents import create_deep_agent
+from deepagents.backends.langsmith import LangSmithSandbox
+from langsmith.sandbox import SandboxClient
+
+DB_PATH = Path(__file__).resolve().parent.parent / &quot;m1&quot; / &quot;chinook.db&quot;
+
+client = SandboxClient()
+ls_sandbox = client.create_sandbox(name=&quot;lca-deepagents-lab&quot;)
+print(f&quot;Sandbox: {ls_sandbox.name}  (id: {ls_sandbox.id})&quot;)
+
+backend = LangSmithSandbox(sandbox=ls_sandbox)
+with open(DB_PATH, &quot;rb&quot;) as f:
+    backend.upload_files([(&quot;/chinook.db&quot;, f.read())])
+
+agent = create_deep_agent(
+    model=model,
+    backend=backend,
+    system_prompt=(
+        &quot;You are a sales data analyst with access to the Chinook music store database &quot;
+        &quot;at /chinook.db. Use sqlite3 and matplotlib to answer questions with charts. &quot;
+        &quot;Install any packages you need with pip before importing them. &quot;
+        &quot;When asked to produce a chart, write a Python script, execute it, and confirm &quot;
+        &quot;the output file was created.&quot;
+    ),
+)
+
+try:
+    result = agent.invoke(
+        {
+            &quot;messages&quot;: [
+                {
+                    &quot;role&quot;: &quot;user&quot;,
+                    &quot;content&quot;: (
+                        &quot;Query the Chinook database at /chinook.db to get total revenue &quot;
+                        &quot;by genre. Create a clean donut chart showing each genre's share &quot;
+                        &quot;of total sales revenue. Group any genres that individually &quot;
+                        &quot;account for less than 3% of total revenue into a single 'Other' &quot;
+                        &quot;slice. Label each slice with the genre name and percentage. &quot;
+                        &quot;Use a visually distinct color palette, leave a white center hole, &quot;
+                        &quot;and make sure no labels overlap with each other or with the title. &quot;
+                        &quot;Add enough top padding so the title is fully visible. &quot;
+                        &quot;Save the chart to /genre_revenue.png.&quot;
+                    ),
+                }
+            ]
+        }
+    )
+    print(result[&quot;messages&quot;][-1].content)
+
+    png_bytes = ls_sandbox.read(&quot;/genre_revenue.png&quot;)
+    out_path = Path(__file__).parent / &quot;genre_revenue.png&quot;
+    out_path.write_bytes(png_bytes)
+    print(f&quot;Chart saved to {out_path}&quot;)
+
+finally:
+    client.delete_sandbox(ls_sandbox.name)
+</code></pre>
+<pre><code class="language-bash">cd python
+uv run ./m2/m2_3_sales_agent.py
+open m2/genre_revenue.png
+</code></pre>
+<hr />
+<p><strong>Expected output:</strong></p>
+<pre style="max-height:260px;overflow-y:auto;background:#0d1117;color:#e6edf3;padding:16px;border-radius:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.6;white-space:pre-wrap;">Sandbox: lca-deepagents-lab  (id: 510c7cfa-7809-4317-a272-715c05221a24)
+Done! I've successfully created your donut chart showing revenue by genre.
+
+Data Summary:
+- Total Revenue: $2,328.60
+- Rock: 35.5% ($826.65)
+- Latin: 16.4% ($382.14)
+- Metal: 11.2% ($261.36)
+- Alternative &amp; Punk: 10.4% ($241.56)
+- TV Shows: 4.0% ($93.53)
+- Jazz: 3.4% ($79.20)
+- Other (&lt;3%): 19.1% ($444.16)
+
+Chart saved to python/m2/genre_revenue.png</pre>
+<p>The chart is saved locally as <code>genre_revenue.png</code>. Open it with <code>open m2/genre_revenue.png</code>.</p>
+<details>
+<summary>📊 Expected chart [click to expand]</summary>
+<p><br><br />
+<img width="480" alt="Donut chart showing Chinook revenue by genre" src="../m2/images/genre_revenue.png" /></p>
+</details>
+</div>
+<hr />
+<h2 id="check-your-understanding">Check your understanding</h2>
+<div class="mcq-container" id="mcq-70606047">
+    <div class="mcq-question">
+        <strong>Question:</strong> What does the execute tool return to the agent?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, true, '70606047')"><strong>A)</strong> stdout, stderr, and an exit code</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '70606047')"><strong>B)</strong> The script file contents</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '70606047')"><strong>C)</strong> A boolean success or failure</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '70606047')"><strong>D)</strong> stdout only</div>
+    </div>
+    <div id="mcq-answer-70606047" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: A</strong> ✅</div>
+        <div class="mcq-explanation">execute returns stdout, stderr, and an exit code as a tool result. The LLM sees all three on the next call, which lets it diagnose errors and retry.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-df396afc">
+    <div class="mcq-question">
+        <strong>Question:</strong> What does root_dir limit in LocalShellBackend?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'df396afc')"><strong>A)</strong> All shell commands executed via execute</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'df396afc')"><strong>B)</strong> Filesystem tool access — ls, read_file, write_file, and similar</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'df396afc')"><strong>C)</strong> Network access from the agent</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'df396afc')"><strong>D)</strong> Which Python packages the agent can import</div>
+    </div>
+    <div id="mcq-answer-df396afc" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
+        <div class="mcq-explanation">root_dir scopes the filesystem tools only. The execute tool still runs with full host permissions regardless of root_dir — that's why LocalShellBackend is unsuitable for production.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-420f73f9">
+    <div class="mcq-question">
+        <strong>Question:</strong> Which sandbox model does this course use?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '420f73f9')"><strong>A)</strong> Agent in Sandbox — the agent runs inside the sandbox</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '420f73f9')"><strong>B)</strong> Both models equally</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '420f73f9')"><strong>C)</strong> Neither — the course uses LocalShellBackend</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '420f73f9')"><strong>D)</strong> Sandbox as a Tool — the agent runs outside and calls the sandbox via execute</div>
+    </div>
+    <div id="mcq-answer-420f73f9" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: D</strong> ✅</div>
+        <div class="mcq-explanation">This course uses the Sandbox as a Tool pattern: the agent runs on the host and calls the sandbox via execute and filesystem tools. API keys stay on the host and the agent code is easy to update.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-638ff72b">
+    <div class="mcq-question">
+        <strong>Question:</strong> How do you make a local file available inside a LangSmith sandbox before the agent runs?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '638ff72b')"><strong>A)</strong> Pass the file path in the system prompt</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '638ff72b')"><strong>B)</strong> The sandbox automatically syncs the local filesystem</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '638ff72b')"><strong>C)</strong> Call backend.upload_files() with the file contents before invoking the agent</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '638ff72b')"><strong>D)</strong> Write the file to /tmp — the sandbox reads it from there</div>
+    </div>
+    <div id="mcq-answer-638ff72b" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
+        <div class="mcq-explanation">upload_files() seeds the sandbox filesystem before the agent starts. Without it the sandbox starts empty — the agent has no access to local files unless you explicitly upload them.</div>
+    </div>
+</div>
+
 <script>
 (function () {
   var tabs = document.querySelectorAll('.lt-tab');
