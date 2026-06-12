@@ -545,38 +545,10 @@ your coding agent (Claude Code, Cursor, etc.) and let it build the file.</p>
     </div>
 </div>
 
-<pre><code class="language-text">Create a minimal LangChain Deep Agent in lca-deepagents/python/m1/scratch_agent.py:
-
-- Import the shared model from python/models.py. Because the script lives in
-  python/m1/, add the project root to sys.path first:
-      import sys
-      from pathlib import Path
-      sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-      from models import model
-- Create the agent with create_deep_agent(model=model); pass NOTHING else:
-  no tools, no system prompt, no filesystem config.
-- Invoke it once with the message &quot;What is an LLM?&quot; and print the final
-  message's .content.
-
-Also create lca-deepagents/python/.env (next to models.py; you can copy the
-provided .env.example). models.py already calls load_dotenv() on this file, so
-scratch_agent.py needs no dotenv code of its own. Use these placeholders; I'll
-paste my real keys in afterward:
-
-    # LangSmith: tracing &amp; observability (lets you open the run in LangSmith)
-    LANGSMITH_API_KEY=lsv2_...
-    LANGSMITH_TRACING=true
-    LANGSMITH_PROJECT=lca-deepagents
-
-    # Model provider keys: set the one your model in models.py uses
-    ANTHROPIC_API_KEY=your-anthropic-api-key   # default: anthropic:claude-haiku-4-5
-    OPENAI_API_KEY=your-openai-api-key         # only if you switch to an openai: model
-
-python-dotenv, langchain, langchain-anthropic, and deepagents are already in the
-project's pyproject.toml, so no new dependencies are needed.
-
-Run it with (from the lca-deepagents repo root):
-  uv run ./python/m1/scratch_agent.py
+<pre><code class="language-text">In lca-deepagents/python/m1/scratch_agent.py, create a minimal deep agent:
+import the model from python/models.py, call create_deep_agent(model=model)
+with no other arguments, invoke it with &quot;What is an LLM?&quot; and print the last
+message's content.
 </code></pre>
 <details>
 <summary>Don't have a coding agent? Copy the code directly [click to expand]</summary>
@@ -595,10 +567,31 @@ print(result[&quot;messages&quot;][-1].content)
 </code></pre>
 </details>
 <p>Once your coding agent has created the file, run it:</p>
-<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents
+<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents &amp;&amp; uv run ./python/m1/scratch_agent.py
 </code></pre>
-<pre><code class="language-bash">uv run ./python/m1/scratch_agent.py
+<div style="max-height:200px;overflow-y:auto;border-radius:8px;margin:0.5rem 0 1rem;">
+
+
+<pre><code>An LLM (Large Language Model) is a type of artificial intelligence system
+trained on vast amounts of text data to understand and generate human language.
+
+Key characteristics:
+- Scale: Contains billions to hundreds of billions of parameters
+- Training: Trained using deep learning on huge text corpora from the internet,
+  books, and other sources
+- Capability: Can perform a wide range of language tasks — answering questions,
+  summarizing, translating, writing, coding, reasoning, and more
+- Architecture: Built on transformer architecture, which uses attention
+  mechanisms to understand relationships between words across long passages
+- Generative: Produces text by predicting the next token one at a time,
+  based on context
+
+Examples: GPT-4, Claude, Gemini, LLaMA, Mistral
 </code></pre>
+
+
+</div>
+
 <div class="callout">
 <strong>Troubleshooting</strong>
 <ul>
@@ -614,10 +607,7 @@ Where did all of that come from? That's what the next lessons uncover.</p>
 <p><strong>Documentation:</strong><br />
 - <a href="https://docs.langchain.com/oss/python/deepagents/overview" target="_blank" rel="noopener noreferrer">Deep Agents overview</a><br />
 - <a href="https://docs.langchain.com/oss/python/deepagents/models" target="_blank" rel="noopener noreferrer">Models (Deep Agents)</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/customization#prompt-assembly" target="_blank" rel="noopener noreferrer">Customization &amp; prompt assembly (Deep Agents)</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/context-engineering" target="_blank" rel="noopener noreferrer">Context engineering (Deep Agents)</a><br />
-- <a href="https://github.com/langchain-ai/deepagents" target="_blank" rel="noopener noreferrer">deepagents README (GitHub)</a><br />
-- <a href="https://github.com/langchain-ai/deepagents/tree/main/libs/deepagents/deepagents/profiles/harness" target="_blank" rel="noopener noreferrer">Built-in harness profiles (GitHub)</a></p>
+- <a href="https://github.com/langchain-ai/deepagents" target="_blank" rel="noopener noreferrer">deepagents README (GitHub)</a></p>
 
     <script>
         // Handle MCQ choice clicks
