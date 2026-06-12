@@ -657,15 +657,26 @@ agent = create_deep_agent(
 <div class="lt-panel" id="p-lab4" role="tabpanel">
 <h2 id="langchain-docs-no-auth">LangChain Docs (no auth)</h2>
 <p>The project repo includes <code>.mcp.json</code> at the root with the LangChain documentation server pre-configured. You do not need to edit any config for this lab.</p>
+<div style="margin:1rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;font-size:0.9em;">
+<strong>Dependencies already included</strong><br>
+This lab uses two packages — <code>deepagents-code</code> (the MCP loader) and <code>langchain-mcp-adapters</code> (the LangChain adapter layer). Both are already listed in <code>python/pyproject.toml</code>, so the <code>uv sync</code> you ran during setup covered them.
+</div>
 <p>Create a new file <code>python/m1/mcp_agent.py</code>:</p>
+<!-- code-highlight-3:5,8,10 -->
 <pre><code class="language-python"># python/m1/mcp_agent.py
+import sys
 import asyncio
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from models import model
 from deepagents import create_deep_agent
 from deepagents_code.mcp_tools import get_mcp_tools
 
+MCP_CONFIG = Path(__file__).resolve().parents[2] / &quot;.mcp.json&quot;
+
 async def main():
-    tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;)
+    tools, session_manager, server_infos = await get_mcp_tools(str(MCP_CONFIG))
 
     for info in server_infos:
         print(f&quot;{info.name}: {info.status} - {len(info.tools)} tool(s)&quot;)
@@ -682,8 +693,7 @@ async def main():
 
 asyncio.run(main())
 </code></pre>
-<p>Run it from the repo root:</p>
-<pre><code class="language-bash">uv run ./python/m1/mcp_agent.py
+<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m1/mcp_agent.py
 </code></pre>
 <p>Open LangSmith and find the run. You should see the MCP tool call in the trace alongside any other tool calls, listed as a regular tool message in the message history.</p>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
@@ -694,8 +704,8 @@ asyncio.run(main())
 <div class="lt-panel" id="p-lab5" role="tabpanel">
 <h2 id="gmail-with-oauth-and-hitl">Gmail with OAuth and HITL</h2>
 <p>This lab adds a Gmail MCP server to the agent and gates every email access behind a human approval step.</p>
-<h3 id="step-1-add-gmail-to-mcpjson">Step 1: Add Gmail to .mcp.json</h3>
-<p>Add the Gmail server entry to <code>.mcp.json</code> in the project root. Use <code>allowedTools</code> to restrict the agent to read-only email access:</p>
+<h3 id="step-1-gmail-is-already-in-mcpjson">Step 1: Gmail is already in .mcp.json</h3>
+<p>The <code>.mcp.json</code> at the repo root already has the Gmail server entry. Here is what it looks like and why each field matters:</p>
 <pre><code class="language-json">// .mcp.json
 {
   &quot;mcpServers&quot;: {
@@ -712,25 +722,40 @@ asyncio.run(main())
   }
 }
 </code></pre>
+<ul>
+<li><code>"auth": "oauth"</code> tells deepagents this server requires user authorization before it can connect.</li>
+<li><code>"allowedTools"</code> restricts the agent to these two tools; any other tools the server exposes are hidden.</li>
+<li><code>"type": "sse"</code> uses a persistent connection so the server can stream results back in real time.</li>
+</ul>
 <div style="margin:1rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid #b3e0b3;background-color:#f0faf0;color:#1a4d1a;font-size:0.9em;">
 <strong>Check the current URL</strong><br>
 Verify the Gmail MCP server URL from Google's official documentation before running. The course README has the tested URL and any additional setup steps.
 </div>
-<h3 id="step-2-authenticate">Step 2: Authenticate</h3>
-<p>On the first run, deepagents will detect <code>auth: "oauth"</code> and open a browser window for you to authorize the Gmail scope. Tokens are saved to <code>~/.deepagents/.state/mcp-tokens/gmail.json</code> and reused on subsequent runs.</p>
+<h3 id="step-2-authenticate-with-gmail">Step 2: Authenticate with Gmail</h3>
+<p>OAuth login is a one-time step run separately from your agent script. <code>deepagents-code</code> ships a CLI called <code>dcode</code> that handles the browser flow and caches the resulting tokens:</p>
+<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents &amp;&amp; uv run dcode mcp login gmail
+</code></pre>
+<p><code>dcode</code> auto-discovers <code>.mcp.json</code> from the repo root (the nearest directory with a <code>.git</code> entry), opens a browser window for you to authorize the Gmail scope, and saves the tokens to <code>~/.deepagents/.state/mcp-tokens/</code>. On subsequent runs the tokens are reused automatically; the browser prompt only appears once.</p>
 <h3 id="step-3-add-hitl-and-run">Step 3: Add HITL and run</h3>
 <p>Update <code>python/m1/mcp_agent.py</code> to add <code>interrupt_on</code> for the Gmail tools:</p>
+<!-- code-highlight-7:10,11,17,18,19,20,22,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47 -->
 <pre><code class="language-python"># python/m1/mcp_agent.py
+import sys
 import asyncio
 import uuid
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from models import model
 from deepagents import create_deep_agent
 from deepagents_code.mcp_tools import get_mcp_tools
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import Command
 
+MCP_CONFIG = Path(__file__).resolve().parents[2] / &quot;.mcp.json&quot;
+
 async def main():
-    tools, session_manager, _ = await get_mcp_tools(&quot;.mcp.json&quot;)
+    tools, session_manager, _ = await get_mcp_tools(str(MCP_CONFIG))
 
     agent = create_deep_agent(
         model=model,
@@ -770,8 +795,7 @@ async def main():
 
 asyncio.run(main())
 </code></pre>
-<p>Run it:</p>
-<pre><code class="language-bash">uv run ./python/m1/mcp_agent.py
+<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m1/mcp_agent.py
 </code></pre>
 <p>The agent will call <code>list_emails</code>, then pause. You will see the pending tool call printed in the terminal. Type <code>y</code> to approve and the agent will continue, fetch the emails, and summarize them.</p>
 <p>Check LangSmith to see the full trace: the interrupt, the resume, and the final tool results all appear in the message history.</p>

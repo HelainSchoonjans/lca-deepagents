@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "docs-langchain": {
+      "type": "http",
+      "url": "https://docs.langchain.com/mcp"
+    },
+    "gmail": {
+      "type": "sse",
+      "url": "https://gmail.googleapis.com/v1/mcp",
+      "auth": "oauth",
+      "allowedTools": ["list_emails", "read_email"]
+    }
+  }
+}
