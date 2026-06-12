@@ -602,7 +602,7 @@ Examples: GPT-4, Claude, Gemini, LLaMA, Mistral
 
 <div style="text-align:center;margin:2.5rem 0 1rem;">
   <button id="celebrate-btn" onclick="launchCelebration()" style="
-    background: linear-gradient(135deg, #006DDD 0%, #0E9F6E 100%);
+    background: #111;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -612,12 +612,12 @@ Examples: GPT-4, Claude, Gemini, LLaMA, Mistral
     font-family: 'IBM Plex Mono', monospace;
     cursor: pointer;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 18px rgba(0,109,221,0.35);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
     transition: transform 0.15s, box-shadow 0.15s;
   "
-  onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 6px 28px rgba(0,109,221,0.5)'"
-  onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 18px rgba(0,109,221,0.35)'"
-  >🎉 I ran my first deep agent!</button>
+  onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 6px 28px rgba(0,0,0,0.4)'"
+  onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 18px rgba(0,0,0,0.25)'"
+  ><img src="images/langchain-symbol.png" style="height:1.1em;vertical-align:middle;margin-right:8px;filter:brightness(0) invert(1);opacity:0.9"> I ran my first deep agent!</button>
 </div>
 
 <canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;"></canvas>
@@ -632,15 +632,15 @@ Examples: GPT-4, Claude, Gemini, LLaMA, Mistral
   pointer-events:none;
 ">
   <div style="
-    background:linear-gradient(135deg,rgba(0,25,60,0.92) 0%,rgba(0,109,221,0.88) 100%);
+    background:#CCE9FF;
     border:2px solid #7FC8FF;
     border-radius:20px;
     padding:2rem 3rem;
-    color:#fff;
+    color:#030710;
     font-family:'IBM Plex Mono',monospace;
-    box-shadow:0 8px 48px rgba(0,109,221,0.6);
+    box-shadow:0 8px 48px rgba(0,0,0,0.15);
   ">
-    <div style="font-size:2.8rem;margin-bottom:0.5rem;">🚀</div>
+    <img src="images/langchain-symbol.png" style="width:56px;height:56px;margin-bottom:0.75rem;filter:brightness(0)">
     <div style="font-size:1.5rem;font-weight:700;margin-bottom:0.4rem;">Your first deep agent is live!</div>
     <div style="font-size:0.95rem;opacity:0.85;">Welcome to the world of agentic AI.</div>
   </div>
@@ -753,7 +753,7 @@ Examples: GPT-4, Claude, Gemini, LLaMA, Mistral
     }, 3200);
 
     var btn = document.getElementById('celebrate-btn');
-    btn.textContent = '✨ Again!';
+    btn.textContent = 'Again!';
 
     particles = [];
     running = true;

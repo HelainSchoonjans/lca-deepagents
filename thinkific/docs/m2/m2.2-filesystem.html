@@ -685,7 +685,7 @@ graph TB
 - <a href="https://docs.langchain.com/oss/python/deepagents/backends" target="_blank" rel="noopener noreferrer">Filesystem Backends</a></p>
 </div>
 <div class="lt-panel" id="p-lab1" role="tabpanel">
-<h2 id="lab-1-permissions">Lab 1: Permissions</h2>
+<h2 id="permissions_1">Permissions</h2>
 <p>The lab agent uses a <code>CompositeBackend</code> with <code>/memories/</code> and <code>/skills/</code> both routed to the store. A <code>FilesystemPermission</code> rule denies all writes to <code>/skills/**</code>.</p>
 <p>The agent is pre-seeded with a Chinook sales skill and asked to read it, then add a promotion note. You'll see it read successfully and get blocked on the write.</p>
 <pre><code class="language-python"># python/m2/agent.py

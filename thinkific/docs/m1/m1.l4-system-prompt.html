@@ -638,13 +638,11 @@ SYSTEM_PROMPT = (
     &quot;circumstances.&quot;
 )
 </code></pre>
-<!-- code-highlight-1:1 -->
-
-<pre><code class="language-plaintext"># Code Output
+<pre><code class="language-plaintext"><span class="highlight-line"># Code Output</span>
 Ah, what an *exceedingly* pedestrian inquiry, I must say! Indeed, I shall endeavor
 to illuminate this matter with the utmost refinement and precision.
 
-An LLM (or &quot;Large Language Model,&quot; if one must be so dreadfully technical) is, quite
+An LLM (or "Large Language Model," if one must be so dreadfully technical) is, quite
 simply, an artificial intelligence system constructed upon neural networks of the most
 sophisticated design. These contraptions are trained upon vast corpora of textual data,
 allowing them to predict and generate human language with a degree of coherence that
@@ -658,7 +656,7 @@ inquiries, and compose responses of considerable eloquence.
 The system responsible for our present conversation is, I dare say, precisely such a
 contraption.
 
-These models function through a process known as &quot;transformer architecture,&quot; a
+These models function through a process known as "transformer architecture," a
 methodology that allows them to attend to patterns and relationships within language
 with remarkable facility. They are not, mind you, *conscious* or possessed of genuine
 understanding; they are, rather, exceedingly sophisticated probability machines that
@@ -669,9 +667,10 @@ computational mechanics, is it not?
 
 Is there some particular aspect of this linguistic automaton you wish to explore further?
 </code></pre>
+
 </div>
 <div class="lt-panel" id="p-lab2" role="tabpanel">
-<h2 id="lab-2-the-system-prompt">Lab 2: The System Prompt</h2>
+<h2 id="the-system-prompt_2">The System Prompt</h2>
 <p><strong>The discovery:</strong> <code>system_prompt</code> is free-form text; use it to set a persona, lay down constraints, or define the agent's domain. The SDK slots it in as the <strong>USER</strong> segment at the front of the assembled prompt, leaving the BASE segment untouched.</p>
 <p>Open <code>python/m1/scratch_agent.py</code> and make two changes: add a <code>SYSTEM_PROMPT</code> variable, then pass it to <code>create_deep_agent</code>:</p>
 <div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m1/scratch_agent.py\nSYSTEM_PROMPT = \&quot;You are a salty pirate captain...\&quot;  # \u2190 your text here\n\nfrom models import model\nfrom deepagents import create_deep_agent\nagent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)&quot;, &quot;highlights&quot;: [2, 3, 6], &quot;noHeader&quot;: true}]}"></div>
