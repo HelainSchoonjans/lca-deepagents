@@ -15,8 +15,18 @@
   <circle cx="84" cy="75" r="4" fill="#2E3900"/>
   <text x="100" y="79" font-size="9" fill="#40668D" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">LangSmith · ChatModel · Input</text>
 
-  <!-- System section highlight -->
-  <rect x="40" y="88" width="390" height="270" fill="#6E8900" fill-opacity="0.06"/>
+  <!-- === SECTION BACKGROUND ZONES === -->
+  <!-- USER zone: y=88 to y=144 -->
+  <rect x="41" y="88" width="388" height="56" fill="#FBB0A5" fill-opacity="0.12"/>
+  <!-- BASE zone: y=144 to y=358 -->
+  <rect x="41" y="144" width="388" height="214" fill="#6E8900" fill-opacity="0.09"/>
+  <!-- LangSmith "user" row: y=358 to y=412 -->
+  <rect x="41" y="358" width="388" height="52" fill="#7FC8FF" fill-opacity="0.07"/>
+
+  <!-- === LEFT BORDER ACCENTS === -->
+  <rect x="40" y="88" width="3" height="56" fill="#FBB0A5" fill-opacity="0.8"/>
+  <rect x="40" y="144" width="3" height="214" fill="#6E8900" fill-opacity="0.8"/>
+  <rect x="40" y="358" width="3" height="52" fill="#7FC8FF" fill-opacity="0.6"/>
 
   <!-- system badge -->
   <rect x="52" y="98" width="48" height="16" rx="3" fill="#161F34" stroke="#2F4B68" stroke-width="1"/>
@@ -26,8 +36,13 @@
   <rect x="52" y="120" width="40" height="16" rx="3" fill="#2A1510" stroke="#FBB0A5" stroke-width="1"/>
   <text x="72" y="132" text-anchor="middle" font-size="9" font-weight="400" fill="#FBB0A5" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">USER</text>
   <text x="98" y="132" font-size="9" fill="#FBB0A5" font-style="italic" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">"You are a salty pirate captain..."  ← your system_prompt</text>
-  <!-- Thin separator between USER and BASE -->
-  <line x1="52" y1="144" x2="418" y2="144" stroke="#2F4B68" stroke-width="0.5" stroke-dasharray="4,3"/>
+
+  <!-- Separator between USER and BASE -->
+  <line x1="44" y1="144" x2="428" y2="144" stroke="#2F4B68" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- BASE badge (right-aligned) -->
+  <rect x="374" y="149" width="42" height="16" rx="3" fill="#1A2800" stroke="#6E8900" stroke-width="1"/>
+  <text x="395" y="161" text-anchor="middle" font-size="9" font-weight="400" fill="#E3FF8F" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">BASE</text>
 
   <!-- BASE content -->
   <g font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#B2DEFF" xml:space="preserve">
@@ -49,24 +64,24 @@
   <line x1="40" y1="358" x2="430" y2="358" stroke="#2F4B68" stroke-width="1"/>
 
   <!-- user badge -->
-  <rect x="52" y="365" width="36" height="16" rx="3" fill="#161F34" stroke="#2F4B68" stroke-width="1"/>
-  <text x="70" y="377" text-anchor="middle" font-size="9" font-weight="400" fill="#40668D" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">user</text>
+  <rect x="52" y="365" width="36" height="16" rx="3" fill="#161F34" stroke="#40668D" stroke-width="1"/>
+  <text x="70" y="377" text-anchor="middle" font-size="9" font-weight="400" fill="#7FC8FF" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">user</text>
 
   <!-- User message -->
   <g font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#B2DEFF">
     <text x="52" y="393">What is an LLM?</text>
   </g>
 
-  <!-- MAIN ARROW (points to system section / BASE area) -->
+  <!-- MAIN ARROW (points to BASE section) -->
   <line x1="430" y1="245" x2="456" y2="245" stroke="#6E8900" stroke-width="1.5"/>
   <polygon points="452,241 460,245 452,249" fill="#E3FF8F"/>
 
-  <!-- CALLOUT BOX (assembled prompt structure explanation) -->
+  <!-- CALLOUT BOX (BASE explanation) -->
   <rect x="460" y="78" width="240" height="280" rx="6" fill="#0D1322" stroke="#6E8900" stroke-width="1.5"/>
 
-  <!-- "SDK injects this" tag -->
-  <rect x="472" y="91" width="148" height="18" rx="3" fill="#2E3900" stroke="#6E8900" stroke-width="1"/>
-  <text x="546" y="104" text-anchor="middle" font-size="9" font-weight="400" fill="#E3FF8F">SDK injects this on every call</text>
+  <!-- "SDK injects BASE" tag -->
+  <rect x="472" y="91" width="162" height="18" rx="3" fill="#2E3900" stroke="#6E8900" stroke-width="1"/>
+  <text x="553" y="104" text-anchor="middle" font-size="9" font-weight="400" fill="#E3FF8F">SDK injects BASE on every call</text>
 
   <text x="472" y="130" font-size="10.5" font-weight="400" fill="#F2FAFF">This is the assembled prompt structure.</text>
 
@@ -82,16 +97,16 @@
   <text x="472" y="273" font-size="10" fill="#5BADDF">only the engine reading it,</text>
   <text x="472" y="288" font-size="10" fill="#5BADDF">not what it reads.</text>
 
-  <!-- ARROW (points to user section) -->
-  <line x1="430" y1="380" x2="457" y2="380" stroke="#FBB0A5" stroke-width="2"/>
-  <polygon points="453,376 461,380 453,384" fill="#FBB0A5"/>
+  <!-- ARROW (points to user row) -->
+  <line x1="430" y1="380" x2="457" y2="380" stroke="#7FC8FF" stroke-width="1.5"/>
+  <polygon points="453,376 461,380 453,384" fill="#7FC8FF"/>
 
   <!-- User role disambiguation callout -->
-  <rect x="461" y="361" width="240" height="76" rx="6" fill="#0D1322" stroke="#FBB0A5" stroke-width="2"/>
-  <text x="472" y="379" font-size="9.5" font-weight="400" fill="#FBB0A5">⚠ LangSmith's "user" = human message role</text>
+  <rect x="461" y="361" width="240" height="76" rx="6" fill="#0D1322" stroke="#7FC8FF" stroke-width="1.5"/>
+  <text x="472" y="379" font-size="9.5" font-weight="400" fill="#7FC8FF">⚠ LangSmith's "user" = human message role</text>
   <text x="472" y="394" font-size="9" fill="#B2DEFF">This is the question you typed, not the</text>
   <text x="472" y="408" font-size="9" fill="#B2DEFF">USER segment (your system_prompt).</text>
-  <text x="472" y="422" font-size="9" fill="#7FC8FF">USER lives inside the system section above.</text>
+  <text x="472" y="422" font-size="9" fill="#99D3FF">USER lives inside the system section above.</text>
 
   <!-- Footer -->
   <text x="370" y="457" text-anchor="middle" font-size="10" fill="#B2DEFF">The system section is what both Haiku and Sonnet received, word for word. Open your LangSmith run to see it.</text>
