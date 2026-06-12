@@ -10,16 +10,6 @@
   .slide.active { display: block; }
   .slide svg { width: 100%; height: auto; display: block; }
   .sd-stage { position: relative; cursor: pointer; }
-  .hint {
-    position: absolute; inset: 0;
-    background: rgba(3,7,16,0.68);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 10px;
-    pointer-events: none;
-  }
-  .hint.gone { display: none; }
-  .hint-title { font: 500 18px 'IBM Plex Mono', monospace; color: #E5F4FF; text-align: center; }
-  .hint-sub   { font: 400 13px 'IBM Plex Mono', monospace; color: #7FC8FF; text-align: center; }
 </style>
 </head>
 <body>
@@ -204,11 +194,6 @@
 
     </div><!-- #slides -->
 
-    <div class="hint" id="hint">
-      <div class="hint-title">Click to step through the flow</div>
-      <div class="hint-sub">or use the ← → buttons below</div>
-    </div>
-
   </div><!-- .sd-stage -->
 
   <div class="sd-bar">
@@ -250,22 +235,14 @@
   var prevBtn = document.getElementById('prev');
   var nextBtn = document.getElementById('next');
   var stage  = document.getElementById('stage');
-  var hint   = document.getElementById('hint');
   var cur = 0;
-  var hintShown = true;
 
   slides.forEach(function (_, i) {
     var d = document.createElement('div');
     d.className = 'sd-dot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', function () { dismissHint(); goTo(i); });
+    d.addEventListener('click', function () { goTo(i); });
     dotsEl.appendChild(d);
   });
-
-  function dismissHint() {
-    if (!hintShown) return;
-    hintShown = false;
-    hint.classList.add('gone');
-  }
 
   function goTo(n) {
     if (n < 0 || n >= slides.length) return;
@@ -281,25 +258,22 @@
   }
 
   stage.addEventListener('click', function () {
-    if (hintShown) { dismissHint(); return; }
     if (cur < slides.length - 1) goTo(cur + 1);
   });
 
   prevBtn.addEventListener('click', function (e) {
     e.stopPropagation();
-    dismissHint();
     if (cur > 0) goTo(cur - 1);
   });
 
   nextBtn.addEventListener('click', function (e) {
     e.stopPropagation();
-    dismissHint();
     if (cur < slides.length - 1) goTo(cur + 1);
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight') { dismissHint(); if (cur < slides.length - 1) goTo(cur + 1); }
-    if (e.key === 'ArrowLeft')  { dismissHint(); if (cur > 0) goTo(cur - 1); }
+    if (e.key === 'ArrowRight') { if (cur < slides.length - 1) goTo(cur + 1); }
+    if (e.key === 'ArrowLeft')  { if (cur > 0) goTo(cur - 1); }
   });
 })();
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m1.l6-mcp</title>
+    <title>m2.2-filesystem</title>
     <meta name="description" content="">
 
     <!-- Syntax highlighting -->
@@ -526,11 +526,13 @@
     </style>
 </head>
 <body>
-    <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1.l6-mcp.html" target="_blank" rel="noopener noreferrer">🔗 For translation, open lesson in new tab and use Chrome translate</a></p>
+    <p><a href="https://langchain-ai.github.io/lca-deepagents/m2/m2.2-filesystem.html" target="_blank" rel="noopener noreferrer">🔗 For translation, open lesson in new tab and use Chrome translate</a></p>
 <style>@import url('../shared/sd-components.css');</style>
 <script src="../shared/sd-components.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { background: '#F2FAFF', primaryColor: '#E5F4FF', primaryBorderColor: '#006DDD', primaryTextColor: '#030710', lineColor: '#2F4B68' } });</script>
 
-<h1 id="mcp">MCP</h1>
+<h1 id="filesystem-backends">Filesystem Backends</h1>
 <style>
 .lt-bar {
   display: flex;
@@ -540,7 +542,7 @@
   border-bottom: 2px solid #CCE9FF;
 }
 .lt-group { display: flex; gap: 3px; }
-.lt-mcp  { --c: #0891B2; }
+.lt-fs   { --c: #006DDD; }
 .lt-wrap { --c: #B45309; }
 .lt-tab {
   font: 500 14px 'IBM Plex Mono', monospace;
@@ -570,203 +572,226 @@
 </style>
 
 <div class="lt-bar" role="tablist" aria-label="Lesson sections">
-  <div class="lt-group lt-mcp">
-    <button class="lt-tab active" data-p="mcp" role="tab" aria-selected="true">MCP</button>
+  <div class="lt-group lt-fs">
+    <button class="lt-tab active" data-p="fs" role="tab" aria-selected="true">Filesystem</button>
   </div>
   <div class="lt-group lt-wrap">
-    <button class="lt-tab" data-p="lab4" role="tab" aria-selected="false">Lab 4</button>
-    <button class="lt-tab" data-p="lab5" role="tab" aria-selected="false">Lab 5</button>
+    <button class="lt-tab" data-p="lab1" role="tab" aria-selected="false">Lab 1</button>
   </div>
 </div>
 
-<div class="lt-panel active" id="p-mcp" role="tabpanel">
-<h2 id="mcp-connecting-agents-to-external-services">MCP: Connecting Agents to External Services</h2>
-<p>Model Context Protocol (MCP) is an open protocol that standardizes how applications provide tools and context to LLMs. Instead of each integration requiring custom code in your agent, MCP servers expose a consistent interface that any MCP-aware client can connect to.</p>
-<iframe src="images/m1.l6-mcp-slides-1.html" style="width:100%;height:480px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="MCP architecture walkthrough; use arrow keys or Prev/Next to navigate"></iframe>
-<p>LangChain agents connect to MCP servers using the <code>langchain-mcp-adapters</code> library. The adapters wrap each MCP tool as a standard LangChain <code>BaseTool</code>, so the agent sees it identically to any locally-defined tool. The tool result is added to the message history and the model decides what to do next, exactly as it would with a regular tool call.</p>
-<h3 id="configuration">Configuration</h3>
-<p>deepagents discovers MCP servers from <code>.mcp.json</code> in your project root (or <code>~/.deepagents/.mcp.json</code> for user-level config). The project repo already includes a config pointing at the LangChain documentation server:</p>
-<iframe src="images/m1.l6-mcp-slides-config.html" style="width:100%;height:380px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title=".mcp.json configuration diagram"></iframe>
-<p>Load those tools in Python with <code>get_mcp_tools</code>:</p>
-<pre><code class="language-python">from deepagents_code.mcp_tools import get_mcp_tools
+<div class="lt-panel active" id="p-fs" role="tabpanel">
+<p>The filesystem backends control <strong>where files are stored</strong>. Each backend implements the same interface — <code>ls</code>, <code>read_file</code>, <code>write_file</code>, <code>edit_file</code>, <code>glob</code>, <code>grep</code> — so the agent code stays the same regardless of which one you choose.</p>
+<hr />
+<h2 id="storage-backends">Storage backends</h2>
+<div class="mermaid">
+graph TB
+    Tools[Filesystem Tools] --&gt; Backend[Backend]
 
-tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;)
-</code></pre>
-<p>Pass <code>tools</code> to <code>create_deep_agent</code> as you would any other tool list. When you are done, call <code>await session_manager.cleanup()</code> to close the connections.</p>
-<h3 id="transport">Transport</h3>
-<p>The transport is the underlying mechanism used to communicate with an MCP server. It is abstracted away from your agent code; the agent never sees or interacts with it directly.</p>
-<p>There are three transport types:</p>
+    Backend --&gt; State[State]
+    Backend --&gt; Disk[Filesystem]
+    Backend --&gt; Store[Store]
+    Backend --&gt; ContextHub[Context Hub]
+    Backend --&gt; Composite[Composite]
+    Backend --&gt; Custom[Custom]
+
+    Composite --&gt; Router{Routes}
+    Router --&gt; State
+    Router --&gt; Disk
+    Router --&gt; Store
+    Router --&gt; ContextHub
+
+    classDef trigger fill:#CCE9FF,stroke:#006DDD,stroke-width:2px,color:#030710
+    classDef hub fill:#7FC8FF,stroke:#006DDD,stroke-width:2px,color:#030710
+    classDef process fill:#E5F4FF,stroke:#006DDD,stroke-width:1px,color:#030710
+    classDef decision fill:#CCE9FF,stroke:#40668D,stroke-width:1.5px,color:#030710
+
+    class Tools trigger
+    class Backend hub
+    class State,Disk,Store,ContextHub,Composite,Custom process
+    class Router decision
+</div>
+<hr />
+<h2 id="the-backends">The backends</h2>
+<p><strong>State</strong> — the default. Files live in LangGraph state, also referred to as "checkpoint or short-term memory". It is scoped to the current thread. Persists as long as the thread persists.</p>
+<p><strong>Filesystem</strong> — reads and writes files on the local disk. Scoped to a <code>root_dir</code> you specify. </p>
+<p><strong>Store</strong> — backed by the store. In production, this is a PostgreSQL database; locally, it can be an in-memory database or a local database. Files persist across threads. </p>
+<p><strong>Context Hub</strong> — files are injected directly into the model's context window, without an explicit read call. Useful for reference material, the agent should always have in view. Learn more about the LangSmith Context Hub <a href="https://docs.langchain.com/langsmith/context-hub" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p><strong>Composite</strong> — routes different path prefixes to different backends. Lets you mix different backends in a single agent (e.g. <code>/memories/</code> → Store, <code>/skills/</code> → Store, everything else → State).</p>
+<p><strong>Custom</strong> — implement the backend interface yourself to plug in any storage system.</p>
+<hr />
+<h2 id="single-backend">Single backend</h2>
+<p>Pass any backend directly to <code>create_deep_agent</code>. Here the agent stores all files in the LangGraph store — persisted across threads.</p>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# example\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=StoreBackend(\n        namespace=lambda rt: (rt.server_info.user.identity,),\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [10, 12]}]"></div>
+<p><code>rt</code> is the LangGraph runtime passed to the backend at invocation time. <code>rt.server_info.user.identity</code> is the caller's user ID — using it as the namespace key keeps each user's files isolated in the store.</p>
+<hr />
+<h2 id="composite-backend">Composite backend</h2>
+<p><code>CompositeBackend</code> routes path prefixes to different backends. Everything not matched by a route falls through to the <code>default</code>.</p>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# example\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [12, 13, 16]}]"></div>
 <ul>
-<li><strong>stdio</strong> runs the server as a local subprocess on your machine. Messages pass as JSON through the subprocess's standard input and output streams. No networking required.</li>
-<li><strong>HTTP</strong> sends a standard HTTPS request to a remote server and waits for the response. A new connection opens for each tool call and closes when the response arrives.</li>
-<li><strong>SSE</strong> (Server-Sent Events) opens a persistent HTTP connection. The server can push events back over that connection in real time, which is useful for long-running tools or streaming results. SSE is the newest transport type in the MCP spec.</li>
+<li><code>/memories/</code> → durable store, persists across threads</li>
+<li><code>/skills/</code> → durable store, persists across threads</li>
+<li>Everything else → <code>StateBackend</code>, thread-scoped and ephemeral</li>
 </ul>
-<iframe src="images/m1.l6-mcp-slides-2.html" style="width:100%;height:460px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="Transport types walkthrough; use arrow keys or Prev/Next to navigate"></iframe>
-<p>In <code>.mcp.json</code>, set <code>"type"</code> to <code>"http"</code> or <code>"sse"</code> for remote servers, or use <code>"command"</code> and <code>"args"</code> for stdio servers. deepagents normalizes the transport at load time; your Python code does not change.</p>
-<h3 id="authorization">Authorization</h3>
-<p>Some MCP servers require the user to authenticate before the agent can call their tools.</p>
-<iframe src="images/m1.l6-mcp-slides-auth.html" style="width:100%;height:460px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="Authorization walkthrough; use arrow keys or Prev/Next to navigate"></iframe>
-<p>Add <code>"auth": "oauth"</code> to the server entry in <code>.mcp.json</code>:</p>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;gmail&quot;: {
-      &quot;type&quot;: &quot;sse&quot;,
-      &quot;url&quot;: &quot;https://example-mcp-server.googleapis.com/v1/mcp&quot;,
-      &quot;auth&quot;: &quot;oauth&quot;,
-      &quot;allowedTools&quot;: [&quot;list_emails&quot;, &quot;read_email&quot;]
-    }
-  }
-}
-</code></pre>
-<p>When deepagents detects a server that requires OAuth, it pauses and opens a browser window for the user to log in. Tokens are stored in <code>~/.deepagents/.state/mcp-tokens/</code> and reused on subsequent runs.</p>
-<p><code>allowedTools</code> lets you restrict which tools from a server the agent can see. This is useful when a server exposes many tools but you only need a subset.</p>
-<h3 id="human-in-the-loop-hitl">Human-in-the-Loop (HITL)</h3>
-<p>Even after authorization, you may want a human to confirm before the agent reads or writes data. Pass <code>interrupt_on</code> to <code>create_deep_agent</code> with a mapping of tool names to approval settings:</p>
-<iframe src="images/m1.l6-mcp-slides-hitl.html" style="width:100%;height:460px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="HITL walkthrough; use arrow keys or Prev/Next to navigate"></iframe>
-<pre><code class="language-python">from deepagents import create_deep_agent
-from langgraph.checkpoint.memory import MemorySaver
+<hr />
+<h2 id="permissions">Permissions</h2>
+<p>Pass a list of <code>FilesystemPermission</code> rules to <code>create_deep_agent</code> to control which paths the agent can read or write. Rules are evaluated in order — the first match wins. If nothing matches, the operation is allowed.</p>
+<p>Each rule has three fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Values</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operations</code></td>
+<td><code>"read"</code>, <code>"write"</code></td>
+<td>—</td>
+<td><code>"read"</code> covers <code>ls</code>, <code>read_file</code>, <code>glob</code>, <code>grep</code>. <code>"write"</code> covers <code>write_file</code>, <code>edit_file</code>.</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>glob patterns</td>
+<td>—</td>
+<td>e.g. <code>["/memories/**"]</code>. Supports <code>**</code> and <code>{a,b}</code> alternation.</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>"allow"</code>, <code>"deny"</code>, <code>"interrupt"</code></td>
+<td><code>"allow"</code></td>
+<td><code>"interrupt"</code> pauses for human approval instead of blocking.</td>
+</tr>
+</tbody>
+</table>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/agent.py\nfrom models import model\nfrom deepagents import create_deep_agent, FilesystemPermission\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),\n    permissions=[\n        FilesystemPermission(\n            operations=[\&quot;write\&quot;],\n            paths=[\&quot;/skills/**\&quot;],\n            mode=\&quot;deny\&quot;,\n        ),\n    ],\n)&quot;, &quot;highlights&quot;: [17, 18, 19, 20, 21, 22, 23]}]"></div>
+<p>The agent can read <code>/skills/</code> but not write to it — skills are managed by application code, not the agent. <code>/memories/</code> remains fully read/write.</p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>All backends expose the same tool surface — the agent never knows which one it's talking to</li>
+<li><strong>State</strong> is the default: fast and zero-config, but thread-scoped</li>
+<li><strong>Store</strong> is the right choice when files need to survive across sessions</li>
+<li><strong>Composite</strong> lets you combine backends by path prefix</li>
+</ul>
+<h2 id="next">Next</h2>
+<p>The next lesson covers the execution backends — Sandbox and Local Shell — which add a shell <code>execute</code> tool on top of the filesystem surface.</p>
+<hr />
+<h2 id="references">References</h2>
+<p><strong>Documentation:</strong><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/backends" target="_blank" rel="noopener noreferrer">Filesystem Backends</a></p>
+</div>
+<div class="lt-panel" id="p-lab1" role="tabpanel">
+<h2 id="lab-1-permissions">Lab 1: Permissions</h2>
+<p>The lab agent uses a <code>CompositeBackend</code> with <code>/memories/</code> and <code>/skills/</code> both routed to the store. A <code>FilesystemPermission</code> rule denies all writes to <code>/skills/**</code>.</p>
+<p>The agent is pre-seeded with a Chinook sales skill and asked to read it, then add a promotion note. You'll see it read successfully and get blocked on the write.</p>
+<pre><code class="language-python"># python/m2/agent.py
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from models import model
+from deepagents import create_deep_agent, FilesystemPermission
+from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
+from deepagents.backends.utils import create_file_data
+from langgraph.store.memory import InMemoryStore
+
+store = InMemoryStore()
+
+# Seed the Chinook sales skill
+store.put(
+    (&quot;student&quot;,),
+    &quot;/skills/chinook-sales/SKILL.md&quot;,
+    create_file_data(&quot;&quot;&quot;\
+---
+name: chinook-sales
+description: Act as a Chinook sales rep — answer questions about customers, invoices, and the music catalog.
+---
+
+You are a sales representative for Chinook Digital Music Store.
+
+**Your responsibilities:**
+- Look up customer accounts and purchase history
+- Recommend music based on a customer's genre and artist preferences
+- Answer questions about the catalog (artists, albums, tracks, pricing)
+- Summarize invoice history for a customer
+
+**Chinook schema (key tables):**
+- `Customer` — CustomerId, FirstName, LastName, Email, SupportRepId
+- `Employee` — EmployeeId, Title (e.g. &quot;Sales Support Agent&quot;)
+- `Invoice` — InvoiceId, CustomerId, InvoiceDate, Total
+- `InvoiceLine` — InvoiceId, TrackId, UnitPrice, Quantity
+- `Track` — TrackId, Name, AlbumId, GenreId, UnitPrice
+- `Album` — AlbumId, Title, ArtistId
+- `Artist` — ArtistId, Name
+- `Genre` — GenreId, Name
+&quot;&quot;&quot;),
+)
 
 agent = create_deep_agent(
     model=model,
-    tools=tools,
-    interrupt_on={
-        &quot;list_emails&quot;: True,
-        &quot;read_email&quot;:  True,
-    },
-    checkpointer=MemorySaver(),
-)
-</code></pre>
-<p><code>True</code> pauses the agent before calling that tool and presents the pending call to the user. The user can approve, edit the inputs, reject, or respond with a message. Execution resumes once a decision is made.</p>
-<div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
-<strong>interrupt_on requires a checkpointer</strong>
-<p style="margin:0.5rem 0 0;">When the agent pauses for human approval, it needs to save its current state so execution can resume from exactly the same point after a decision is made. A checkpointer handles that save-and-restore. <code>MemorySaver</code> keeps state in memory and is fine for development; use a persistent checkpointer in production.</p>
-</div>
-</div>
-<div class="lt-panel" id="p-lab4" role="tabpanel">
-<h2 id="lab-4-langchain-docs-no-auth">Lab 4: LangChain Docs (no auth)</h2>
-<p>The project repo includes <code>.mcp.json</code> at the root with the LangChain documentation server pre-configured. You do not need to edit any config for this lab.</p>
-<p>Create a new file <code>python/m1/mcp_agent.py</code>:</p>
-<pre><code class="language-python">import asyncio
-from models import model
-from deepagents import create_deep_agent
-from deepagents_code.mcp_tools import get_mcp_tools
-
-async def main():
-    tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;)
-
-    for info in server_infos:
-        print(f&quot;{info.name}: {info.status} — {len(info.tools)} tool(s)&quot;)
-
-    agent = create_deep_agent(model=model, tools=tools)
-
-    result = await agent.ainvoke({
-        &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the LangGraph interrupt API and when would I use it?&quot;}]
-    })
-    print(result[&quot;messages&quot;][-1].content)
-
-    if session_manager:
-        await session_manager.cleanup()
-
-asyncio.run(main())
-</code></pre>
-<p>Run it from the repo root:</p>
-<pre><code class="language-bash">uv run ./python/m1/mcp_agent.py
-</code></pre>
-<p>Open LangSmith and find the run. You should see the MCP tool call in the trace alongside any other tool calls, listed as a regular tool message in the message history.</p>
-<div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
-<strong>The server_infos check</strong>
-<p style="margin:0.5rem 0 0;">Printing <code>server_infos</code> at startup tells you which servers loaded successfully and how many tools each one exposed. If a server has <code>status="error"</code>, its tools will not be available and the agent will not try to call them.</p>
-</div>
-</div>
-<div class="lt-panel" id="p-lab5" role="tabpanel">
-<h2 id="lab-5-gmail-with-oauth-and-hitl">Lab 5: Gmail with OAuth and HITL</h2>
-<p>This lab adds a Gmail MCP server to the agent and gates every email access behind a human approval step.</p>
-<h3 id="step-1-add-gmail-to-mcpjson">Step 1: Add Gmail to .mcp.json</h3>
-<p>Add the Gmail server entry to <code>.mcp.json</code> in the project root. Use <code>allowedTools</code> to restrict the agent to read-only email access:</p>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;docs-langchain&quot;: {
-      &quot;type&quot;: &quot;http&quot;,
-      &quot;url&quot;: &quot;https://docs.langchain.com/mcp&quot;
-    },
-    &quot;gmail&quot;: {
-      &quot;type&quot;: &quot;sse&quot;,
-      &quot;url&quot;: &quot;https://gmail.googleapis.com/v1/mcp&quot;,
-      &quot;auth&quot;: &quot;oauth&quot;,
-      &quot;allowedTools&quot;: [&quot;list_emails&quot;, &quot;read_email&quot;]
-    }
-  }
-}
-</code></pre>
-<div style="margin:1rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid #b3e0b3;background-color:#f0faf0;color:#1a4d1a;font-size:0.9em;">
-<strong>Check the current URL</strong><br>
-Verify the Gmail MCP server URL from Google's official documentation before running. The course README has the tested URL and any additional setup steps.
-</div>
-<h3 id="step-2-authenticate">Step 2: Authenticate</h3>
-<p>On the first run, deepagents will detect <code>auth: "oauth"</code> and open a browser window for you to authorize the Gmail scope. Tokens are saved to <code>~/.deepagents/.state/mcp-tokens/gmail.json</code> and reused on subsequent runs.</p>
-<h3 id="step-3-add-hitl-and-run">Step 3: Add HITL and run</h3>
-<p>Update <code>python/m1/mcp_agent.py</code> to add <code>interrupt_on</code> for the Gmail tools:</p>
-<pre><code class="language-python">import asyncio
-import uuid
-from models import model
-from deepagents import create_deep_agent
-from deepagents_code.mcp_tools import get_mcp_tools
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.types import Command
-
-async def main():
-    tools, session_manager, _ = await get_mcp_tools(&quot;.mcp.json&quot;)
-
-    agent = create_deep_agent(
-        model=model,
-        tools=tools,
-        interrupt_on={
-            &quot;list_emails&quot;: True,
-            &quot;read_email&quot;:  True,
+    backend=CompositeBackend(
+        default=StateBackend(),
+        routes={
+            &quot;/memories/&quot;: StoreBackend(namespace=lambda _rt: (&quot;student&quot;,)),
+            &quot;/skills/&quot;: StoreBackend(namespace=lambda _rt: (&quot;student&quot;,)),
         },
-        checkpointer=MemorySaver(),
-    )
+    ),
+    store=store,
+    permissions=[
+        FilesystemPermission(
+            operations=[&quot;write&quot;],
+            paths=[&quot;/skills/**&quot;],
+            mode=&quot;deny&quot;,
+        ),
+    ],
+)
 
-    config = {&quot;configurable&quot;: {&quot;thread_id&quot;: str(uuid.uuid4())}}
+result = agent.invoke(
+    {
+        &quot;messages&quot;: [
+            {
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: (
+                    &quot;Read the chinook-sales skill file, then add this note to it: &quot;
+                    &quot;'Current promotion: 20% off all Jazz albums through end of month.'&quot;
+                ),
+            }
+        ]
+    },
+    config={&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;lab-m2.2&quot;}},
+)
 
-    await agent.ainvoke(
-        {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize my three most recent emails.&quot;}]},
-        config=config,
-    )
-
-    state = agent.get_state(config)
-    if state.interrupts:
-        interrupt = state.interrupts[0].value
-        for req in interrupt[&quot;action_requests&quot;]:
-            print(f&quot;\nPending tool call: {req['name']}&quot;)
-            print(f&quot;  Input: {req.get('args', {})}&quot;)
-        decision = input(&quot;\nApprove? (y/n): &quot;)
-        if decision.strip().lower() == &quot;y&quot;:
-            result = await agent.ainvoke(
-                Command(resume={&quot;decisions&quot;: [{&quot;type&quot;: &quot;approve&quot;} for _ in interrupt[&quot;action_requests&quot;]]}),
-                config=config,
-            )
-            print(result[&quot;messages&quot;][-1].content)
-        else:
-            print(&quot;Rejected.&quot;)
-
-    if session_manager:
-        await session_manager.cleanup()
-
-asyncio.run(main())
+print(result[&quot;messages&quot;][-1].content)
 </code></pre>
-<p>Run it:</p>
-<pre><code class="language-bash">uv run ./python/m1/mcp_agent.py
+<pre><code class="language-bash">cd python
+uv run ./m2/agent.py
 </code></pre>
-<p>The agent will call <code>list_emails</code>, then pause. You will see the pending tool call printed in the terminal. Type <code>y</code> to approve and the agent will continue, fetch the emails, and summarize them.</p>
-<p>Check LangSmith to see the full trace: the interrupt, the resume, and the final tool results all appear in the message history.</p>
+<pre><code>The file is read-only — I don't have write permission to /skills/chinook-sales/SKILL.md.
+Here's the current content of the file for reference:
+
+---
+name: chinook-sales
+description: Act as a Chinook sales rep — answer questions about customers, invoices, and the music catalog.
+---
+
+You are a sales representative for Chinook Digital Music Store.
+...
+
+The note I'd add would go at the bottom:
+
+**Notes:**
+- Current promotion: 20% off all Jazz albums through end of month.
+
+Unfortunately, the file is write-protected and I'm unable to modify it directly.
+</code></pre>
+<p><strong>What to look for:</strong><br />
+- The agent reads <code>/skills/chinook-sales/SKILL.md</code> without issue<br />
+- When it tries to write, it reports the file is read-only<br />
+- <code>/memories/</code> is unaffected — the agent can still read and write there</p>
 </div>
-<h2 id="references">References</h2>
-<p><strong>Documentation:</strong><br />
-- <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">Model Context Protocol spec</a><br />
-- <a href="https://github.com/langchain-ai/langchain-mcp-adapters" target="_blank" rel="noopener noreferrer">langchain-mcp-adapters (GitHub)</a><br />
-- <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer">MCP servers directory</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/mcp" target="_blank" rel="noopener noreferrer">deepagents MCP config reference</a></p>
 <script>
 (function () {
   var tabs = document.querySelectorAll('.lt-tab');
