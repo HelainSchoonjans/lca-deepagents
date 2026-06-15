@@ -722,7 +722,7 @@ buildDiagram({
 </script>
 <details style="margin:4px 0 16px;">
 <summary style="cursor:pointer;font-size:0.9em;color:#40668D;">Parallel tool calls</summary>
-<div style="padding:8px 0 4px;">
+<div style="padding:8px 16px 12px;">
 <p>When tool calls have no dependency on each other, the Tool Node runs them simultaneously rather than one at a time. Some harness profiles explicitly instruct the model to do this.</p>
 <p><strong>Example:</strong> an agent with <code>search_web</code> and <code>search_docs</code> tools receives a question that needs both. Both fire in the same turn; the LLM sees both results together in the next call.</p>
 <p><strong>Try it in Lab 3:</strong> ask two unrelated questions in one message: <code>"Which genres have the most tracks, and which employee has handled the most invoices?"</code> Then watch the LangSmith trace to see whether the calls overlap.</p>
