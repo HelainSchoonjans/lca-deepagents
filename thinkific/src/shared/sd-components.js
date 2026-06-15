@@ -1,21 +1,24 @@
 // ── SVG fragment helpers ──────────────────────────────────────────────────────
 
-function solidArrow(x1, x2, y, lbl, lx, a) {
+function solidArrow(x1, x2, y, lbl, lx, a, fs) {
+  fs = fs || 12.5;
   return `<line class="al" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke-width="1.5" marker-end="url(#${a})"/>` +
-         `<text class="at" x="${lx}" y="${y-7}" text-anchor="middle" font-size="12.5">${lbl}</text>`;
+         `<text class="at" x="${lx}" y="${y-7}" text-anchor="middle" font-size="${fs}">${lbl}</text>`;
 }
 
-function dashedArrow(x1, x2, y, lbl, lx, a) {
+function dashedArrow(x1, x2, y, lbl, lx, a, fs) {
+  fs = fs || 12.5;
   return `<line class="al" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#${a})"/>` +
-         `<text class="at" x="${lx}" y="${y-7}" text-anchor="middle" font-size="12.5">${lbl}</text>`;
+         `<text class="at" x="${lx}" y="${y-7}" text-anchor="middle" font-size="${fs}">${lbl}</text>`;
 }
 
-function labelBox(cx, y, w, lines) {
-  const lh = 18, pad = 10;
+function labelBox(cx, y, w, lines, fs) {
+  fs = fs || 12;
+  const lh = 20, pad = 12;
   const h = lines.length * lh + pad;
   let s = `<rect class="ab" x="${cx - w/2}" y="${y}" width="${w}" height="${h}" rx="4" stroke-width="1.5"/>`;
   lines.forEach((t, i) => {
-    s += `<text class="abt" x="${cx}" y="${y + pad/2 + lh*(i+0.8)}" text-anchor="middle" font-size="12">${t}</text>`;
+    s += `<text class="abt" x="${cx}" y="${y + pad/2 + lh*(i+0.8)}" text-anchor="middle" font-size="${fs}">${t}</text>`;
   });
   return s;
 }
@@ -25,7 +28,7 @@ function labelBox(cx, y, w, lines) {
 //         steps, buildSteps, staticSVG (optional), stageBg (optional) }
 
 function buildDiagram(opts) {
-  const { id, participants, cx, bw, bh, tby, bby, vw, vh, steps, buildSteps, staticSVG: customStatic, stageBg } = opts;
+  const { id, participants, cx, bw, bh, tby, bby, vw, vh, steps, buildSteps, staticSVG: customStatic, stageBg, partFontSize } = opts;
   const wrap = document.getElementById(id);
   if (!wrap) return;
   const n = steps.length;
@@ -43,10 +46,11 @@ function buildDiagram(opts) {
     participants.forEach(function(lbl, i) {
       const x = cx[i] - bw/2;
       staticSVG += `<rect x="${x}" y="${tby}" width="${bw}" height="${bh}" rx="4" fill="#161F34" stroke="#2F4B68" stroke-width="1.5"/>`;
-      staticSVG += `<text x="${cx[i]}" y="${tby + bh/2 + 5}" text-anchor="middle" fill="#E5F4FF" font-size="13" font-weight="500">${lbl}</text>`;
+      const pfs = partFontSize || 13;
+      staticSVG += `<text x="${cx[i]}" y="${tby + bh/2 + 5}" text-anchor="middle" fill="#E5F4FF" font-size="${pfs}" font-weight="500">${lbl}</text>`;
       staticSVG += `<line x1="${cx[i]}" y1="${ly1}" x2="${cx[i]}" y2="${ly2}" stroke="#40668D" stroke-width="1.5" stroke-dasharray="5,5"/>`;
       staticSVG += `<rect x="${x}" y="${bby}" width="${bw}" height="${bh}" rx="4" fill="#161F34" stroke="#2F4B68" stroke-width="1.5"/>`;
-      staticSVG += `<text x="${cx[i]}" y="${bby + bh/2 + 5}" text-anchor="middle" fill="#E5F4FF" font-size="13" font-weight="500">${lbl}</text>`;
+      staticSVG += `<text x="${cx[i]}" y="${bby + bh/2 + 5}" text-anchor="middle" fill="#E5F4FF" font-size="${pfs}" font-weight="500">${lbl}</text>`;
     });
   }
 

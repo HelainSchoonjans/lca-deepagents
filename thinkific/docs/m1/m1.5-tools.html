@@ -631,10 +631,11 @@
 buildDiagram({
   id: 'dg-tool-loop',
   participants: ['SDK', 'LLM', 'Tools', 'execute_sql'],
-  cx: [72, 237, 470, 660],
-  bw: 105, bh: 36,
+  cx: [80, 320, 590, 840],
+  bw: 130, bh: 42,
   tby: 20, bby: 480,
-  vw: 800, vh: 540,
+  vw: 960, vh: 540,
+  partFontSize: 16,
   steps: [
     {
       tag: 'Step 1 of 7 · SDK injects tool schemas',
@@ -666,15 +667,15 @@ buildDiagram({
     }
   ],
   buildSteps: function(a) {
-    var L = [72, 237, 470, 660], hw = 52;
+    var L = [80, 320, 590, 840], hw = 65, fs = 14;
     return [
-      solidArrow(L[0]+hw, L[1]-hw, 82, 'tool schemas', (L[0]+L[1])/2, a),
-      labelBox(L[1], 112, 160, ['AIMessage', '{ tool_calls: [...] }']),
-      solidArrow(L[1]+hw, L[2]-hw, 197, 'AIMessage', (L[1]+L[2])/2, a),
-      solidArrow(L[2]+hw, L[3]-hw, 252, 'execute_sql(query=…)', (L[2]+L[3])/2, a),
-      dashedArrow(L[3]-hw, L[2]+hw, 312, 'result string', (L[2]+L[3])/2, a),
-      solidArrow(L[2]-hw, L[1]+hw, 372, 'ToolMessage', (L[1]+L[2])/2, a),
-      labelBox(L[1], 425, 160, ['AIMessage', '(answer or loop)'])
+      solidArrow(L[0]+hw, L[1]-hw, 82, 'tool schemas', (L[0]+L[1])/2, a, fs),
+      labelBox(L[1], 112, 190, ['AIMessage', '{ tool_calls: [...] }'], fs),
+      solidArrow(L[1]+hw, L[2]-hw, 205, 'AIMessage', (L[1]+L[2])/2, a, fs),
+      solidArrow(L[2]+hw, L[3]-hw, 262, 'execute_sql(query=…)', (L[2]+L[3])/2, a, fs),
+      dashedArrow(L[3]-hw, L[2]+hw, 322, 'result string', (L[2]+L[3])/2, a, fs),
+      solidArrow(L[2]-hw, L[1]+hw, 382, 'ToolMessage', (L[1]+L[2])/2, a, fs),
+      labelBox(L[1], 412, 190, ['AIMessage', '(answer or loop)'], fs)
     ];
   }
 });
@@ -691,18 +692,18 @@ buildDiagram({
   g.setAttribute('style', 'pointer-events:none');
   var r = document.createElementNS(ns, 'rect');
   r.setAttribute('x','0'); r.setAttribute('y','0');
-  r.setAttribute('width','800'); r.setAttribute('height','540');
+  r.setAttribute('width','960'); r.setAttribute('height','540');
   r.setAttribute('fill','rgba(3,7,16,0.65)');
   g.appendChild(r);
   var t1 = document.createElementNS(ns, 'text');
-  t1.setAttribute('x','400'); t1.setAttribute('y','263');
+  t1.setAttribute('x','480'); t1.setAttribute('y','263');
   t1.setAttribute('text-anchor','middle'); t1.setAttribute('fill','#E5F4FF');
   t1.setAttribute('font-size','18'); t1.setAttribute('font-weight','500');
   t1.setAttribute('font-family','IBM Plex Mono, monospace');
   t1.textContent = 'Click to step through the flow';
   g.appendChild(t1);
   var t2 = document.createElementNS(ns, 'text');
-  t2.setAttribute('x','400'); t2.setAttribute('y','287');
+  t2.setAttribute('x','480'); t2.setAttribute('y','287');
   t2.setAttribute('text-anchor','middle'); t2.setAttribute('fill','#7FC8FF');
   t2.setAttribute('font-size','13'); t2.setAttribute('font-family','IBM Plex Mono, monospace');
   t2.textContent = 'or use the ← → buttons below';
