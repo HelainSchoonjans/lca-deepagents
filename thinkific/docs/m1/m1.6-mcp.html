@@ -581,8 +581,7 @@
     <button class="lt-tab active" data-p="mcp" role="tab" aria-selected="true">MCP</button>
   </div>
   <div class="lt-group lt-wrap">
-    <button class="lt-tab" data-p="lab4" role="tab" aria-selected="false">Lab</button>
-    <button class="lt-tab" data-p="lab5" role="tab" aria-selected="false">Lab</button>
+    <button class="lt-tab" data-p="lab" role="tab" aria-selected="false">Lab</button>
   </div>
 </div>
 
@@ -621,16 +620,16 @@ tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;
 {
   &quot;mcpServers&quot;: {
     &quot;gmail&quot;: {
-      &quot;type&quot;: &quot;sse&quot;,
-      &quot;url&quot;: &quot;https://example-mcp-server.googleapis.com/v1/mcp&quot;,
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://gmailmcp.googleapis.com/mcp/v1&quot;,
       &quot;auth&quot;: &quot;oauth&quot;,
-      &quot;allowedTools&quot;: [&quot;list_emails&quot;, &quot;read_email&quot;]
+      &quot;allowedTools&quot;: [&quot;search_threads&quot;, &quot;get_thread&quot;]
     }
   }
 }
 </code></pre>
 <p>When deepagents detects a server that requires OAuth, it pauses and opens a browser window for the user to log in. Tokens are stored in <code>~/.deepagents/.state/mcp-tokens/</code> and reused on subsequent runs.</p>
-<p><code>allowedTools</code> lets you restrict which tools from a server the agent can see. This is useful when a server exposes many tools but you only need a subset.</p>
+<p><code>allowedTools</code> lets you restrict which tools from a server the agent can see. This is useful when a server exposes many tools but you only need a subset; for example, giving an agent read-only access to Gmail without exposing tools that can send or delete.</p>
 <h3 id="human-in-the-loop-hitl">Human-in-the-Loop (HITL)</h3>
 <p>Even after authorization, you may want a human to confirm before the agent reads or writes data. Pass <code>interrupt_on</code> to <code>create_deep_agent</code> with a mapping of tool names to approval settings:</p>
 <iframe src="images/m1.6-mcp-slides-hitl.html" style="width:100%;height:460px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="HITL walkthrough; use arrow keys or Prev/Next to navigate"></iframe>
@@ -642,8 +641,8 @@ agent = create_deep_agent(
     model=model,
     tools=tools,
     interrupt_on={
-        &quot;list_emails&quot;: True,
-        &quot;read_email&quot;:  True,
+        &quot;search_threads&quot;: True,
+        &quot;get_thread&quot;:     True,
     },
     checkpointer=MemorySaver(),
 )
@@ -654,15 +653,29 @@ agent = create_deep_agent(
 <p style="margin:0.5rem 0 0;">When the agent pauses for human approval, it needs to save its current state so execution can resume from exactly the same point after a decision is made. A checkpointer handles that save-and-restore. <code>MemorySaver</code> keeps state in memory and is fine for development; use a persistent checkpointer in production.</p>
 </div>
 </div>
-<div class="lt-panel" id="p-lab4" role="tabpanel">
-<h2 id="langchain-docs-no-auth">LangChain Docs (no auth)</h2>
-<p>The project repo includes <code>.mcp.json</code> at the root with the LangChain documentation server pre-configured. You do not need to edit any config for this lab.</p>
+<div class="lt-panel" id="p-lab" role="tabpanel">
+<h2 id="langchain-docs-with-hitl">LangChain Docs with HITL</h2>
+<p>This lab connects an agent to the LangChain documentation server and adds a human-in-the-loop gate before any search call. No authentication setup is needed; the docs server is publicly accessible.</p>
 <div style="margin:1rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;font-size:0.9em;">
 <strong>Dependencies already included</strong><br>
-This lab uses two packages — <code>deepagents-code</code> (the MCP loader) and <code>langchain-mcp-adapters</code> (the LangChain adapter layer). Both are already listed in <code>python/pyproject.toml</code>, so the <code>uv sync</code> you ran during setup covered them.
+This lab uses two packages: <code>deepagents-code</code> (the MCP loader) and <code>langchain-mcp-adapters</code> (the LangChain adapter layer). Both are already listed in <code>python/pyproject.toml</code>, so the <code>uv sync</code> you ran during setup covered them.
 </div>
-<p>Create a new file <code>python/m1/mcp_agent.py</code>:</p>
-<!-- code-highlight-3:5,8,10 -->
+<h3 id="step-1-review-the-config">Step 1: Review the config</h3>
+<p>The <code>.mcp.json</code> at the repo root already has the documentation server configured:</p>
+<pre><code class="language-json">// .mcp.json
+{
+  &quot;mcpServers&quot;: {
+    &quot;docs-langchain&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://docs.langchain.com/mcp&quot;
+    }
+  }
+}
+</code></pre>
+<p><code>"type": "http"</code> means each tool call is a stateless HTTPS request. No persistent connection is maintained between calls.</p>
+<h3 id="step-2-load-tools-and-run">Step 2: Load tools and run</h3>
+<p>Create <code>python/m1/mcp_agent.py</code>:</p>
+<!-- code-highlight-4:9,14,19 -->
 <pre><code class="language-python"># python/m1/mcp_agent.py
 import sys
 import asyncio
@@ -684,7 +697,7 @@ async def main():
     agent = create_deep_agent(model=model, tools=tools)
 
     result = await agent.ainvoke({
-        &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the LangGraph interrupt API and when would I use it?&quot;}]
+        &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the LangGraph interrupt API?&quot;}]
     })
     print(result[&quot;messages&quot;][-1].content)
 
@@ -695,50 +708,14 @@ asyncio.run(main())
 </code></pre>
 <pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m1/mcp_agent.py
 </code></pre>
-<p>Open LangSmith and find the run. You should see the MCP tool call in the trace alongside any other tool calls, listed as a regular tool message in the message history.</p>
+<p>Open LangSmith and find the run. The MCP tool call appears as a regular tool message in the trace, indistinguishable from any locally-defined tool.</p>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
 <strong>The server_infos check</strong>
 <p style="margin:0.5rem 0 0;">Printing <code>server_infos</code> at startup tells you which servers loaded successfully and how many tools each one exposed. If a server has <code>status="error"</code>, its tools will not be available and the agent will not try to call them.</p>
 </div>
-</div>
-<div class="lt-panel" id="p-lab5" role="tabpanel">
-<h2 id="gmail-with-oauth-and-hitl">Gmail with OAuth and HITL</h2>
-<p>This lab adds a Gmail MCP server to the agent and gates every email access behind a human approval step.</p>
-<h3 id="step-1-gmail-is-already-in-mcpjson">Step 1: Gmail is already in .mcp.json</h3>
-<p>The <code>.mcp.json</code> at the repo root already has the Gmail server entry. Here is what it looks like and why each field matters:</p>
-<pre><code class="language-json">// .mcp.json
-{
-  &quot;mcpServers&quot;: {
-    &quot;docs-langchain&quot;: {
-      &quot;type&quot;: &quot;http&quot;,
-      &quot;url&quot;: &quot;https://docs.langchain.com/mcp&quot;
-    },
-    &quot;gmail&quot;: {
-      &quot;type&quot;: &quot;http&quot;,
-      &quot;url&quot;: &quot;https://gmailmcp.googleapis.com/mcp/v1&quot;,
-      &quot;auth&quot;: &quot;oauth&quot;,
-      &quot;allowedTools&quot;: [&quot;list_emails&quot;, &quot;read_email&quot;]
-    }
-  }
-}
-</code></pre>
-<ul>
-<li><code>"auth": "oauth"</code> tells deepagents this server requires user authorization before it can connect.</li>
-<li><code>"allowedTools"</code> restricts the agent to these two tools; any other tools the server exposes are hidden.</li>
-<li><code>"type": "sse"</code> uses a persistent connection so the server can stream results back in real time.</li>
-</ul>
-<div style="margin:1rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid #b3e0b3;background-color:#f0faf0;color:#1a4d1a;font-size:0.9em;">
-<strong>Check the current URL</strong><br>
-Verify the Gmail MCP server URL from Google's official documentation before running. The course README has the tested URL and any additional setup steps.
-</div>
-<h3 id="step-2-authenticate-with-gmail">Step 2: Authenticate with Gmail</h3>
-<p>OAuth login is a one-time step run separately from your agent script. <code>deepagents-code</code> ships a CLI called <code>dcode</code> that handles the browser flow and caches the resulting tokens:</p>
-<pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents &amp;&amp; uv run dcode mcp login gmail
-</code></pre>
-<p><code>dcode</code> auto-discovers <code>.mcp.json</code> from the repo root (the nearest directory with a <code>.git</code> entry), opens a browser window for you to authorize the Gmail scope, and saves the tokens to <code>~/.deepagents/.state/mcp-tokens/</code>. On subsequent runs the tokens are reused automatically; the browser prompt only appears once.</p>
-<h3 id="step-3-add-hitl-and-run">Step 3: Add HITL and run</h3>
-<p>Update <code>python/m1/mcp_agent.py</code> to add <code>interrupt_on</code> for the Gmail tools:</p>
-<!-- code-highlight-7:10,11,17,18,19,20,22,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47 -->
+<h3 id="step-3-add-hitl">Step 3: Add HITL</h3>
+<p>Update <code>python/m1/mcp_agent.py</code> to pause before any search call:</p>
+<!-- code-highlight-6:4,11,12,23,26,27,30,34,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51 -->
 <pre><code class="language-python"># python/m1/mcp_agent.py
 import sys
 import asyncio
@@ -754,23 +731,24 @@ from langgraph.types import Command
 
 MCP_CONFIG = Path(__file__).resolve().parents[2] / &quot;.mcp.json&quot;
 
+
 async def main():
-    tools, session_manager, _ = await get_mcp_tools(str(MCP_CONFIG))
+    tools, session_manager, server_infos = await get_mcp_tools(str(MCP_CONFIG))
+
+    for info in server_infos:
+        print(f&quot;{info.name}: {info.status} - {len(info.tools)} tool(s)&quot;)
 
     agent = create_deep_agent(
         model=model,
         tools=tools,
-        interrupt_on={
-            &quot;list_emails&quot;: True,
-            &quot;read_email&quot;:  True,
-        },
+        interrupt_on={&quot;search&quot;: True},
         checkpointer=MemorySaver(),
     )
 
     config = {&quot;configurable&quot;: {&quot;thread_id&quot;: str(uuid.uuid4())}}
 
     await agent.ainvoke(
-        {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize my three most recent emails.&quot;}]},
+        {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the LangGraph interrupt API?&quot;}]},
         config=config,
     )
 
@@ -793,12 +771,13 @@ async def main():
     if session_manager:
         await session_manager.cleanup()
 
+
 asyncio.run(main())
 </code></pre>
 <pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m1/mcp_agent.py
 </code></pre>
-<p>The agent will call <code>list_emails</code>, then pause. You will see the pending tool call printed in the terminal. Type <code>y</code> to approve and the agent will continue, fetch the emails, and summarize them.</p>
-<p>Check LangSmith to see the full trace: the interrupt, the resume, and the final tool results all appear in the message history.</p>
+<p>The agent pauses before calling the search tool. You will see the pending call printed in the terminal. Type <code>y</code> to approve and the agent fetches the docs and answers. Type <code>n</code> and it stops without making the call.</p>
+<p>Check LangSmith to see the full trace: the interrupt, the resume decision, and the final tool result all appear in the message history.</p>
 </div>
 <hr />
 <h2 id="recap">Recap</h2>
@@ -806,7 +785,7 @@ asyncio.run(main())
 <li>MCP is an open protocol that standardizes how applications expose tools and context to LLMs; any MCP-aware client connects to any MCP server without custom integration code</li>
 <li><code>langchain-mcp-adapters</code> wraps each server tool as a standard <code>BaseTool</code>; the agent cannot tell MCP tools apart from locally-defined ones</li>
 <li>Servers are configured in <code>.mcp.json</code>; the <code>type</code> field sets the transport (<code>stdio</code> for local subprocesses, <code>http</code> for stateless remote calls, <code>sse</code> for persistent streaming connections)</li>
-<li><code>allowedTools</code> restricts which tools from a server the agent can see; useful when a server exposes many tools but you only need a subset</li>
+<li><code>allowedTools</code> restricts which tools from a server the agent can see; useful when a server exposes many tools but you only need a subset, or want to limit access to read-only operations</li>
 <li><code>auth: "oauth"</code> triggers a one-time browser authorization on first run; tokens are cached in <code>~/.deepagents/.state/mcp-tokens/</code> and reused automatically</li>
 <li><code>interrupt_on</code> pauses the agent before a named tool call for human approval; like HITL with custom tools, it requires a checkpointer</li>
 </ul>

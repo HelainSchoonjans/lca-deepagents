@@ -11,37 +11,55 @@
 <body>
 <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
   <rect width="800" height="380" fill="#030710"/>
-  <text x="400" y="48" text-anchor="middle" font-size="21" font-weight="300" fill="#F2FAFF">Declaring servers in .mcp.json</text>
-  <text x="400" y="74" text-anchor="middle" font-size="12" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">deepagents auto-discovers this file at the project root</text>
+  <text x="400" y="38" text-anchor="middle" font-size="22" font-weight="300" fill="#F2FAFF">Declaring servers in .mcp.json</text>
+  <text x="400" y="62" text-anchor="middle" font-size="12.5" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">deepagents auto-discovers this file at the project root</text>
 
-  <!-- Editor -->
-  <rect x="110" y="94" width="440" height="228" rx="8" fill="#0D1322" stroke="#2F4B68" stroke-width="1.5"/>
-  <rect x="110" y="94" width="440" height="28" rx="8" fill="#161F34"/>
-  <rect x="110" y="110" width="440" height="12" fill="#161F34"/>
-  <circle cx="128" cy="108" r="5" fill="#441E33"/>
-  <circle cx="145" cy="108" r="5" fill="#634643"/>
-  <circle cx="162" cy="108" r="5" fill="#2E3900"/>
-  <text x="178" y="112" font-size="10" fill="#40668D" font-family="'IBM Plex Mono',monospace">.mcp.json</text>
+  <!-- Editor box: left-aligned to leave room for annotation panel -->
+  <rect x="24" y="82" width="440" height="244" rx="8" fill="#0D1322" stroke="#2F4B68" stroke-width="1.5"/>
+  <rect x="24" y="82" width="440" height="28" rx="8" fill="#161F34"/>
+  <rect x="24" y="98" width="440" height="12" fill="#161F34"/>
+  <circle cx="42" cy="96" r="5" fill="#441E33"/>
+  <circle cx="59" cy="96" r="5" fill="#634643"/>
+  <circle cx="76" cy="96" r="5" fill="#2E3900"/>
+  <text x="92" y="100" font-size="10" fill="#40668D" font-family="'IBM Plex Mono',monospace">.mcp.json</text>
 
   <g font-family="'IBM Plex Mono',monospace" font-size="13">
-    <text x="136" y="150" fill="#7FC8FF">{"mcpServers": {</text>
-    <text x="136" y="173" fill="#40668D">  "docs-langchain": {</text>
-    <text x="136" y="194" fill="#B2DEFF">    "type": <tspan fill="#E3FF8F">"http"</tspan>,</text>
-    <text x="136" y="215" fill="#B2DEFF">    "url":  <tspan fill="#E3FF8F">"https://docs.langchain.com/mcp"</tspan></text>
-    <text x="136" y="236" fill="#40668D">  }</text>
-    <text x="136" y="257" fill="#7FC8FF">}}</text>
+    <text x="44" y="134" fill="#7FC8FF">{"mcpServers": {</text>
+    <text x="44" y="157" fill="#40668D">  "docs-langchain": {</text>
+    <text x="44" y="180" fill="#B2DEFF">    "type": <tspan fill="#E3FF8F">"http"</tspan>,</text>
+    <text x="44" y="203" fill="#B2DEFF">    "url":  <tspan fill="#E3FF8F">"https://docs.langchain.com/mcp"</tspan></text>
+    <text x="44" y="226" fill="#40668D">  }</text>
+    <text x="44" y="249" fill="#7FC8FF">}}</text>
   </g>
 
-  <!-- Annotations -->
-  <rect x="574" y="160" width="100" height="30" rx="5" fill="#0D1322" stroke="#40668D" stroke-width="1.2"/>
-  <line x1="550" y1="173" x2="572" y2="173" stroke="#40668D" stroke-width="1"/>
-  <text x="624" y="179" text-anchor="middle" font-size="10" fill="#B2DEFF">server name</text>
+  <!-- Connector: server name -->
+  <line x1="464" y1="157" x2="488" y2="162" stroke="#40668D" stroke-width="1.2"/>
 
-  <rect x="574" y="200" width="100" height="30" rx="5" fill="#0D1322" stroke="#E3FF8F" stroke-width="1.2"/>
-  <line x1="550" y1="215" x2="572" y2="215" stroke="#6E8900" stroke-width="1"/>
-  <text x="624" y="219" text-anchor="middle" font-size="10" fill="#E3FF8F">transport type</text>
+  <!-- Annotation 1: server name -->
+  <rect x="490" y="130" width="280" height="66" rx="6" fill="#0D1322" stroke="#40668D" stroke-width="1.5"/>
+  <text x="503" y="154" font-size="13" font-weight="500" fill="#B2DEFF">SERVER NAME</text>
+  <text x="503" y="173" font-size="12" fill="#7FC8FF">any key you choose; identifies this</text>
+  <text x="503" y="188" font-size="12" fill="#7FC8FF">server in logs and error messages</text>
 
-  <text x="400" y="356" text-anchor="middle" font-size="12.5" fill="#B2DEFF">Add a server entry and deepagents will connect to it automatically on the next run.</text>
+  <!-- Connector: transport type -->
+  <line x1="464" y1="180" x2="488" y2="222" stroke="#6E8900" stroke-width="1.2"/>
+
+  <!-- Annotation 2: transport type -->
+  <rect x="490" y="206" width="280" height="66" rx="6" fill="#0D1322" stroke="#6E8900" stroke-width="1.5"/>
+  <text x="503" y="230" font-size="13" font-weight="500" fill="#E3FF8F">TRANSPORT TYPE</text>
+  <text x="503" y="249" font-size="12" fill="#B2DEFF">http for remote servers,</text>
+  <text x="503" y="264" font-size="12" fill="#B2DEFF">stdio for local command-line servers</text>
+
+  <!-- Connector: server URL -->
+  <line x1="464" y1="203" x2="488" y2="298" stroke="#7FC8FF" stroke-width="1.2"/>
+
+  <!-- Annotation 3: server URL (extends just below editor bottom — right side has space) -->
+  <rect x="490" y="282" width="280" height="58" rx="6" fill="#0D1322" stroke="#7FC8FF" stroke-width="1.5"/>
+  <text x="503" y="306" font-size="13" font-weight="500" fill="#7FC8FF">SERVER URL</text>
+  <text x="503" y="325" font-size="12" fill="#B2DEFF">the endpoint deepagents connects to</text>
+
+  <!-- Footer -->
+  <text x="400" y="356" text-anchor="middle" font-size="13" fill="#B2DEFF">Add a server entry and deepagents will connect to it automatically on the next run.</text>
 </svg>
 </body>
 </html>

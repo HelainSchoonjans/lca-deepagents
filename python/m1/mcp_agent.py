@@ -2,7 +2,6 @@ import sys
 import asyncio
 import uuid
 from pathlib import Path
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from models import model
@@ -23,17 +22,14 @@ async def main():
     agent = create_deep_agent(
         model=model,
         tools=tools,
-        interrupt_on={
-            "list_emails": True,
-            "read_email":  True,
-        },
+        interrupt_on={"search": True},
         checkpointer=MemorySaver(),
     )
 
     config = {"configurable": {"thread_id": str(uuid.uuid4())}}
 
     await agent.ainvoke(
-        {"messages": [{"role": "user", "content": "Summarize my three most recent emails."}]},
+        {"messages": [{"role": "user", "content": "What is the LangGraph interrupt API?"}]},
         config=config,
     )
 

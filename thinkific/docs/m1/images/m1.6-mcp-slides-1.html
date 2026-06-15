@@ -28,24 +28,37 @@
         <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
           <defs><marker id="s3fa" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L5,3 L0,6 Z" fill="#7FC8FF"/></marker></defs>
           <rect width="800" height="380" fill="#030710"/>
-          <text x="400" y="48" text-anchor="middle" font-size="21" font-weight="300" fill="#F2FAFF">MCP: one standard interface</text>
-          <text x="400" y="74" text-anchor="middle" font-size="12" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">any MCP-aware client connects to any MCP server</text>
-          <rect x="56" y="119" width="160" height="120" rx="10" fill="#0D1322" stroke="#7FC8FF" stroke-width="2"/>
-          <text x="136" y="171" text-anchor="middle" font-size="14" font-weight="400" fill="#7FC8FF">Your Agent</text>
-          <text x="136" y="191" text-anchor="middle" font-size="11" fill="#B2DEFF">LangChain / deepagents</text>
-          <line x1="216" y1="179" x2="284" y2="179" stroke="#7FC8FF" stroke-width="2" marker-end="url(#s3fa)"/>
-          <rect x="286" y="109" width="228" height="140" rx="10" fill="#0D1322" stroke="#40668D" stroke-width="2"/>
-          <text x="400" y="157" text-anchor="middle" font-size="14" font-weight="400" fill="#B2DEFF">MCP Server</text>
-          <text x="400" y="179" text-anchor="middle" font-size="11" fill="#5BADDF">standard protocol</text>
-          <text x="400" y="197" text-anchor="middle" font-size="11" fill="#5BADDF">run by anyone, anywhere</text>
-          <text x="400" y="221" text-anchor="middle" font-size="10" fill="#40668D" font-family="'IBM Plex Mono',monospace">no custom code in your agent</text>
-          <line x1="514" y1="179" x2="582" y2="179" stroke="#7FC8FF" stroke-width="2" marker-end="url(#s3fa)"/>
-          <rect x="584" y="119" width="160" height="120" rx="10" fill="#0D1322" stroke="#6E8900" stroke-width="2"/>
-          <text x="664" y="165" text-anchor="middle" font-size="14" font-weight="400" fill="#E3FF8F">Service</text>
-          <text x="664" y="186" text-anchor="middle" font-size="11" fill="#B2DEFF">Gmail, GitHub,</text>
-          <text x="664" y="204" text-anchor="middle" font-size="11" fill="#B2DEFF">LangChain Docs…</text>
-          <text x="400" y="328" text-anchor="middle" font-size="12.5" fill="#B2DEFF">The MCP server handles the service-specific details.</text>
-          <text x="400" y="350" text-anchor="middle" font-size="12.5" fill="#B2DEFF">Your agent only speaks the MCP protocol.</text>
+          <text x="400" y="38" text-anchor="middle" font-size="22" font-weight="300" fill="#F2FAFF">MCP: one standard interface</text>
+          <text x="400" y="63" text-anchor="middle" font-size="12.5" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">any MCP-aware client connects to any MCP server</text>
+
+          <!-- Your Agent box -->
+          <rect x="32" y="86" width="208" height="168" rx="10" fill="#0D1322" stroke="#7FC8FF" stroke-width="2"/>
+          <text x="136" y="163" text-anchor="middle" font-size="17" font-weight="400" fill="#7FC8FF">Your Agent</text>
+          <text x="136" y="186" text-anchor="middle" font-size="13" fill="#B2DEFF">LangChain / deepagents</text>
+
+          <!-- Arrow 1 -->
+          <line x1="240" y1="170" x2="282" y2="170" stroke="#7FC8FF" stroke-width="2" marker-end="url(#s3fa)"/>
+
+          <!-- MCP Server box -->
+          <rect x="284" y="72" width="232" height="196" rx="10" fill="#0D1322" stroke="#40668D" stroke-width="2"/>
+          <text x="400" y="126" text-anchor="middle" font-size="17" font-weight="400" fill="#B2DEFF">MCP Server</text>
+          <text x="400" y="153" text-anchor="middle" font-size="14" fill="#5BADDF">standard protocol</text>
+          <text x="400" y="174" text-anchor="middle" font-size="14" fill="#5BADDF">run by anyone, anywhere</text>
+          <line x1="302" y1="193" x2="498" y2="193" stroke="#2F4B68" stroke-width="1"/>
+          <text x="400" y="215" text-anchor="middle" font-size="12" fill="#40668D" font-family="'IBM Plex Mono',monospace">no custom code in your agent</text>
+
+          <!-- Arrow 2 -->
+          <line x1="516" y1="170" x2="558" y2="170" stroke="#7FC8FF" stroke-width="2" marker-end="url(#s3fa)"/>
+
+          <!-- Service box -->
+          <rect x="560" y="86" width="208" height="168" rx="10" fill="#0D1322" stroke="#6E8900" stroke-width="2"/>
+          <text x="664" y="154" text-anchor="middle" font-size="17" font-weight="400" fill="#E3FF8F">Service</text>
+          <text x="664" y="177" text-anchor="middle" font-size="13" fill="#B2DEFF">Gmail, GitHub,</text>
+          <text x="664" y="197" text-anchor="middle" font-size="13" fill="#B2DEFF">LangChain Docs…</text>
+
+          <!-- Footer -->
+          <text x="400" y="306" text-anchor="middle" font-size="13.5" fill="#B2DEFF">The MCP server handles the service-specific details.</text>
+          <text x="400" y="328" text-anchor="middle" font-size="13.5" fill="#B2DEFF">Your agent only speaks the MCP protocol.</text>
         </svg>
       </div>
 
@@ -53,56 +66,76 @@
       <div class="slide">
         <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
           <rect width="800" height="380" fill="#030710"/>
-          <text x="400" y="48" text-anchor="middle" font-size="21" font-weight="300" fill="#F2FAFF">What an MCP server exposes</text>
-          <text x="400" y="74" text-anchor="middle" font-size="12" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">this course focuses on tools</text>
-          <rect x="200" y="100" width="400" height="210" rx="12" fill="#0D1322" stroke="#40668D" stroke-width="2"/>
-          <text x="400" y="130" text-anchor="middle" font-size="14" font-weight="400" fill="#B2DEFF">MCP Server</text>
-          <rect x="222" y="144" width="356" height="70" rx="8" fill="#161F34" stroke="#7FC8FF" stroke-width="1.5"/>
-          <text x="400" y="168" text-anchor="middle" font-size="13" font-weight="400" fill="#7FC8FF">Tools</text>
-          <text x="400" y="188" text-anchor="middle" font-size="11" fill="#B2DEFF">functions the agent can call: search, read, write, query</text>
-          <rect x="222" y="224" width="356" height="70" rx="8" fill="#161F34" stroke="#2F4B68" stroke-width="1.2"/>
-          <text x="400" y="248" text-anchor="middle" font-size="13" font-weight="400" fill="#99D3FF">Resources</text>
-          <text x="400" y="268" text-anchor="middle" font-size="11" fill="#5BADDF">structured data the agent can read: files, records, configs</text>
-          <text x="400" y="348" text-anchor="middle" font-size="12.5" fill="#B2DEFF">When you connect to an MCP server, deepagents discovers all its</text>
-          <text x="400" y="366" text-anchor="middle" font-size="12.5" fill="#B2DEFF">tools automatically and makes them available to your agent.</text>
+          <text x="400" y="38" text-anchor="middle" font-size="22" font-weight="300" fill="#F2FAFF">What an MCP server exposes</text>
+          <text x="400" y="63" text-anchor="middle" font-size="12.5" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">this course focuses on tools</text>
+
+          <!-- Outer MCP Server box -->
+          <rect x="160" y="88" width="480" height="232" rx="12" fill="#0D1322" stroke="#40668D" stroke-width="2"/>
+          <text x="400" y="120" text-anchor="middle" font-size="16" font-weight="400" fill="#B2DEFF">MCP Server</text>
+
+          <!-- Tools inner box -->
+          <rect x="182" y="134" width="436" height="80" rx="8" fill="#161F34" stroke="#7FC8FF" stroke-width="1.5"/>
+          <text x="400" y="164" text-anchor="middle" font-size="15" font-weight="400" fill="#7FC8FF">Tools</text>
+          <text x="400" y="185" text-anchor="middle" font-size="13" fill="#B2DEFF">functions the agent can call: search, read, write, query</text>
+
+          <!-- Resources inner box -->
+          <rect x="182" y="226" width="436" height="80" rx="8" fill="#161F34" stroke="#2F4B68" stroke-width="1.2"/>
+          <text x="400" y="256" text-anchor="middle" font-size="15" font-weight="400" fill="#99D3FF">Resources</text>
+          <text x="400" y="277" text-anchor="middle" font-size="13" fill="#5BADDF">structured data the agent can read: files, records, configs</text>
+
+          <!-- Footer -->
+          <text x="400" y="348" text-anchor="middle" font-size="13" fill="#B2DEFF">When you connect to an MCP server, deepagents discovers all its</text>
+          <text x="400" y="368" text-anchor="middle" font-size="13" fill="#B2DEFF">tools automatically and makes them available to your agent.</text>
         </svg>
       </div>
 
-      <!-- STEP 6: MCP tools are just BaseTool objects -->
+      <!-- STEP 3: MCP tools are just BaseTool objects -->
       <div class="slide">
         <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
           <defs><marker id="s5a" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L5,3 L0,6 Z" fill="#7FC8FF"/></marker></defs>
           <rect width="800" height="380" fill="#030710"/>
-          <text x="400" y="48" text-anchor="middle" font-size="21" font-weight="300" fill="#F2FAFF">MCP tools are just BaseTool objects</text>
-          <text x="400" y="74" text-anchor="middle" font-size="12" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">the agent cannot tell them apart from locally-defined tools</text>
-          <rect x="36" y="110" width="190" height="160" rx="10" fill="#0D1322" stroke="#40668D" stroke-width="1.5"/>
-          <text x="131" y="138" text-anchor="middle" font-size="13" font-weight="400" fill="#B2DEFF">MCP Server</text>
-          <rect x="54" y="150" width="154" height="28" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
-          <text x="131" y="168" text-anchor="middle" font-size="11" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">list_emails</text>
-          <rect x="54" y="186" width="154" height="28" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
-          <text x="131" y="204" text-anchor="middle" font-size="11" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">read_email</text>
-          <rect x="54" y="222" width="154" height="28" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
-          <text x="131" y="240" text-anchor="middle" font-size="11" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">search_emails</text>
-          <line x1="226" y1="190" x2="278" y2="190" stroke="#7FC8FF" stroke-width="1.5" marker-end="url(#s5a)"/>
-          <rect x="280" y="158" width="156" height="64" rx="8" fill="#161F34" stroke="#2F4B68" stroke-width="1.2"/>
-          <text x="358" y="183" text-anchor="middle" font-size="10" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">langchain-mcp-</text>
-          <text x="358" y="198" text-anchor="middle" font-size="10" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">adapters</text>
-          <text x="358" y="214" text-anchor="middle" font-size="9.5" fill="#40668D">wraps as BaseTool</text>
-          <line x1="436" y1="190" x2="488" y2="190" stroke="#7FC8FF" stroke-width="1.5" marker-end="url(#s5a)"/>
-          <rect x="490" y="100" width="274" height="200" rx="10" fill="#0D1322" stroke="#7FC8FF" stroke-width="1.5"/>
-          <text x="627" y="128" text-anchor="middle" font-size="13" font-weight="400" fill="#7FC8FF">Agent's tool list</text>
-          <text x="627" y="148" text-anchor="middle" font-size="10" fill="#40668D" font-family="'IBM Plex Mono',monospace">source is invisible</text>
-          <rect x="508" y="160" width="238" height="28" rx="5" fill="#161F34" stroke="#6E8900" stroke-width="1.2"/>
-          <text x="614" y="178" text-anchor="middle" font-size="11" fill="#E3FF8F" font-family="'IBM Plex Mono',monospace">web_search</text>
-          <text x="706" y="178" font-size="9" fill="#6E8900">local</text>
-          <rect x="508" y="196" width="238" height="28" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1.2"/>
-          <text x="614" y="214" text-anchor="middle" font-size="11" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">list_emails</text>
-          <text x="706" y="214" font-size="9" fill="#40668D">MCP</text>
-          <rect x="508" y="232" width="238" height="28" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1.2"/>
-          <text x="614" y="250" text-anchor="middle" font-size="11" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">read_email</text>
-          <text x="706" y="250" font-size="9" fill="#40668D">MCP</text>
-          <text x="400" y="336" text-anchor="middle" font-size="12.5" fill="#B2DEFF">Tool results come back as ToolMessages in the conversation history.</text>
-          <text x="400" y="356" text-anchor="middle" font-size="12.5" fill="#B2DEFF">The model decides what to do next exactly as it would with any other tool.</text>
+          <text x="400" y="38" text-anchor="middle" font-size="22" font-weight="300" fill="#F2FAFF">MCP tools are just BaseTool objects</text>
+          <text x="400" y="63" text-anchor="middle" font-size="12.5" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">the agent cannot tell them apart from locally-defined tools</text>
+
+          <!-- MCP Server box -->
+          <rect x="20" y="90" width="192" height="192" rx="10" fill="#0D1322" stroke="#40668D" stroke-width="1.5"/>
+          <text x="116" y="118" text-anchor="middle" font-size="14" font-weight="400" fill="#B2DEFF">MCP Server</text>
+          <rect x="38" y="130" width="156" height="30" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
+          <text x="116" y="149" text-anchor="middle" font-size="12" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">list_emails</text>
+          <rect x="38" y="168" width="156" height="30" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
+          <text x="116" y="187" text-anchor="middle" font-size="12" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">read_email</text>
+          <rect x="38" y="206" width="156" height="30" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1"/>
+          <text x="116" y="225" text-anchor="middle" font-size="12" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">search_emails</text>
+
+          <!-- Arrow MCP → adapters -->
+          <line x1="212" y1="186" x2="252" y2="186" stroke="#7FC8FF" stroke-width="1.5" marker-end="url(#s5a)"/>
+
+          <!-- Adapters box -->
+          <rect x="254" y="156" width="148" height="72" rx="8" fill="#161F34" stroke="#2F4B68" stroke-width="1.2"/>
+          <text x="328" y="182" text-anchor="middle" font-size="11" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">langchain-mcp-</text>
+          <text x="328" y="198" text-anchor="middle" font-size="11" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">adapters</text>
+          <text x="328" y="216" text-anchor="middle" font-size="10.5" fill="#40668D">wraps as BaseTool</text>
+
+          <!-- Arrow adapters → agent -->
+          <line x1="402" y1="186" x2="442" y2="186" stroke="#7FC8FF" stroke-width="1.5" marker-end="url(#s5a)"/>
+
+          <!-- Agent's tool list box -->
+          <rect x="444" y="86" width="336" height="210" rx="10" fill="#0D1322" stroke="#7FC8FF" stroke-width="1.5"/>
+          <text x="612" y="114" text-anchor="middle" font-size="14" font-weight="400" fill="#7FC8FF">Agent's tool list</text>
+          <text x="612" y="134" text-anchor="middle" font-size="11" fill="#40668D" font-family="'IBM Plex Mono',monospace">source is invisible</text>
+          <rect x="462" y="148" width="300" height="30" rx="5" fill="#161F34" stroke="#6E8900" stroke-width="1.2"/>
+          <text x="598" y="167" text-anchor="middle" font-size="12" fill="#E3FF8F" font-family="'IBM Plex Mono',monospace">web_search</text>
+          <text x="730" y="167" font-size="10" fill="#6E8900">local</text>
+          <rect x="462" y="186" width="300" height="30" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1.2"/>
+          <text x="598" y="205" text-anchor="middle" font-size="12" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">list_emails</text>
+          <text x="730" y="205" font-size="10" fill="#40668D">MCP</text>
+          <rect x="462" y="224" width="300" height="30" rx="5" fill="#161F34" stroke="#40668D" stroke-width="1.2"/>
+          <text x="598" y="243" text-anchor="middle" font-size="12" fill="#CCE9FF" font-family="'IBM Plex Mono',monospace">read_email</text>
+          <text x="730" y="243" font-size="10" fill="#40668D">MCP</text>
+
+          <!-- Footer -->
+          <text x="400" y="328" text-anchor="middle" font-size="13" fill="#B2DEFF">Tool results come back as ToolMessages in the conversation history.</text>
+          <text x="400" y="350" text-anchor="middle" font-size="13" fill="#B2DEFF">The model decides what to do next exactly as it would with any other tool.</text>
         </svg>
       </div>
 

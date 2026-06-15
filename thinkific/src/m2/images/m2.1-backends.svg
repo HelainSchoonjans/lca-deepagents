@@ -17,7 +17,7 @@
 
   <!-- Title -->
   <text x="350" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#030710">Filesystem Backends</text>
-  <text x="350" y="46" text-anchor="middle" font-size="10" fill="#40668D">Tools operate through a pluggable backend — swap storage without changing agent code</text>
+  <text x="350" y="46" text-anchor="middle" font-size="10" fill="#40668D">Tools operate through a pluggable backend; swap storage without changing agent code</text>
 
   <!-- ═══ FILESYSTEM TOOLS ═══ -->
   <rect x="280" y="60" width="140" height="28" rx="4" fill="#CCE9FF" stroke="#006DDD" stroke-width="1.5"/>

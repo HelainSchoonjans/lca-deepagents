@@ -3,12 +3,6 @@
     "docs-langchain": {
       "type": "http",
       "url": "https://docs.langchain.com/mcp"
-    },
-    "gmail": {
-      "type": "http",
-      "url": "https://gmailmcp.googleapis.com/mcp/v1",
-      "auth": "oauth",
-      "allowedTools": ["list_emails", "read_email"]
     }
   }
 }
