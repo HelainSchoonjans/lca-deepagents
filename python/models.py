@@ -1,6 +1,6 @@
 """Model Initialization File
 
-Configures the LLM model used throughout the workshop.
+Configures the LLM model used throughout the course.
 
 Default: Anthropic claude-haiku-4-5 (fast, cheap, great for learning).
 
@@ -34,49 +34,21 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
 from langchain.chat_models import init_chat_model
 
 
-# ---- Default Models -------------------------------------------------------
+# ═══ Default Models ══════════════════════════════════════════════════════════
 # Workshop default: Anthropic claude-haiku-4-5, fast and cost-effective.
 # Requires ANTHROPIC_API_KEY in .env
 model = init_chat_model("anthropic:claude-haiku-4-5")
 
-# A more capable model for steps that need stronger reasoning — e.g. a
-# supervisor/editor agent that coordinates and synthesizes the work of cheaper
-# subagents. If you switch providers below, switch this to the matching
-# stronger model so everything still comes from one provider.
+#A more capable model for steps that need stronger reasoning
 strong_model = init_chat_model("anthropic:claude-sonnet-4-6")
 
-# ---- Alternative models (comment out default above, uncomment one below) --
+# ═══ Alternative Models (comment out default above, uncomment one below) ═════
 # model = init_chat_model("anthropic:claude-sonnet-4-6")
 # model = init_chat_model("openai:gpt-4.1-mini")
 # model = init_chat_model("openai:gpt-4.1")
 # strong_model = init_chat_model("openai:gpt-4.1")
 
-
-# ---- Azure OpenAI ---------------------------------------------------------
-# Install first:  uv sync --extra azure
-# Requires AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT,
-#          OPENAI_API_VERSION, AZURE_OPENAI_DEPLOYMENT_NAME in .env
-#
-# from langchain_openai import AzureChatOpenAI
-# model = AzureChatOpenAI(azure_deployment="gpt-4.1", api_version="2024-12-01-preview")
-
-
-# ---- AWS Bedrock ----------------------------------------------------------
-# Install first:  uv sync --extra bedrock
-# Requires AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME in .env
-#
-# from langchain_aws import ChatBedrockConverse
-# model = ChatBedrockConverse(model_id="anthropic.claude-sonnet-4-6", region_name="us-east-1")
-
-
-# ---- Google Gemini --------------------------------------------------------
-# Install first:  uv sync --extra google
-# Requires GOOGLE_API_KEY in .env
-#
-# model = init_chat_model("google_genai:gemini-2.5-flash")
-
-
-# ---- Open-Source / Alternative Hosted Models --------------------------------
+# ═══ Open-Source / Alternative Hosted Models ══════════════════════════════════
 
 # Groq: fast hosted inference for Llama, Mixtral, and others (free tier available)
 # Install first:  uv add langchain-groq
@@ -104,3 +76,28 @@ strong_model = init_chat_model("anthropic:claude-sonnet-4-6")
 #
 # from langchain_openai import ChatOpenAI
 # model = ChatOpenAI(model="nvidia/nemotron-3-ultra-550b-a55b:free", base_url="https://openrouter.ai/api/v1", api_key=os.environ["OPENROUTER_API_KEY"])
+
+
+# ═══ Cloud Provider Models (extra install required — see table above) ═════════
+# ─── Azure OpenAI ─────────────────────────────────────────────────────────────
+# Install first:  uv sync --extra azure
+# Requires AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT,
+#          OPENAI_API_VERSION, AZURE_OPENAI_DEPLOYMENT_NAME in .env
+#
+# from langchain_openai import AzureChatOpenAI
+# model = AzureChatOpenAI(azure_deployment="gpt-4.1", api_version="2024-12-01-preview")
+
+
+# ─── AWS Bedrock ──────────────────────────────────────────────────────────────
+# Install first:  uv sync --extra bedrock
+# Requires AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME in .env
+#
+# from langchain_aws import ChatBedrockConverse
+# model = ChatBedrockConverse(model_id="anthropic.claude-sonnet-4-6", region_name="us-east-1")
+
+
+# ─── Google Gemini ────────────────────────────────────────────────────────────
+# Install first:  uv sync --extra google
+# Requires GOOGLE_API_KEY in .env
+#
+# model = init_chat_model("google_genai:gemini-2.5-flash")
