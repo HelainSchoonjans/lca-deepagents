@@ -585,6 +585,20 @@
 <div class="lt-panel active" id="p-skills" role="tabpanel">
 <h2 id="skills-composable-activatable-instructions">Skills: Composable, Activatable Instructions</h2>
 <p>A skill is a directory containing a <code>SKILL.md</code> file. Skills follow an <a href="https://agentskills.io/specification" target="_blank" rel="noopener noreferrer">open standard</a>, which means they are portable across agents and shareable across teams.</p>
+<details class="video-walkthrough">
+<summary>Video Walk-through [click to expand] — script available, video later</summary>
+<p><br></p>
+<p><strong>Script (will be recorded):</strong> A skill is a directory containing a SKILL.md file. Skills follow an open standard, which means they're portable across agents and shareable across teams.</p>
+<p>[Show diagram]</p>
+<p>The directory structure is simple. Under your skills/ folder, each skill gets its own named subdirectory. Inside that, SKILL.md is the only required file, highlighted here in yellow. Everything else is optional: a scripts/ folder for executable code, references/ for documentation, assets/ for templates or resources. Importantly, the agent can't see any of those optional files unless the skill body explicitly mentions them.</p>
+<p>[Slide 2]</p>
+<p>This slide shows two skills side by side. Notice what's shown underneath each SKILL.md: just the name and description. Those are the only two fields injected into the system prompt on every call. The full body - the steps, output format, everything else - is only loaded when the agent activates the skill by calling read_file.</p>
+<p>[Next diagram]</p>
+<p>And this is what that looks like inside the file. The top block is the YAML frontmatter: always in context, always compact. Below it are the markdown instructions: the actual behaviour, like the BANT framework steps shown here as an example, and this stays out of context until activation.</p>
+<p>So the frontmatter is always present but compact, and the instructions are only loaded when needed. That's the core of how skills stay lightweight.</p>
+<p>[Scroll to the frontmatter fields table]</p>
+<p>There are only two required frontmatter fields: name and description. The name must be lowercase with hyphens and must match the directory name. The description is a single sentence describing when to use the skill; we'll come back to why that matters. The rest of the fields [highlight allowed-tools, compatibility, and metadata] are optional.</p>
+</details>
 <iframe src="images/m3.2-skill-structure.html" style="width:100%;height:580px;border:none;border-radius:12px;display:block;margin:1.25rem 0 1.5rem;" title="Skill directory structure; use arrow keys or Prev/Next to navigate"></iframe>
 <h3 id="the-skillmd-file">The SKILL.md file</h3>
 <p>Each skill lives in its own named directory, and the directory name must match the <code>name</code> field in the frontmatter:</p>
