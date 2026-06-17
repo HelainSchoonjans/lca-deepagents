@@ -582,6 +582,14 @@
 
 <div class="lt-panel active" id="p-fs" role="tabpanel">
 <p>The filesystem backends control <strong>where files are stored</strong>. Each backend implements the same interface (<code>ls</code>, <code>read_file</code>, <code>write_file</code>, <code>edit_file</code>, <code>glob</code>, <code>grep</code>), so the agent code stays the same regardless of which one you choose.</p>
+<details class="video-walkthrough">
+<summary>Video Walk-through [click to expand] — script available, video later</summary>
+<p><br></p>
+<p><strong>Script (will be recorded):</strong> You saw this diagram in the execution environment lesson: this lesson zooms in on just the storage side. The core idea is the same: every filesystem tool call goes through a backend, and swapping the backend changes where files live without touching the agent at all.</p>
+<p>[Walk the diagram from State through to Composite]</p>
+<p>State is the default: files live in the thread's checkpoint, so they're fast and zero-config but disappear when the thread ends. Filesystem writes to local disk. Store persists to a database, which means files survive across threads and sessions. Context Hub is different - files are injected directly into the model's context on every call rather than read on demand. And Composite lets you combine any of these by path prefix, which we'll see in the lab.</p>
+<p>The right backend to use comes down to one question: do these files need to survive beyond the current thread? If no, State is fine. If yes, use Store. If you need different answers for different paths, use Composite.</p>
+</details>
 <hr />
 <h2 id="storage-backends">Storage backends</h2>
 <div class="mermaid">
