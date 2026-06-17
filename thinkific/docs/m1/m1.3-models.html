@@ -526,7 +526,7 @@
     </style>
 </head>
 <body>
-    <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1.3-models.html" target="_blank" rel="noopener noreferrer">🔗 For translation, open lesson in new tab and use Chrome translate</a></p>
+    <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1.3-models.html" target="_blank" rel="noopener noreferrer">For translation, open lesson in new tab and use Chrome translate</a></p>
 <style>@import url('../shared/sd-components.css');</style>
 <script src="../shared/sd-components.js"></script>
 
@@ -580,6 +580,11 @@
 
 <div class="lt-panel active" id="p-models" role="tabpanel">
 <h2 id="models-use-any-provider">Models: Use Any Provider</h2>
+<div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
+<strong>What is a provider?</strong>
+<p style="margin:0.5rem 0 0;">A provider is a company or platform that hosts AI models and exposes them through an API (e.g., OpenAI, Anthropic, Google). Many providers have a dedicated <code>langchain-&lt;provider&gt;</code> package that implements one or more of LangChain's standard interfaces (chat models, embedding models, vector stores, and more), giving you a consistent API regardless of which provider is underneath. Install the package, pick a model name, and swap providers without changing your code.</p>
+<p style="margin:0.75rem 0 0;">LangChain supports 1,000+ integrations. See the full <a href="https://docs.langchain.com/oss/python/integrations/providers/overview" target="_blank" rel="noopener noreferrer">providers overview</a> for what's available.</p>
+</div>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;display:flex;gap:1.25rem;align-items:flex-start;">
 <img src="images/langchain-symbol.png" alt="LangChain" style="width:44px;height:44px;flex-shrink:0;margin-top:2px;object-fit:contain;" />
 <div>
@@ -590,11 +595,6 @@
 <li>a more capable one for complex reasoning</li>
 </ul>
 </div>
-</div>
-<div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
-<strong>What is a provider?</strong>
-<p style="margin:0.5rem 0 0;">A provider is a company or platform that hosts AI models and exposes them through an API (e.g., OpenAI, Anthropic, Google). Many providers have a dedicated <code>langchain-&lt;provider&gt;</code> package that implements one or more of LangChain's standard interfaces (chat models, embedding models, vector stores, and more), giving you a consistent API regardless of which provider is underneath. Install the package, pick a model name, and swap providers without changing your code.</p>
-<p style="margin:0.75rem 0 0;">LangChain supports 1,000+ integrations. See the full <a href="https://docs.langchain.com/oss/python/integrations/providers/overview" target="_blank" rel="noopener noreferrer">providers overview</a> for what's available.</p>
 </div>
 <h3 id="model-categories">Model Categories</h3>
 <table style="width:100%;border-collapse:collapse;font-size:0.88em;margin:1.25rem 0 1.75rem;">
@@ -736,6 +736,9 @@ model = init_chat_model(&quot;ollama:llama3.2&quot;)
 <li>Three categories in this course: Proprietary &amp; Conversational, Advanced Reasoning, and Open-Source/Open-Weight; 50+ providers are supported in total</li>
 <li>Swapping the model changes nothing else in the agent; the system prompt, tools, and behavior instructions stay identical</li>
 </ul>
+<hr />
+<h2 id="next">Next</h2>
+<p>The next lesson covers the <strong>system prompt</strong>: how <code>create_deep_agent</code> assembles it from named parts, and how a single string can steer the agent's persona and domain without touching anything else.</p>
 <hr />
 <h2 id="references">References</h2>
 <p><strong>Documentation:</strong><br />
