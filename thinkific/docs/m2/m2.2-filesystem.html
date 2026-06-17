@@ -627,6 +627,30 @@ graph TB
 <p><strong>Context Hub</strong>: files are injected directly into the model's context window, without an explicit read call. Useful for reference material, the agent should always have in view. Learn more about the LangSmith Context Hub <a href="https://docs.langchain.com/langsmith/context-hub" target="_blank" rel="noopener noreferrer">here</a>.</p>
 <p><strong>Composite</strong>: routes different path prefixes to different backends. Lets you mix different backends in a single agent (e.g. <code>/memories/</code> → Store, <code>/skills/</code> → Store, everything else → State).</p>
 <p><strong>Custom</strong>: implement the backend interface yourself to plug in any storage system.</p>
+<hr />
+<div class="mermaid">
+graph LR
+    subgraph single["Single backend"]
+        A1[Agent] --&gt; SB[StoreBackend]
+        SB --&gt; D1[(Store)]
+    end
+
+    subgraph comp["Composite backend"]
+        A2[Agent] --&gt; CB[CompositeBackend]
+        CB --&gt;|"/memories/, /skills/"| D2[(Store)]
+        CB --&gt;|"everything else"| ST[State]
+    end
+
+    classDef agent fill:#CCE9FF,stroke:#006DDD,stroke-width:2px,color:#030710
+    classDef backend fill:#7FC8FF,stroke:#006DDD,stroke-width:2px,color:#030710
+    classDef store fill:#E5F4FF,stroke:#006DDD,stroke-width:1px,color:#030710
+    classDef state fill:#E5F4FF,stroke:#40668D,stroke-width:1px,color:#030710
+
+    class A1,A2 agent
+    class SB,CB backend
+    class D1,D2 store
+    class ST state
+</div>
 <details class="video-walkthrough">
 <summary>Video Walk-through [click to expand] — script available, video later</summary>
 <p><br></p>
@@ -639,7 +663,6 @@ graph TB
 <p>[Point to the bottom note]</p>
 <p>A common combination: route <code>/skills/</code> to Store so files persist, but deny writes to it so only your application code can modify skills, not the agent. <code>/memories/</code> stays fully read/write.</p>
 </details>
-<hr />
 <h2 id="single-backend">Single backend</h2>
 <p>Pass any backend directly to <code>create_deep_agent</code>. Here the agent stores all files in the LangGraph store, persisted across threads.</p>
 <div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=StoreBackend(\n        namespace=lambda rt: (rt.server_info.user.identity,),\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [10, 12]}]"></div>
