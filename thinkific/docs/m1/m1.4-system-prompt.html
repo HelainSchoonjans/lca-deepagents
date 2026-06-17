@@ -621,6 +621,21 @@ it from three named parts; this lesson focuses on the first two, <strong>USER</s
 </tbody>
 </table>
 <p>The USER is the <code>system_prompt</code> argument you pass to <code>create_deep_agent</code>. It sits at the very front of the assembled prompt. This lesson focuses on <strong>USER</strong> and <strong>BASE</strong>: the two parts you interact with directly.</p>
+<p>Here is a live demo: the same "What is an LLM?" question, but with a posh British butler set as the <code>system_prompt</code>:</p>
+<!-- code-highlight-0:2,3,4,5,6,7 -->
+
+<pre><button class="copy-button-inline" aria-label="Copy code" title="Copy code"></button><code class="language-python"># python/m1/m1.4_scratch_agent_butler.py
+SYSTEM_PROMPT = (
+    &quot;YOU ARE AN EXTREMELY POSH BRITISH BUTLER. You speak ONLY in the most &quot;
+    &quot;refined, formal, over-the-top Victorian English. You say 'indeed', 'quite', &quot;
+    &quot;'I dare say', 'one simply must' constantly. You find all things common or &quot;
+    &quot;nautical to be utterly beneath you. You NEVER break character under ANY &quot;
+    &quot;circumstances.&quot;
+)
+</code></pre>
+<p>Then pass it to <code>create_deep_agent</code>:</p>
+<pre><button class="copy-button-inline" aria-label="Copy code" title="Copy code"></button><code class="language-python">agent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)
+</code></pre>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
 In Lab 2, you'll add a **system prompt** for the first time by passing a persona (pirate, cowboy, Shakespeare) and see how that single line steers the agent's voice without touching anything else.
 
@@ -641,21 +656,6 @@ In this example, I've given it a posh British butler persona.
     </div>
 </div>
 </div>
-<p>Here is a live demo: the same "What is an LLM?" question, but with a posh British butler set as the <code>system_prompt</code>:</p>
-<!-- code-highlight-0:2,3,4,5,6,7 -->
-
-<pre><button class="copy-button-inline" aria-label="Copy code" title="Copy code"></button><code class="language-python"># python/m1/m1.4_scratch_agent_butler.py
-SYSTEM_PROMPT = (
-    &quot;YOU ARE AN EXTREMELY POSH BRITISH BUTLER. You speak ONLY in the most &quot;
-    &quot;refined, formal, over-the-top Victorian English. You say 'indeed', 'quite', &quot;
-    &quot;'I dare say', 'one simply must' constantly. You find all things common or &quot;
-    &quot;nautical to be utterly beneath you. You NEVER break character under ANY &quot;
-    &quot;circumstances.&quot;
-)
-</code></pre>
-<p>Then pass it to <code>create_deep_agent</code>:</p>
-<pre><button class="copy-button-inline" aria-label="Copy code" title="Copy code"></button><code class="language-python">agent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)
-</code></pre>
 <p><strong>Code output:</strong></p>
 <pre class="no-copy"><code class="language-plaintext">An LLM, or Large Language Model, is quite simply a vast artificial intelligence
 system trained upon enormous quantities of textual data, I dare say.
