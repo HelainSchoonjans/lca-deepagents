@@ -584,6 +584,24 @@
 
 <div class="lt-panel active" id="p-tools" role="tabpanel">
 <h2 id="tools-extending-the-agent">Tools: Extending the Agent</h2>
+<details class="video-walkthrough">
+<summary>Video Walk-through [click to expand] — placeholder, not yet recorded</summary>
+<p><br></p>
+<p><strong>Script (will be recorded):</strong> Tools are functions you give an agent so it can act: look things up, run queries, call APIs. You define what they do and the agent decides when and how to call them.</p>
+<p>Every deep agent ships with a built-in set: you already saw them in the LangSmith trace as write_todos and Filesystem Tools in the system message.</p>
+<p>These tools [gesture to table] are always present, and anything you pass to the tools parameter [highlight code block tools=[my_tool_a, my_tool_b]] on create_deep_agent is added on top, not a replacement.</p>
+<p>This diagram shows exactly what happens under the hood when an agent uses a tool. Let's walk through it. [Zoom into diagram]</p>
+<p>First, the SDK injects tool schemas. Before any LLM call, the SDK takes all your tools and sends their names, descriptions, and argument schemas to the LLM, so the model knows what tools exist and what to pass to them.</p>
+<p>Then the LLM outputs tool_calls. The LLM decides it needs to call a tool and responds with an AIMessage containing a tool_calls list, which includes the tool name and the arguments. Importantly, the LLM doesn't run anything. It just produces a structured request.</p>
+<p>That AIMessage is then passed to the Tool Node, which is a built-in LangGraph component inside the deep agent that's responsible for actually executing tools.</p>
+<p>The Tool Node then executes the call. It reads tool_calls, finds execute_sql by name, and calls it with the arguments the LLM provided. If multiple independent tools were requested, it can run them in parallel.</p>
+<p>The tool then returns a result. execute_sql runs and returns a string, which the Tool Node wraps in a ToolMessage, linked back to the original request via a tool_call_id.</p>
+<p>That ToolMessage then feeds back to the LLM, which is called again with the full updated context: its original question, its tool call, and the result.</p>
+<p>And finally, the LLM either answers or loops. With the result in context, it either responds with a final answer, or issues another tool_call if it needs more information. And that's the loop.</p>
+<p>The LLM never runs tools directly. It only requests them, and everything else is the SDK and Tool Node orchestrating execution and feeding results back.</p>
+<p>[Open parallel tool calls dropdown]</p>
+<p>When tool calls have no dependency on each other, the Tool Node runs them simultaneously rather than one at a time. So if an agent with search_web and search_docs tools receives a question that needs both, both fire in the same turn and the LLM sees both results together in the next call.</p>
+</details>
 <p>Tools are functions you give an agent so it can act: look things up, run queries, call APIs, write files. The agent decides when to call them and what to pass; you define what they do.</p>
 <p>Every deep agent ships with a built-in set of tools, loaded automatically by the SDK. You already saw these appear in the LangSmith trace in the previous lesson, as <code>write_todos</code> and <code>Filesystem Tools</code> sections inside the system message:</p>
 <table>
