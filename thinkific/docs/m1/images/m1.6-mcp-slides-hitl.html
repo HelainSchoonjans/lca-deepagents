@@ -29,38 +29,38 @@
       <text x="400" y="76" text-anchor="middle" font-size="13" fill="#99D3FF" font-family="'IBM Plex Mono',monospace">pass interrupt_on to create_deep_agent with a dict of tool names</text>
 
       <!-- Code block (left side) -->
-      <rect x="20" y="90" width="468" height="240" rx="8" fill="#0D1322" stroke="#2F4B68" stroke-width="1.5"/>
-      <rect x="20" y="90" width="468" height="28" rx="8" fill="#161F34"/>
-      <rect x="20" y="106" width="468" height="12" fill="#161F34"/>
-      <circle cx="38" cy="104" r="5" fill="#441E33"/>
-      <circle cx="55" cy="104" r="5" fill="#634643"/>
-      <circle cx="72" cy="104" r="5" fill="#2E3900"/>
+      <rect x="20" y="105" width="468" height="240" rx="8" fill="#0D1322" stroke="#2F4B68" stroke-width="1.5"/>
+      <rect x="20" y="105" width="468" height="28" rx="8" fill="#161F34"/>
+      <rect x="20" y="121" width="468" height="12" fill="#161F34"/>
+      <circle cx="38" cy="119" r="5" fill="#441E33"/>
+      <circle cx="55" cy="119" r="5" fill="#634643"/>
+      <circle cx="72" cy="119" r="5" fill="#2E3900"/>
 
       <g font-family="'IBM Plex Mono',monospace" font-size="12">
-        <text x="46" y="152" fill="#B2DEFF">agent = create_deep_agent(</text>
-        <text x="46" y="174" fill="#B2DEFF">    model=model, tools=tools,</text>
-        <rect x="28" y="181" width="456" height="23" rx="3" fill="#1A2E1A" stroke="#6E8900" stroke-width="1"/>
-        <text x="46" y="197" fill="#B2DEFF">    interrupt_on={<tspan fill="#E3FF8F">"list_emails"</tspan>: <tspan fill="#C78EAD">True</tspan>, <tspan fill="#E3FF8F">"read_email"</tspan>: <tspan fill="#C78EAD">True</tspan>},</text>
-        <rect x="28" y="206" width="456" height="23" rx="3" fill="#1A2938" stroke="#C78EAD" stroke-width="1"/>
-        <text x="46" y="222" fill="#B2DEFF">    checkpointer=<tspan fill="#E3FF8F">MemorySaver()</tspan>,</text>
-        <text x="46" y="248" fill="#B2DEFF">)</text>
+        <text x="46" y="167" fill="#B2DEFF">agent = create_deep_agent(</text>
+        <text x="46" y="189" fill="#B2DEFF">    model=model, tools=tools,</text>
+        <rect x="28" y="196" width="456" height="23" rx="3" fill="#1A2E1A" stroke="#6E8900" stroke-width="1"/>
+        <text x="46" y="212" fill="#B2DEFF">    interrupt_on={<tspan fill="#E3FF8F">"list_emails"</tspan>: <tspan fill="#C78EAD">True</tspan>, <tspan fill="#E3FF8F">"read_email"</tspan>: <tspan fill="#C78EAD">True</tspan>},</text>
+        <rect x="28" y="221" width="456" height="23" rx="3" fill="#1A2938" stroke="#C78EAD" stroke-width="1"/>
+        <text x="46" y="237" fill="#B2DEFF">    checkpointer=<tspan fill="#E3FF8F">MemorySaver()</tspan>,</text>
+        <text x="46" y="263" fill="#B2DEFF">)</text>
       </g>
 
       <!-- Connectors -->
-      <line x1="488" y1="197" x2="508" y2="188" stroke="#6E8900" stroke-width="1.5"/>
-      <line x1="488" y1="222" x2="508" y2="306" stroke="#C78EAD" stroke-width="1.5"/>
+      <line x1="488" y1="212" x2="508" y2="203" stroke="#6E8900" stroke-width="1.5"/>
+      <line x1="488" y1="237" x2="508" y2="321" stroke="#C78EAD" stroke-width="1.5"/>
 
       <!-- Annotation box 1: interrupt_on -->
-      <rect x="508" y="148" width="278" height="94" rx="6" fill="#0D1322" stroke="#6E8900" stroke-width="1.5"/>
-      <text x="522" y="170" font-size="14" font-weight="400" fill="#E3FF8F">INTERRUPT_ON</text>
-      <text x="522" y="192" font-size="12" fill="#B2DEFF">pauses before each listed tool call</text>
-      <text x="522" y="211" font-size="12" fill="#B2DEFF">True = pause on every invocation</text>
+      <rect x="508" y="163" width="278" height="94" rx="6" fill="#0D1322" stroke="#6E8900" stroke-width="1.5"/>
+      <text x="522" y="185" font-size="14" font-weight="400" fill="#E3FF8F">INTERRUPT_ON</text>
+      <text x="522" y="207" font-size="12" fill="#B2DEFF">pauses before each listed tool call</text>
+      <text x="522" y="226" font-size="12" fill="#B2DEFF">True = pause on every invocation</text>
 
       <!-- Annotation box 2: checkpointer -->
-      <rect x="508" y="258" width="278" height="94" rx="6" fill="#0D1322" stroke="#C78EAD" stroke-width="1.5"/>
-      <text x="522" y="280" font-size="14" font-weight="400" fill="#C78EAD">CHECKPOINTER</text>
-      <text x="522" y="302" font-size="12" fill="#B2DEFF">saves graph state at each step</text>
-      <text x="522" y="321" font-size="12" fill="#B2DEFF">required for pause + resume to work</text>
+      <rect x="508" y="273" width="278" height="94" rx="6" fill="#0D1322" stroke="#C78EAD" stroke-width="1.5"/>
+      <text x="522" y="295" font-size="14" font-weight="400" fill="#C78EAD">CHECKPOINTER</text>
+      <text x="522" y="317" font-size="12" fill="#B2DEFF">saves graph state at each step</text>
+      <text x="522" y="336" font-size="12" fill="#B2DEFF">required for pause + resume to work</text>
 
       <text x="400" y="392" text-anchor="middle" font-size="12" fill="#40668D">True pauses before every call to that tool. Use InterruptOnConfig for finer control</text>
       <text x="400" y="412" text-anchor="middle" font-size="12" fill="#40668D">(e.g. only pause when specific conditions are met).</text>
