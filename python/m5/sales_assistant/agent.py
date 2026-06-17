@@ -1,4 +1,4 @@
-# python/m5/agent.py
+# python/m5/sales_assistant/agent.py
 """The Chinook Sales Assistant — served as a graph for `langgraph dev`.
 
 This module is just the agent. The Gmail MCP plumbing lives in `gmail_mcp.py`;
