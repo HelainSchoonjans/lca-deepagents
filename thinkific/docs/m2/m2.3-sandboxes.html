@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m2.3-execution-backends</title>
+    <title>m2.3-sandboxes</title>
     <meta name="description" content="">
 
     <!-- Syntax highlighting -->
@@ -526,7 +526,7 @@
     </style>
 </head>
 <body>
-    <p><a href="https://langchain-ai.github.io/lca-deepagents/m2/m2.3-execution-backends.html" target="_blank" rel="noopener noreferrer">For translation, open lesson in new tab and use Chrome translate</a></p>
+    <p><a href="https://langchain-ai.github.io/lca-deepagents/m2/m2.3-sandboxes.html" target="_blank" rel="noopener noreferrer">For translation, open lesson in new tab and use Chrome translate</a></p>
 <style>@import url('../shared/sd-components.css');</style>
 <script src="../shared/sd-components.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
@@ -789,7 +789,7 @@ uv run ./m2/sandbox_agent.py
 <p>This lab introduces two new patterns: <strong>uploading files</strong> to a sandbox before the agent runs, and <strong>reading files</strong> back from the sandbox after it finishes.</p>
 <hr />
 <!-- code-highlight-2:13,14,16,17,55,56,57 -->
-<pre><code class="language-python"># python/m2/m2_3_sales_agent.py
+<pre><code class="language-python"># python/m2/m2.3_sales_agent.py
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -852,7 +852,7 @@ finally:
     client.delete_sandbox(ls_sandbox.name)
 </code></pre>
 <pre><code class="language-bash">cd python
-uv run ./m2/m2_3_sales_agent.py
+uv run ./m2/m2.3_sales_agent.py
 open m2/genre_revenue.png
 </code></pre>
 <hr />

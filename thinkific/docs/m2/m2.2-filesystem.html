@@ -642,12 +642,12 @@ graph TB
 <hr />
 <h2 id="single-backend">Single backend</h2>
 <p>Pass any backend directly to <code>create_deep_agent</code>. Here the agent stores all files in the LangGraph store, persisted across threads.</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2_2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=StoreBackend(\n        namespace=lambda rt: (rt.server_info.user.identity,),\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [10, 12]}]"></div>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=StoreBackend(\n        namespace=lambda rt: (rt.server_info.user.identity,),\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [10, 12]}]"></div>
 <p><code>rt</code> is the LangGraph runtime passed to the backend at invocation time. <code>rt.server_info.user.identity</code> is the caller's user ID; using it as the namespace key keeps each user's files isolated in the store.</p>
 <hr />
 <h2 id="composite-backend">Composite backend</h2>
 <p><code>CompositeBackend</code> routes path prefixes to different backends. Everything not matched by a route falls through to the <code>default</code>.</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2_2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [12, 13, 16]}]"></div>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [12, 13, 16]}]"></div>
 <ul>
 <li><code>/memories/</code> → durable store, persists across threads</li>
 <li><code>/skills/</code> → durable store, persists across threads</li>
@@ -687,7 +687,7 @@ graph TB
 </tr>
 </tbody>
 </table>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2_2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent, FilesystemPermission\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),\n    permissions=[\n        FilesystemPermission(\n            operations=[\&quot;write\&quot;],\n            paths=[\&quot;/skills/**\&quot;],\n            mode=\&quot;deny\&quot;,\n        ),\n    ],\n)&quot;, &quot;highlights&quot;: [17, 18, 19, 20, 21, 22, 23]}]"></div>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent, FilesystemPermission\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),\n    permissions=[\n        FilesystemPermission(\n            operations=[\&quot;write\&quot;],\n            paths=[\&quot;/skills/**\&quot;],\n            mode=\&quot;deny\&quot;,\n        ),\n    ],\n)&quot;, &quot;highlights&quot;: [17, 18, 19, 20, 21, 22, 23]}]"></div>
 <p>The agent can read <code>/skills/</code> but not write to it; skills are managed by application code, not the agent. <code>/memories/</code> remains fully read/write.</p>
 <hr />
 <h2 id="recap">Recap</h2>
@@ -708,7 +708,23 @@ graph TB
 <h2 id="lab-filesystem-permissions">Lab: Filesystem Permissions</h2>
 <p>The lab agent uses a <code>CompositeBackend</code> with <code>/memories/</code> and <code>/skills/</code> both routed to the store. A <code>FilesystemPermission</code> rule denies all writes to <code>/skills/**</code>.</p>
 <p>The agent is pre-seeded with a Chinook sales skill and asked to read it, then add a promotion note. You'll see it read successfully and get blocked on the write.</p>
-<pre><code class="language-python"># python/m2/m2_2_agent.py
+<details class="video-walkthrough">
+<summary>Video Walk-through [click to expand] — script available, video later</summary>
+<p><br></p>
+<p><strong>Script (will be recorded):</strong> [Open m2.2_agent.py in VS Code]</p>
+<p>This lab puts composite backends and permissions together in one place. The agent is given a skill file and asked to do two things: read it, then write a promotion note to it. One of those will succeed and one won't (which is the point).</p>
+<p>[Highlight the store.put block]</p>
+<p>First, we seed the store with a Chinook sales skill at <code>/skills/chinook-sales/SKILL.md</code>. This simulates a skill that already exists in production, managed by application code, not the agent.</p>
+<p>[Highlight the CompositeBackend block]</p>
+<p>The agent uses a <code>CompositeBackend</code>. <code>/memories/</code> and <code>/skills/</code> both route to <code>StoreBackend</code> so they persist across threads. Everything else falls back to <code>StateBackend</code>. The agent doesn't know any of this; it just calls <code>read_file</code> and the routing is transparent.</p>
+<p>[Highlight the permissions block]</p>
+<p>Then we add one permission rule: deny all writes to <code>/skills/**</code>. The reasoning is exactly what we covered - skills are managed by application code. The agent should be able to read them but never modify them. <code>/memories/</code> has no rule, so it stays fully read/write.</p>
+<p>[Highlight the agent.invoke message]</p>
+<p>The agent is asked to read the skill and then add a promotion note. That's deliberately two operations: a read that should work and a write that should be blocked.</p>
+<p>[Run it in terminal]</p>
+<p>The agent reads the file fine, then hits the permission rule on the write and reports the file is read-only. It even shows what it would have written, it just can't persist it. That's exactly the behavior we want.</p>
+</details>
+<pre><code class="language-python"># python/m2/m2.2_agent.py
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -787,7 +803,7 @@ result = agent.invoke(
 print(result[&quot;messages&quot;][-1].content)
 </code></pre>
 <pre><code class="language-bash">cd python
-uv run ./m2/m2_2_agent.py
+uv run ./m2/m2.2_agent.py
 </code></pre>
 <pre><code>The file is read-only; I don't have write permission to /skills/chinook-sales/SKILL.md.
 Here's the current content of the file for reference:
