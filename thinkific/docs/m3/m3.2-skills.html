@@ -642,7 +642,19 @@
 </tr>
 </tbody>
 </table>
-<h3 id="progressive-disclosure">Progressive disclosure</h3>
+<h2 id="progressive-disclosure">Progressive disclosure</h2>
+<details class="video-walkthrough">
+<summary>Video Walk-through [click to expand] — script available, video later</summary>
+<p><br></p>
+<p><strong>Script (will be recorded):</strong> Skills use a three-stage pattern called progressive disclosure, which is designed to keep the agent's context lean. The idea is: don't load what you don't need yet.</p>
+<p>[Scroll to and highlight the Skills System code block]</p>
+<p>Stage one is discovery. At startup, the SDK reads the name and description from each skill's frontmatter and automatically injects them into the system prompt. The SDK generates this section, not you. This is what it looks like. Both skills are listed [highlight] with their descriptions and the path to their SKILL.md. That's all that's in context at this point: just the names and descriptions, nothing from the skill bodies.</p>
+<p>[Scroll to "Activation"]</p>
+<p>Stage two is activation. When a user's request matches a skill's description, the agent calls read_file on the path shown in the system prompt, loading the full SKILL.md into context for that turn. This is the moment the instructions actually arrive.</p>
+<p>[Scroll to "Execution"]</p>
+<p>Then stage three is execution; the agent follows the instructions in the skill body, calling whatever tools it needs.</p>
+<p>Head over to the lab to see how the skills are wired up and watch both activation stages play out in LangSmith!</p>
+</details>
 <p>Skills use a three-stage pattern to keep the agent's context lean:</p>
 <p><strong>1. Discovery</strong></p>
 <p>The SDK reads the <code>name</code> and <code>description</code> from each skill's frontmatter and automatically injects them into the system prompt on every call. You do not write this section; the SDK generates it. Here is what it looks like:</p>
