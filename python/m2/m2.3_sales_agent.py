@@ -1,11 +1,10 @@
-import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
 from deepagents import create_deep_agent
 from deepagents.backends.langsmith import LangSmithSandbox
 from langsmith.sandbox import SandboxClient
+
+from models import model
 
 DB_PATH = Path(__file__).resolve().parent / "chinook.db"
 

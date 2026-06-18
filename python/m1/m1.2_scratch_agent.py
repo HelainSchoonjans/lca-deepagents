@@ -1,8 +1,6 @@
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
 from deepagents import create_deep_agent
+
+from models import model
 
 agent = create_deep_agent(model=model)
 

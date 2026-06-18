@@ -629,7 +629,11 @@ SYSTEM_PROMPT = (
 )
 </code></pre>
 <p>Then pass it to <code>create_deep_agent</code>:</p>
-<pre><code class="language-python">agent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)
+<pre><code class="language-python">agent = create_deep_agent(
+    model=model,
+    system_prompt=SYSTEM_PROMPT,
+    name=&quot;Butler Agent&quot;,
+)
 </code></pre>
 <div style="margin:1.5rem 0;padding:1.25rem 1.5rem;border-radius:12px;border:1px solid #99d3ff;background-color:#e5f4ff;color:#1e4d7a;">
 <p>In Lab 2, you'll add a <strong>system prompt</strong> for the first time by passing a persona (pirate, cowboy, Shakespeare) and see how that single line steers the agent's voice without touching anything else.</p>
@@ -645,6 +649,7 @@ SYSTEM_PROMPT = (
         </iframe>
     </div>
 </div>
+<p><p>The <code>name="Butler Agent"</code> argument also sets the root trace name in LangSmith. Without it, traces show "LangGraph"; with it they show "Butler Agent".</p></p>
 </div>
 <p><strong>Code output:</strong></p>
 <pre class="no-copy"><code class="language-plaintext">An LLM, or Large Language Model, is quite simply a vast artificial intelligence
@@ -675,17 +680,17 @@ further?
 </div>
 <div class="lt-panel" id="p-lab2" role="tabpanel">
 <h2 id="lab-swapping-personas">Lab: Swapping Personas</h2>
-<p><strong>The discovery:</strong> <code>system_prompt</code> is free-form text; use it to set a persona, lay down constraints, or define the agent's domain. The SDK slots it in as the <strong>USER</strong> segment at the front of the assembled prompt, leaving the BASE segment untouched.</p>
+<p><strong>The discovery:</strong> <code>system_prompt</code> is how you orient your agent to the task at hand and pass it essential instructions. It is free-form text: use it to define the agent's role, scope its domain, or enforce constraints. The SDK places it as the <strong>USER</strong> segment at the very front of the assembled prompt, ahead of BASE.</p>
 <details class="video-walkthrough">
 <summary>Video Walk-through [click to expand] — script available, video later</summary>
 <p><br></p>
-<p><strong>Script (will be recorded):</strong> [Highlight lab text] So the system_prompt is free-form text; this means we can use it to set a persona, lay down constraints, or define the agent's domain. The SDK slots it in as the USER segment at the front of the assembled prompt, leaving the BASE segment untouched.</p>
+<p><strong>Script (will be recorded):</strong> [Highlight lab text] So the system_prompt is how you orient your agent to the task at hand and pass it essential instructions. It's free-form text: use it to define the agent's role, scope its domain, or enforce constraints. The SDK places it as the USER segment at the very front of the assembled prompt, ahead of BASE.</p>
 <p>[Open scratch_agent_butler in VSCode]</p>
 <p>So we are going to swap out our butler persona for a pirate that yells at us. [Copy-paste the pirate persona, but add that must respond in all caps].</p>
 <p>[Show the answer in the terminal and in Langsmith]</p>
 </details>
 <p>Open <code>python/m1/m1.4_scratch_agent_butler.py</code>; the <code>SYSTEM_PROMPT</code> is already defined and passed to <code>create_deep_agent</code>. Run it to see the butler in action, then try swapping the <code>SYSTEM_PROMPT</code> for one of the personas below and run it again:</p>
-<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m1/m1.4_scratch_agent_butler.py\nSYSTEM_PROMPT = \&quot;You are a salty pirate captain...\&quot;  # \u2190 swap this\n\nfrom models import model\nfrom deepagents import create_deep_agent\nagent = create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)&quot;, &quot;highlights&quot;: [2, 3, 6], &quot;noHeader&quot;: true}]}"></div>
+<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m1/m1.4_scratch_agent_butler.py\nSYSTEM_PROMPT = \&quot;You are a salty pirate captain...\&quot;  # \u2190 swap this\n\nfrom models import model\nfrom deepagents import create_deep_agent\nagent = create_deep_agent(\n    model=model,\n    system_prompt=SYSTEM_PROMPT,\n    name=\&quot;Butler Agent\&quot;,\n)&quot;, &quot;highlights&quot;: [2, 3, 6], &quot;noHeader&quot;: true}]}"></div>
 <details>
 <summary>Persona ideas [click to expand]</summary>
 <p><br></p>

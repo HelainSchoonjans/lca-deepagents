@@ -736,13 +736,9 @@ agent = create_deep_agent(
 <hr />
 <!-- code-highlight-4:10 -->
 <pre><code class="language-python"># python/m2/m2.4_eval_agent.py
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
 from deepagents import create_deep_agent
 from langchain_quickjs import CodeInterpreterMiddleware
+from models import model
 
 agent = create_deep_agent(
     model=model,
@@ -776,16 +772,14 @@ uv run ./m2/m2.4_eval_agent.py
 <hr />
 <!-- code-highlight-6:16,17,18,19,20,21,22,23,29,30,31,32,51,52,53,54,55,56,57,58 -->
 <pre><code class="language-python"># python/m2/m2.4_interpreter_agent.py
-import sys
 import json
 import sqlite3
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
 from deepagents import create_deep_agent
-from langchain_quickjs import CodeInterpreterMiddleware
 from langchain.tools import tool
+from langchain_quickjs import CodeInterpreterMiddleware
+from models import model
 
 DB_PATH = Path(__file__).resolve().parent / &quot;chinook.db&quot;
 

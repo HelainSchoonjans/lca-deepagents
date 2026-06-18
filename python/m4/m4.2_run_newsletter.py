@@ -11,10 +11,8 @@ mirrors them to OUT_DIR: the finished newsletter plus each researcher's raw
 /research/<genre>/ archive, so you can inspect what was quarantined there.
 """
 
-import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from m4_2_newsletter_agent import agent
 
 OUT_DIR = Path(__file__).resolve().parent / "output"

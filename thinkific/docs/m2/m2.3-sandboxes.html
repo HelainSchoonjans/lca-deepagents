@@ -744,13 +744,10 @@ graph TB
 <hr />
 <p>Create <code>python/m2/sandbox_agent.py</code>:</p>
 <pre><code class="language-python"># python/m2/sandbox_agent.py
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
 from deepagents import create_deep_agent
 from deepagents.backends.langsmith import LangSmithSandbox
 from langsmith.sandbox import SandboxClient
+from models import model
 
 client = SandboxClient()
 ls_sandbox = client.create_sandbox(name=&quot;lca-deepagents-lab&quot;, template_name=&quot;deepagents-deploy&quot;)
@@ -809,13 +806,12 @@ uv run ./m2/sandbox_agent.py
 <hr />
 <!-- code-highlight-2:13,14,16,17,55,56,57 -->
 <pre><code class="language-python"># python/m2/m2.3_sales_agent.py
-import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
+
 from deepagents import create_deep_agent
 from deepagents.backends.langsmith import LangSmithSandbox
 from langsmith.sandbox import SandboxClient
+from models import model
 
 DB_PATH = Path(__file__).resolve().parent / &quot;chinook.db&quot;
 

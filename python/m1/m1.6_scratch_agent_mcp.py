@@ -1,14 +1,13 @@
-import sys
 import asyncio
 import contextlib
 import io
 import json
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from models import model
 from deepagents import create_deep_agent
 from deepagents_code.mcp_tools import get_mcp_tools
+
+from models import model
 
 MCP_CONFIG = Path(__file__).resolve().parent / ".mcp.json"
 

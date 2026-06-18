@@ -1,12 +1,10 @@
 # python/m2/m2_2_agent.py
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model
-from deepagents import create_deep_agent, FilesystemPermission
+from deepagents import FilesystemPermission, create_deep_agent
 from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
 from deepagents.backends.utils import create_file_data
 from langgraph.store.memory import InMemoryStore
+
+from models import model
 
 store = InMemoryStore()
 

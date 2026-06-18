@@ -26,12 +26,12 @@ To swap providers:
 """
 
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
 
 from langchain.chat_models import init_chat_model
-
 
 # ═══ Default Models ══════════════════════════════════════════════════════════
 # Workshop default: Anthropic claude-haiku-4-5, fast and cost-effective.

@@ -795,12 +795,10 @@ Keep the final pitch under 150 words.
 <h3 id="3-m32_scratch_agent_skillspy">3. <code>m3.2_scratch_agent_skills.py</code></h3>
 <p>Here's how <code>python/m3/m3.2_scratch_agent_skills.py</code> wires the skills into the agent:</p>
 <pre><code class="language-python"># python/m3/m3.2_scratch_agent_skills.py
-import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from models import model
 from deepagents import create_deep_agent
+from models import model
 
 agent = create_deep_agent(
     model=model,

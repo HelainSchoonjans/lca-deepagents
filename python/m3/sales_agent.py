@@ -1,8 +1,8 @@
 # python/m3/sales_agent.py
-import sys
 from pathlib import Path
+
 from deepagents import create_deep_agent
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from models import model
 
 agent = create_deep_agent(

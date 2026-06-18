@@ -42,6 +42,7 @@ langsmith_traces/
 # IDE
 .vscode/
 .idea/
+pyrightconfig.json
 *.swp
 *.swo
 *~

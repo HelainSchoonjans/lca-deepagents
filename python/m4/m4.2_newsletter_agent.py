@@ -13,19 +13,14 @@ HTML from agent state and writes it to disk.
 """
 
 import os
-import sys
-from pathlib import Path
-
-# Make the shared workshop model module importable (python/models.py).
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from models import model, strong_model  # shared workshop models (see models.py)
 
 import markdown as md
 import nh3
+from deepagents import FilesystemPermission, create_deep_agent
 from langchain_core.tools import tool
 from tavily import TavilyClient
 
-from deepagents import FilesystemPermission, create_deep_agent
+from models import model, strong_model
 
 # The distributor's top genres — known up front, no database needed.
 TOP_GENRES = ["Rock", "Latin", "Metal", "Alternative & Punk"]

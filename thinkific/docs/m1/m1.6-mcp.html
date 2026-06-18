@@ -695,15 +695,13 @@ tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;
 <p>The first thing <code>main()</code> does is load the MCP tools and print each tool's name and description so you can see what the server is offering:</p>
 <!-- code-highlight-2:12,13,14,15,16,17,18,19,20,21,25,26,27,28,29,30,31 -->
 <pre><code class="language-python"># python/m1/m1.6_scratch_agent_mcp.py
-import sys
 import asyncio
 import json
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from models import model
 from deepagents import create_deep_agent
 from deepagents_code.mcp_tools import get_mcp_tools
+from models import model
 
 MCP_CONFIG = Path(__file__).resolve().parent / &quot;.mcp.json&quot;
 
@@ -743,15 +741,13 @@ asyncio.run(main())
 <p>The agent is already wired up in <code>main()</code>; after printing the tools, it invokes the agent and prints the response:</p>
 <!-- code-highlight-4:33,34,35,36,37,38,39,40,41 -->
 <pre><code class="language-python"># python/m1/m1.6_scratch_agent_mcp.py
-import sys
 import asyncio
 import json
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from models import model
 from deepagents import create_deep_agent
 from deepagents_code.mcp_tools import get_mcp_tools
+from models import model
 
 MCP_CONFIG = Path(__file__).resolve().parent / &quot;.mcp.json&quot;
 

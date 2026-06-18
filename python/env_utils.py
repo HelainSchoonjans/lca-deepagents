@@ -5,9 +5,9 @@
 
 # ========== STANDARD LIBRARY IMPORTS ONLY (no external dependencies) ==========
 import os
-import sys
-import shutil
 import re
+import shutil
+import sys
 from pathlib import Path
 
 
@@ -58,7 +58,7 @@ def check_python_executable_and_version():
         issues.append("⚠️  Not running in a virtual environment")
         issues.append("   This may cause import errors if required packages are not installed")
     elif not executable_in_venv:
-        issues.append(f"⚠️  Python executable is not in expected .venv location")
+        issues.append("⚠️  Python executable is not in expected .venv location")
         issues.append(f"   Expected: {expected_python}")
         issues.append(f"   Actual:   {executable}")
         issues.append("   You may be using a different virtual environment or system Python")
@@ -74,7 +74,7 @@ def check_python_executable_and_version():
         print(f"✅ Python version {py_version_str} is in expected range (>=3.11, <3.15)")
 
     # Check sys.prefix and base_prefix
-    print(f"\nEnvironment paths:")
+    print("\nEnvironment paths:")
     print(f"  sys.prefix:      {sys.prefix}")
     print(f"  sys.base_prefix: {sys.base_prefix}")
     if in_venv:
@@ -101,9 +101,10 @@ def check_python_executable_and_version():
 
 # ========== EXTERNAL DEPENDENCY IMPORTS (with error handling) ==========
 try:
-    from dotenv import dotenv_values, load_dotenv
     import tomllib
     from importlib import metadata
+
+    from dotenv import dotenv_values, load_dotenv
     from packaging.requirements import Requirement
     from packaging.specifiers import SpecifierSet
     from packaging.version import Version
@@ -185,7 +186,7 @@ def check_manual_installs(file_path: str):
         return
 
     manual_installs = []
-    with open(file_path, 'r') as f:
+    with open(file_path) as f:
         for line in f:
             stripped = line.strip()
             # Look for the manual installs comment
@@ -233,7 +234,7 @@ def doublecheck_env(file_path: str):
     # Parse the example file to identify required keys and their example values
     required_keys = {}
     all_example_values = {}
-    with open(file_path, 'r') as f:
+    with open(file_path) as f:
         lines = f.readlines()
         is_required_section = False
         for line in lines:
@@ -309,9 +310,9 @@ def doublecheck_env(file_path: str):
     if langsmith_tracing == "true":
         # Check if API key is missing, empty, or still has the example value
         if not langsmith_api_key:
-            issues.append(f"  ⚠️  LANGSMITH_TRACING is enabled but LANGSMITH_API_KEY is not set")
+            issues.append("  ⚠️  LANGSMITH_TRACING is enabled but LANGSMITH_API_KEY is not set")
         elif langsmith_api_key == langsmith_example:
-            issues.append(f"  ⚠️  LANGSMITH_TRACING is enabled but LANGSMITH_API_KEY still has the example/placeholder value")
+            issues.append("  ⚠️  LANGSMITH_TRACING is enabled but LANGSMITH_API_KEY still has the example/placeholder value")
         else:
             print("\n✅ LANGSMITH_TRACING is enabled and the LANGSMITH_API_KEY is set")
     elif langsmith_api_key and langsmith_api_key != langsmith_example:

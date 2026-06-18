@@ -818,14 +818,7 @@
 <p>You'll build a simple agent.</p>
 <p>The agent itself is a single <code>create_deep_agent</code> call. It pulls <code>model</code> from the course's shared <code>models.py</code> - so the agent uses whatever provider you configured during setup - and is exposed as a module-level <code>graph</code> so the server can find it:</p>
 <pre><code class="language-python"># python/m5/hello/agent.py
-import sys
-from pathlib import Path
-
-# Make the shared models.py importable (python/models.py).
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-
 from deepagents import create_deep_agent
-
 from models import model
 
 # langgraph.json points at this variable: &quot;./agent.py:graph&quot;

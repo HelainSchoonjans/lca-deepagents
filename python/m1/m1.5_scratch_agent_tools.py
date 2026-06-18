@@ -1,13 +1,14 @@
-import sys
 import warnings
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 from pathlib import Path
+
+from deepagents import create_deep_agent
 from langchain_community.utilities import SQLDatabase
 from langchain_core.tools import tool
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import Command
-from deepagents import create_deep_agent
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from models import model
 
 DB_PATH = Path(__file__).parent / "chinook.db"
