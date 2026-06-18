@@ -901,7 +901,7 @@ def get_stock_price(ticker: str) -&gt; str:
     { tag: 'Step 4 of 7 · Tool Node executes, result returned to Agent',
       caption: 'The Tool Node runs write_sql and db.run() executes the query. The result is returned to the agent as a tool message and the agent continues.' },
     { tag: 'Step 5 of 7 · Human rejects',
-      caption: 'Alternatively, if you type "no", Command(resume={"decisions": [{"type": "reject"}]}) is sent. The middleware short-circuits and returns a rejection message without calling the Tool Node.' },
+      caption: 'Alternatively, if you type "no", Command(resume={"decisions": [{"type": "reject"}]}) is sent. The middleware injects a rejection ToolMessage so write_sql never executes.' },
     { tag: 'Step 6 of 7 · Write cancelled, Agent notified',
       caption: 'The agent receives a rejection message as its tool result. The database is untouched and write_sql never ran. The agent continues with the cancellation in context.' },
     { tag: 'Step 7 of 7 · Full flow',
