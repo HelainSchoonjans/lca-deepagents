@@ -661,8 +661,8 @@ buildDiagram({
       caption: 'The LLM decides it needs data and outputs an AIMessage with a tool_calls list: the name of the tool and the arguments to pass. The LLM does not run the tool. It produces a structured request; something else executes it.'
     },
     {
-      tag: 'Step 3 of 7 · AIMessage passed to Tool Node',
-      caption: 'The AIMessage (carrying tool_calls) flows to the Tool Node, a built-in LangGraph node inside the deep agent. The Tool Node is responsible for all tool execution.'
+      tag: 'Step 3 of 7 · tool_calls trigger the Tool Node',
+      caption: 'The graph detects tool_calls in the AIMessage and routes to the Tool Node, a built-in LangGraph node inside the deep agent. The AIMessage itself is not passed to the Tool Node; the tool_calls within it are what trigger the routing.'
     },
     {
       tag: 'Step 4 of 7 · Tool Node executes the call',
@@ -686,7 +686,7 @@ buildDiagram({
     return [
       solidArrow(L[0]+hw, L[1]-hw, 82, 'tool schemas', (L[0]+L[1])/2, a, fs),
       labelBox(L[1], 112, 190, ['AIMessage', '{ tool_calls: [...] }'], fs),
-      solidArrow(L[1]+hw, L[2]-hw, 205, 'AIMessage', (L[1]+L[2])/2, a, fs),
+      solidArrow(L[1]+hw, L[2]-hw, 205, 'tool_calls', (L[1]+L[2])/2, a, fs),
       solidArrow(L[2]+hw, L[3]-hw, 262, 'execute_sql(query=…)', (L[2]+L[3])/2, a, fs),
       dashedArrow(L[3]-hw, L[2]+hw, 322, 'result string', (L[2]+L[3])/2, a, fs),
       solidArrow(L[2]-hw, L[1]+hw, 382, 'ToolMessage', (L[1]+L[2])/2, a, fs),
