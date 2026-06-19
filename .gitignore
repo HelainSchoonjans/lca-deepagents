@@ -9,6 +9,11 @@
 secrets/
 credentials/
 
+# Editor autosave / lock files (can mirror .env and leak secrets)
+\#*\#
+.#*
+*~
+
 # Python
 __pycache__/
 *.py[cod]
