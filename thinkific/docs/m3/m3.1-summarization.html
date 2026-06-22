@@ -580,50 +580,45 @@
 
 <div class="lt-panel active" id="p-summ" role="tabpanel">
 <details class="video-walkthrough">
-<summary>Video Walk-through [click to expand] — script available, video later</summary>
+<summary>Video Walk-through [click to expand]</summary>
 <br>
 
-**Script (will be recorded):** This lesson covers how Deep Agents handles long conversations automatically. As you chat with an agent across many turns, messages accumulate and the token count rises. Left unchecked, it would eventually hit the model's context limit. SummarizationMiddleware deals with this automatically by watching the context fill up and compacting old messages into a summary before they ever reach the model.
-
-[Show diagram]
-
-Think of the context window like a thermometer. Every message adds tokens and the level rises. When it crosses 85% of the model's limit, the middleware fires. At that point, it picks a cutoff point, keeps the most recent messages intact, and summarizes everything older into a single block. The original messages are replaced in the model's view by that summary, so the token count drops sharply and the conversation can continue.
-
-This scales. On a second compaction event, the prior summary is treated just like any other old message, so it gets folded into a new combined summary along with whatever else has aged past the cutoff. Every compaction event produces exactly one summary block, no matter how many rounds have happened before.
-
-[Scroll to "What the summary contains"]
-
-So what actually goes into the summary? The middleware makes a separate LLM call, using the same model as the agent, with a structured prompt that extracts four things [highlight as I go]:
-
-The session intent, meaning what the user is trying to accomplish. Key facts and decisions from the conversation. Any artifacts like files that were created or modified. And what still remains to be done.
-
-That resulting text is then injected as a single message at the top of the preserved recent messages, so the model picks up as if it had been there the whole time.
-
-[Scroll to "Seeing it in action" and highlight the model.profile line]
-
-The default threshold is 85% of the model's real context window, which for Claude Haiku 4.5 is 170,000 tokens. To actually see it fire in a demo, we override model.profile["max_input_tokens"] to a small value so the threshold is hit after just a few turns.
-
-[Point at the expected output]
-
-[Highlight turn 1: stored : 2 message(s) (raw history, never trimmed)]
-
-[Highlight turn 2: stored : 4 message(s) (raw history, never trimmed)]
-
-You can see it fire on turn 3. [Highlight]
-
-After that, every subsequent turn shows "model saw: summary + messages[4:]", which means the model is receiving the summary plus only the most recent messages, not the full history.
-
-On turn 5, when we ask "what do you remember about me?", the agent correctly recalls the name, company, and project from earlier turns that it never directly saw again. The summary did its job.
-
-One important note: state["messages"] is never modified. The full history is always stored intact. Summarization only affects what gets sent to the model each turn.
-
+<div class="video-container" style="max-width: 750px;">
+    <div class="video-wrapper">
+        <iframe
+            src="https://share.descript.com/embed/YARdGwwHje9"
+            frameborder="0"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
 </details>
-<p>As agents have grown more capable, we ask more of them. Tasks that once took a single tool call now span dozens of steps. Research sessions run for many turns, complex workflows pile up tool results and intermediate reasoning, and back-and-forth refinement adds more with every exchange. More capability means more context, and more context means the total token count climbs steadily toward the model's limit. Left unchecked, a long-running agent eventually stalls.</p>
+</div>
+<p><strong>Script:</strong> This lesson covers how Deep Agents handles long conversations automatically. As you chat with an agent across many turns, messages accumulate and the token count rises. Left unchecked, it would eventually hit the model's context limit. SummarizationMiddleware deals with this automatically by watching the context fill up and compacting old messages into a summary before they ever reach the model.</p>
+<p>[Show diagram]</p>
+<p>Think of the context window like a thermometer. Every message adds tokens and the level rises. When it crosses 85% of the model's limit, the middleware fires. At that point, it picks a cutoff point, keeps the most recent messages intact, and summarizes everything older into a single block. The original messages are replaced in the model's view by that summary, so the token count drops sharply and the conversation can continue.</p>
+<p>This scales. On a second compaction event, the prior summary is treated just like any other old message, so it gets folded into a new combined summary along with whatever else has aged past the cutoff. Every compaction event produces exactly one summary block, no matter how many rounds have happened before.</p>
+<p>[Scroll to "What the summary contains"]</p>
+<p>So what actually goes into the summary? The middleware makes a separate LLM call, using the same model as the agent, with a structured prompt that extracts four things [highlight as I go]:</p>
+<p>The session intent, meaning what the user is trying to accomplish. Key facts and decisions from the conversation. Any artifacts like files that were created or modified. And what still remains to be done.</p>
+<p>That resulting text is then injected as a single message at the top of the preserved recent messages, so the model picks up as if it had been there the whole time.</p>
+<p>[Scroll to "Seeing it in action" and highlight the model.profile line]</p>
+<p>The default threshold is 85% of the model's real context window, which for Claude Haiku 4.5 is 170,000 tokens. To actually see it fire in a demo, we override model.profile["max_input_tokens"] to a small value so the threshold is hit after just a few turns.</p>
+<p>[Point at the expected output]</p>
+<p>[Highlight turn 1: stored : 2 message(s) (raw history, never trimmed)]</p>
+<p>[Highlight turn 2: stored : 4 message(s) (raw history, never trimmed)]</p>
+<p>You can see it fire on turn 3. [Highlight]</p>
+<p>After that, every subsequent turn shows "model saw: summary + messages[4:]", which means the model is receiving the summary plus only the most recent messages, not the full history.</p>
+<p>On turn 5, when we ask "what do you remember about me?", the agent correctly recalls the name, company, and project from earlier turns that it never directly saw again. The summary did its job.</p>
+<p>One important note: state["messages"] is never modified. The full history is always stored intact. Summarization only affects what gets sent to the model each turn.</p>
+</details>
+<p>As agents grow more capable, tasks span more steps, sessions run longer, and tool results pile up. Token counts climb steadily toward the model's limit, and left unchecked, a long-running agent eventually stalls.</p>
 <p>Deep Agents handles this automatically with <strong>SummarizationMiddleware</strong>; it watches the context fill up and compacts old messages into a summary before the model ever sees them.</p>
 <hr />
 <h2 id="how-the-context-window-fills-up">How the context window fills up</h2>
 <p>Think of the context window like a thermometer. Every new message adds tokens and the level rises. When it crosses <strong>85%</strong> of the model's limit, the middleware fires.</p>
 <div class="sd-wrap" id="ss-compaction"></div>
+
 <script>
 buildSlideshow({
   id: 'ss-compaction',
@@ -641,6 +636,7 @@ buildSlideshow({
   ]
 });
 </script>
+
 <hr />
 <h2 id="what-the-summary-contains">What the summary contains</h2>
 <p>The middleware makes a separate LLM call to generate the summary. It uses a structured prompt that asks the model to extract:</p>
@@ -698,9 +694,9 @@ Turn 5  User:  What do you remember about me?
 Turn 5  Agent: You mentioned your name is Alex, you work at Acme Corp, and you've been building a distributed cache for three months.
   stored : 10 message(s) (raw history, never trimmed)
   model saw : summary + messages[4:]  [SUMMARIZED]</pre>
-<div class="tip">
-<p><strong>Passing <code>model</code> not <code>MODEL</code>.</strong> Notice <code>create_deep_agent(model=model, ...)</code> receives the model <em>object</em>, not the string <code>"anthropic:claude-haiku-4-5"</code>. Passing the string would re-initialize the model internally and ignore the <code>profile</code> override.</p>
-</div>
+
+<div class="tip"><p><strong>Passing <code>model</code> not <code>MODEL</code>.</strong> Notice <code>create_deep_agent(model=model, ...)</code> receives the model <em>object</em>, not the string <code>"anthropic:claude-haiku-4-5"</code>. Passing the string would re-initialize the model internally and ignore the <code>profile</code> override.</p></div>
+
 <p>When summarization fires, a private <code>_summarization_event</code> key appears in the agent's state. The <code>state["messages"]</code> list itself is never modified; the summarization happens only on what gets <em>sent</em> to the model each turn.</p>
 <hr />
 <h2 id="tool-result-offloading">Tool result offloading</h2>
@@ -721,12 +717,13 @@ So instead of the full result, the model sees this. First, it's told the result 
 
 [Scroll to the exclusions paragraph]
 
-The filesystem tools themselves are excluded from this, so things like read_file, grep, and ls. They either have their own truncation built in, or evicting them wouldn't make sense.
+The filesystem tools themselves are excluded from this, so things like read_file, grep, and ls. They either have their own truncation built in, or offloading them wouldn't make sense.
 
 In short: summarization handles gradual accumulation across turns, and tool result offloading handles single large spikes. Together they're what allows an agent to run indefinitely without hitting context limits.
 
 </details>
-<p><strong>FilesystemMiddleware</strong> handles this automatically with tool result eviction. When a tool returns a result that exceeds roughly <strong>20,000 tokens</strong>, the middleware:</p>
+
+<p><strong>FilesystemMiddleware</strong> handles this automatically with tool result offloading. When a tool returns a result that exceeds roughly <strong>20,000 tokens</strong>, the middleware:</p>
 <ol>
 <li>Writes the full result to <code>/large_tool_results/&lt;tool_call_id&gt;</code> on the agent's filesystem</li>
 <li>Replaces the inline <code>ToolMessage</code> with a short preview (first and last 5 lines) and a file reference</li>
@@ -751,7 +748,7 @@ Here is a preview showing the head and tail of the result:
   1830  | 1829, ...
 </code></pre>
 <p>The agent can then call <code>read_file</code> with <code>offset</code> and <code>limit</code> to page through the full result on demand - reading only the portion that is relevant rather than loading everything into context at once.</p>
-<p>The tools <code>ls</code>, <code>glob</code>, <code>grep</code>, <code>read_file</code>, <code>edit_file</code>, and <code>write_file</code> are excluded from eviction. They either have their own built-in truncation, return minimal confirmation text, or (for <code>read_file</code>) re-reading a truncated file would not help.</p>
+<p>The tools <code>ls</code>, <code>glob</code>, <code>grep</code>, <code>read_file</code>, <code>edit_file</code>, and <code>write_file</code> are excluded from offloading. They either have their own built-in truncation, return minimal confirmation text, or (for <code>read_file</code>) re-reading a truncated file would not help.</p>
 <hr />
 <h2 id="recap">Recap</h2>
 <ul>
@@ -760,7 +757,7 @@ Here is a preview showing the head and tail of the result:
 <li>The summary is generated by a separate LLM call using the same model as the agent</li>
 <li><code>state["messages"]</code> is never mutated; summarization is tracked in a private <code>_summarization_event</code> field</li>
 <li>Passing <code>model.profile["max_input_tokens"]</code> overrides the threshold, making it practical to demo</li>
-<li><strong>FilesystemMiddleware</strong> also evicts individual tool results that exceed ~20k tokens, offloading them to <code>/large_tool_results/</code> and replacing them with a preview + file reference</li>
+<li><strong>FilesystemMiddleware</strong> also offloads individual tool results that exceed ~20k tokens, writing them to <code>/large_tool_results/</code> and replacing them with a preview + file reference</li>
 </ul>
 <h2 id="next">Next</h2>
 <p>In the next lesson we cover skills: how to package reusable agent behaviours so the model can load them on demand.</p>
