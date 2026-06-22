@@ -529,6 +529,8 @@
     <p><a href="https://langchain-ai.github.io/lca-deepagents/m1/m1.6-mcp.html" target="_blank" rel="noopener noreferrer">For translation, open lesson in new tab and use Chrome translate</a></p>
 <style>@import url('../shared/sd-components.css');</style>
 <script src="../shared/sd-components.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { background: '#F2FAFF', primaryColor: '#E5F4FF', primaryBorderColor: '#006DDD', primaryTextColor: '#030710', lineColor: '#2F4B68' } });</script>
 
 <h1 id="mcp">MCP</h1>
 <div class="callout">
@@ -582,7 +584,8 @@ The lab for this lesson originally used a Gmail MCP server, but OAuth authentica
     <button class="lt-tab" data-p="quiz" role="tab" aria-selected="false">Quiz</button>
   </div>
   <div class="lt-group lt-wrap">
-    <button class="lt-tab" data-p="lab" role="tab" aria-selected="false">Lab</button>
+    <button class="lt-tab" data-p="lab1" role="tab" aria-selected="false">Lab 1</button>
+    <button class="lt-tab" data-p="lab2" role="tab" aria-selected="false">Lab 2</button>
   </div>
 </div>
 
@@ -631,6 +634,22 @@ tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;
 </code></pre>
 <p>When deepagents detects a server that requires OAuth, it pauses and opens a browser window for the user to log in. Tokens are stored in <code>~/.deepagents/.state/mcp-tokens/</code> and reused on subsequent runs.</p>
 <p><code>allowedTools</code> lets you restrict which tools from a server the agent can see. This is useful when a server exposes many tools but you only need a subset; for example, giving an agent read-only access to Gmail without exposing tools that can send or delete.</p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>MCP is an open protocol that standardizes how applications expose tools and context to LLMs; any MCP-aware client connects to any MCP server without custom integration code</li>
+<li><code>langchain-mcp-adapters</code> wraps each server tool as a standard <code>BaseTool</code>; the agent cannot tell MCP tools apart from locally-defined ones</li>
+<li>Servers are configured in <code>.mcp.json</code>; the <code>type</code> field sets the transport (<code>stdio</code> for local subprocesses, <code>http</code> for stateless remote calls, <code>sse</code> for persistent streaming connections)</li>
+<li><code>allowedTools</code> restricts which tools from a server the agent can see; useful when a server exposes many tools but you only need a subset, or want to limit access to read-only operations</li>
+<li><code>auth: "oauth"</code> triggers a one-time browser authorization on first run; tokens are cached in <code>~/.deepagents/.state/mcp-tokens/</code> and reused automatically</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<p><strong>Documentation:</strong><br />
+- <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">Model Context Protocol spec</a><br />
+- <a href="https://github.com/langchain-ai/langchain-mcp-adapters" target="_blank" rel="noopener noreferrer">langchain-mcp-adapters (GitHub)</a><br />
+- <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer">MCP servers directory</a><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/mcp" target="_blank" rel="noopener noreferrer">deepagents MCP config reference</a></p>
 </div>
 <div class="lt-panel" id="p-quiz" role="tabpanel">
 
@@ -700,10 +719,25 @@ tools, session_manager, server_infos = await get_mcp_tools(&quot;.mcp.json&quot;
     </div>
 </div>
 
+<div class="mcq-container" id="mcq-cd400c71">
+    <div class="mcq-question">
+        <strong>Question:</strong> You add interrupt_on to create_deep_agent for an MCP tool but forget to pass a checkpointer. What happens?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'cd400c71')"><strong>A)</strong> The agent runs normally and ignores the interrupt_on setting</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'cd400c71')"><strong>B)</strong> An error is raised at invocation time because interrupt_on requires a checkpointer to save and restore state</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'cd400c71')"><strong>C)</strong> The agent pauses but cannot resume; graph state is lost</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'cd400c71')"><strong>D)</strong> The interrupt fires once, then is automatically disabled for that session</div>
+    </div>
+    <div id="mcq-answer-cd400c71" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
+        <div class="mcq-explanation">interrupt_on requires a checkpointer to save and restore conversation state at the pause point. Without one, LangGraph raises an error at invocation time rather than silently ignoring the interrupt or losing state.</div>
+    </div>
+</div>
 
 </div>
 
-<div class="lt-panel" id="p-lab" role="tabpanel">
+<div class="lt-panel" id="p-lab1" role="tabpanel">
 <h2 id="connecting-to-a-docs-server">Connecting to a Docs Server</h2>
 <p>This lab connects an agent to the LangChain documentation server, an HTTP MCP server maintained by LangChain, not you. When the docs update, the tools update. You write nothing; you maintain nothing.</p>
 <h3 id="step-1-load-and-inspect">Step 1: Load and inspect</h3>
@@ -821,22 +855,586 @@ asyncio.run(main())
 <p style="margin:0.5rem 0 0;"><code>allowedTools</code> is an allowlist; only the named tools are kept; anything new the server adds in the future stays invisible. <code>disabledTools</code> is a denylist; only the named tools are removed; anything new the server adds is visible by default. Use <code>allowedTools</code> when you want a strict, stable subset; use <code>disabledTools</code> when you want most of the server's tools and just need to block a few.</p>
 </div>
 </div>
+<div class="lt-panel" id="p-lab2" role="tabpanel">
+<h2 id="mcp-with-oauth">MCP with OAuth</h2>
+<details>
+<summary>🎥 Video Walk-through [click to expand]</summary>
+<p><br></p>
+<div class="video-container" style="max-width: 750px;">
+    <div class="video-wrapper">
+        <iframe
+            src="https://share.descript.com/embed/2MCJKu6aWXr"
+            frameborder="0"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+</details>
+</div>
+</details>
+<p>Many of the most useful tools and services require a user to be signed in to access data. Increasingly, application vendors offer MCP interfaces that use the OAuth standard to allow an agent to gain access.</p>
+<p>We will use the GitHub MCP server as our example, as most students will have a GitHub account. It requires an OAuth access token before it will respond to any request. This lesson covers two things: how to set up your agent to obtain and use that token, and what actually happens under the hood when it does. It will demonstrate static client registration, where you manually register the client with the provider once before running any code. This is very common at this point in time.</p>
 <hr />
-<h2 id="recap">Recap</h2>
+<h2 id="set-up-your-agent-with-oauth">Set up your agent with OAuth</h2>
+<p>Two steps are required:</p>
+<ol>
+<li>Register your OAuth application — a one-time setup.<br />
+   - This identifies your agent to the application. It can also be a time<br />
+     to establish constraints on access in the application.</li>
+<li>Configure your agent with the credentials and run it.</li>
+</ol>
+<h3 id="register-your-oauth-client">Register your OAuth client</h3>
+<p>Before running any of the programs below, you need to register an OAuth App<br />
+in GitHub. This is a one-time manual step — it is what makes GitHub willing to<br />
+issue tokens to your application at all.</p>
+<p>Follow GitHub's guide: <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" target="_blank" rel="noopener noreferrer">Creating an OAuth App</a>.</p>
+<p>When filling in the registration form at<br />
+<code>github.com/settings/developers → New OAuth App</code>, use these values:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application name</td>
+<td><code>LCA-DA-Course-MCP</code></td>
+</tr>
+<tr>
+<td>Homepage URL</td>
+<td><code>http://localhost</code></td>
+</tr>
+<tr>
+<td>Authorization callback URL</td>
+<td><code>http://127.0.0.1</code></td>
+</tr>
+</tbody>
+</table>
+<p>The callback URL <code>http://127.0.0.1</code> (an IP literal, not a hostname) is the<br />
+loopback address the script's listener binds to. GitHub validates the host but<br />
+not the port for loopback addresses, so the script can pick an available<br />
+ephemeral port at runtime without pre-registering a specific one.</p>
+<p>After clicking <strong>Register application</strong>, immediately click <strong>Generate a new<br />
+client secret</strong> — GitHub shows it only once. Add both values to <code>.env</code>:</p>
+<pre><code class="language-bash"># .env
+GITHUB_CLIENT_ID=your_client_id_here
+GITHUB_CLIENT_SECRET=your_client_secret_here
+</code></pre>
+<p><code>GITHUB_CLIENT_ID</code> is used to build the authorization URL during the OAuth<br />
+consent flow. <code>GITHUB_CLIENT_SECRET</code> is used to exchange the authorization<br />
+code for an access token.</p>
+<hr />
+<h3 id="putting-it-together-github_agentpy">Putting it together (<code>github_agent.py</code>)</h3>
+<p>This example follows the template shown <a href="https://github.com/modelcontextprotocol/python-sdk/blob/main/examples/clients/simple-auth-client/mcp_simple_auth_client/main.py" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m1/gh_auth/github_agent.py\n\nasync def main() -&gt; None:\n    client_id = os.environ.get(\&quot;GITHUB_CLIENT_ID\&quot;)\n    client_secret = os.environ.get(\&quot;GITHUB_CLIENT_SECRET\&quot;)\n    if not client_id or not client_secret:\n        raise SystemExit(\&quot;Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in .env.\&quot;)\n\n    auth = GitHubOAuthClientProvider(\n        server_url=MCP_URL,\n        client_metadata=OAuthClientMetadata(\n            redirect_uris=[REDIRECT_URI],\n            scope=SCOPE,\n            token_endpoint_auth_method=\&quot;client_secret_post\&quot;,\n        ),\n        storage=GitHubTokenStorage(client_id, client_secret),\n        redirect_handler=open_browser,\n        callback_handler=wait_for_callback,\n        requested_scope=SCOPE,\n    )\n\n    client = MultiServerMCPClient({\n        \&quot;github\&quot;: {\n            \&quot;transport\&quot;: \&quot;streamable_http\&quot;,\n            \&quot;url\&quot;: MCP_URL,\n            \&quot;auth\&quot;: auth,\n        }\n    })\n\n    async with client.session(\&quot;github\&quot;) as session:\n        tools = await load_mcp_tools(session)\n        print(f\&quot;github: {len(tools)} tool(s) available\&quot;)\n\n        agent = create_deep_agent(model=model, tools=tools)\n        print(\&quot;Running agent...\\n\&quot;)\n        result = await agent.ainvoke({\n            \&quot;messages\&quot;: [{\&quot;role\&quot;: \&quot;user\&quot;, \&quot;content\&quot;: (\n                \&quot;Use the get_me tool to find my GitHub username, \&quot;\n                \&quot;then use get_file_contents to list the files in the root of my repository.\&quot;\n            )}]\n        })\n        print(\&quot;\\n\&quot; + result[\&quot;messages\&quot;][-1].content)\n\n\nif __name__ == \&quot;__main__\&quot;:\n    asyncio.run(main())&quot;, &quot;highlights&quot;: [9, 22, 26, 30, 31, 34]}]"></div>
+
+<details>
+<summary>Full file</summary>
+<pre><code class="language-python"># python/m1/gh_auth/github_agent.py
+&quot;&quot;&quot;GitHub MCP agent — OAuth via the MCP SDK's built-in flow.
+
+The MCP SDK's OAuthClientProvider handles PKCE, discovery, and token exchange.
+GitHubTokenStorage pre-seeds the registered client credentials so the SDK skips
+dynamic client registration (which GitHub does not support).
+
+Run:  uv run python m1/gh_auth/github_agent.py
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import asyncio
+import os
+import threading
+import webbrowser
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from deepagents import create_deep_agent
+from dotenv import load_dotenv
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_mcp_adapters.tools import load_mcp_tools
+import httpx
+from mcp.client.auth import OAuthClientProvider
+from mcp.shared.auth import OAuthClientInformationFull, OAuthClientMetadata, OAuthToken
+
+from models import model
+
+ENV_PATH = Path(__file__).resolve().parent.parent.parent / &quot;.env&quot;
+load_dotenv(dotenv_path=ENV_PATH, override=True)
+
+TOKEN_FILE = Path(__file__).resolve().parent.parent.parent / &quot;.m1_github_token&quot;
+
+MCP_URL = &quot;https://api.githubcopilot.com/mcp/&quot;
+REDIRECT_URI = &quot;http://127.0.0.1:8765/&quot;
+SCOPE = &quot;repo read:user&quot;
+
+
+class GitHubOAuthClientProvider(OAuthClientProvider):
+    def __init__(self, *args, requested_scope: str, **kwargs) -&gt; None:
+        super().__init__(*args, **kwargs)
+        self._requested_scope = requested_scope
+
+    async def _perform_authorization_code_grant(self) -&gt; tuple[str, str]:
+        self.context.client_metadata.scope = self._requested_scope
+        return await super()._perform_authorization_code_grant()
+
+    async def _exchange_token_authorization_code(
+        self, auth_code: str, code_verifier: str, *, token_data: dict | None = {}
+    ) -&gt; httpx.Request:
+        req = await super()._exchange_token_authorization_code(
+            auth_code, code_verifier, token_data=token_data
+        )
+        req.headers[&quot;Accept&quot;] = &quot;application/json&quot;
+        return req
+
+
+class GitHubTokenStorage:
+    def __init__(self, client_id: str, client_secret: str) -&gt; None:
+        self._client_id = client_id
+        self._client_secret = client_secret
+
+    async def get_tokens(self) -&gt; OAuthToken | None:
+        if TOKEN_FILE.exists():
+            raw = TOKEN_FILE.read_text().strip()
+            if raw:
+                try:
+                    return OAuthToken.model_validate_json(raw)
+                except Exception:
+                    return OAuthToken(access_token=raw, token_type=&quot;Bearer&quot;)
+        return None
+
+    async def set_tokens(self, tokens: OAuthToken) -&gt; None:
+        TOKEN_FILE.write_text(tokens.model_dump_json())
+
+    async def get_client_info(self) -&gt; OAuthClientInformationFull:
+        return OAuthClientInformationFull(
+            client_id=self._client_id,
+            client_secret=self._client_secret,
+            redirect_uris=[REDIRECT_URI],
+            token_endpoint_auth_method=&quot;client_secret_post&quot;,
+        )
+
+    async def set_client_info(self, info: OAuthClientInformationFull) -&gt; None:
+        pass
+
+
+async def open_browser(url: str) -&gt; None:
+    print(f&quot;Opening browser for GitHub login ({SCOPE})...&quot;)
+    print(f&quot;If it doesn't open, paste this URL:\n{url}\n&quot;)
+    webbrowser.open(url)
+
+
+async def wait_for_callback() -&gt; tuple[str, str | None]:
+    result: dict[str, str] = {}
+    done = threading.Event()
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            params = parse_qs(urlparse(self.path).query)
+            result[&quot;code&quot;] = params.get(&quot;code&quot;, [&quot;&quot;])[0]
+            result[&quot;state&quot;] = params.get(&quot;state&quot;, [&quot;&quot;])[0]
+            self.send_response(200)
+            self.send_header(&quot;Content-Type&quot;, &quot;text/html&quot;)
+            self.end_headers()
+            self.wfile.write(b&quot;&lt;h3&gt;Authorized. You can close this tab.&lt;/h3&gt;&quot;)
+            done.set()
+
+        def log_message(self, *a): pass
+
+    port = int(urlparse(REDIRECT_URI).port or 80)
+    server = HTTPServer((&quot;127.0.0.1&quot;, port), Handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+
+    if not done.wait(timeout=300):
+        server.shutdown()
+        raise SystemExit(&quot;Timed out waiting for OAuth callback.&quot;)
+    server.shutdown()
+    return result[&quot;code&quot;], result.get(&quot;state&quot;)
+
+
+async def main() -&gt; None:
+    client_id = os.environ.get(&quot;GITHUB_CLIENT_ID&quot;)
+    client_secret = os.environ.get(&quot;GITHUB_CLIENT_SECRET&quot;)
+    if not client_id or not client_secret:
+        raise SystemExit(&quot;Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in .env.&quot;)
+
+    auth = GitHubOAuthClientProvider(
+        server_url=MCP_URL,
+        client_metadata=OAuthClientMetadata(
+            redirect_uris=[REDIRECT_URI],
+            scope=SCOPE,
+            token_endpoint_auth_method=&quot;client_secret_post&quot;,
+        ),
+        storage=GitHubTokenStorage(client_id, client_secret),
+        redirect_handler=open_browser,
+        callback_handler=wait_for_callback,
+        requested_scope=SCOPE,
+    )
+
+    client = MultiServerMCPClient({
+        &quot;github&quot;: {
+            &quot;transport&quot;: &quot;streamable_http&quot;,
+            &quot;url&quot;: MCP_URL,
+            &quot;auth&quot;: auth,
+        }
+    })
+
+    async with client.session(&quot;github&quot;) as session:
+        tools = await load_mcp_tools(session)
+        print(f&quot;github: {len(tools)} tool(s) available&quot;)
+
+        agent = create_deep_agent(model=model, tools=tools)
+        print(&quot;Running agent...\n&quot;)
+        result = await agent.ainvoke({
+            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: (
+                &quot;Use the get_me tool to find my GitHub username, &quot;
+                &quot;then use get_file_contents to list the files in the root of my repository.&quot;
+            )}]
+        })
+        print(&quot;\n&quot; + result[&quot;messages&quot;][-1].content)
+
+
+if __name__ == &quot;__main__&quot;:
+    asyncio.run(main())
+</code></pre>
+</details>
+<p><code>OAuthClientProvider</code> is from the MCP Python SDK and implements <code>httpx.Auth</code> — the interface httpx uses to inject authentication into every request automatically. It handles the full OAuth flow: it follows the <code>WWW-Authenticate</code> header to discover the authorization server, generates PKCE parameters, calls <code>redirect_handler</code> to open the browser, awaits <code>callback_handler</code> to receive the authorization code, exchanges the code for a token, and caches it via <code>storage</code>.</p>
+<p><code>GitHubTokenStorage</code> pre-seeds the registered <code>client_id</code> and <code>client_secret</code> so the SDK skips dynamic client registration, which GitHub does not support. <code>GitHubOAuthClientProvider</code> is a small subclass with two GitHub-specific fixes: it restores the requested scope (the SDK otherwise uses GitHub's full advertised scope list), and adds <code>Accept: application/json</code> to the token exchange request (GitHub returns URL-encoded form data by default).</p>
+<p>On first run (no cached token) the program opens the browser for consent; on subsequent runs it reads the cached token and skips straight to the agent:</p>
+<pre><code class="language-bash">cd python
+uv run python m1/gh_auth/github_agent.py
+</code></pre>
+<pre style="max-height:300px;overflow-y:auto;background:#0d1117;color:#e6edf3;padding:16px;border-radius:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.6;white-space:pre-wrap;">Opening browser for GitHub login (repo read:user)...
+If it doesn't open, paste this URL:
+https://github.com/login/oauth/authorize?...&amp;scope=repo+read%3Auser
+
+github: 44 tool(s) available
+Running agent...
+
+Your GitHub username is edu-langchain. You have 1 public repository.
+The root of your repository contains: .gitignore, README.md, python/, thinkific/</pre>
+
+<hr />
+<h2 id="under-the-hood">Under the hood</h2>
+<details>
+<summary>🎥 Video Walk-through [click to expand]</summary>
+<p><br></p>
+<div class="video-container" style="max-width: 750px;">
+    <div class="video-wrapper">
+        <iframe
+            src="https://share.descript.com/embed/zad961aFDP1"
+            frameborder="0"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+</details>
+<p>Strictly speaking, OAuth is an <em>authorization</em> framework — but the consent<br />
+flow bundles authentication in as well:</p>
 <ul>
-<li>MCP is an open protocol that standardizes how applications expose tools and context to LLMs; any MCP-aware client connects to any MCP server without custom integration code</li>
-<li><code>langchain-mcp-adapters</code> wraps each server tool as a standard <code>BaseTool</code>; the agent cannot tell MCP tools apart from locally-defined ones</li>
-<li>Servers are configured in <code>.mcp.json</code>; the <code>type</code> field sets the transport (<code>stdio</code> for local subprocesses, <code>http</code> for stateless remote calls, <code>sse</code> for persistent streaming connections)</li>
-<li><code>allowedTools</code> restricts which tools from a server the agent can see; useful when a server exposes many tools but you only need a subset, or want to limit access to read-only operations</li>
-<li><code>auth: "oauth"</code> triggers a one-time browser authorization on first run; tokens are cached in <code>~/.deepagents/.state/mcp-tokens/</code> and reused automatically</li>
+<li><strong>Authentication</strong> — the user proves their identity by logging in to the<br />
+  service. The agent cannot skip this; a human must be present to approve.</li>
+<li><strong>Authorization</strong> — the user grants the agent permission to act on specific<br />
+  scopes (for example, <code>repo</code> to read repositories). The token the agent<br />
+  receives is bounded by exactly those scopes and nothing more.</li>
 </ul>
+<p>The OAuth flow involves five actors:</p>
+<ul>
+<li><strong>you / the user</strong> — who approves access in the browser;</li>
+<li><strong>the client</strong> (<code>myagent</code>, your script) — the thing that wants to call tools;</li>
+<li>the <strong>browser</strong> — which carries you to GitHub to log in and returns with the<br />
+  authorization code;</li>
+<li><strong>the authorization server</strong> — GitHub, which logs you in and issues tokens;</li>
+<li><strong>the resource server</strong> — the GitHub MCP server, which holds the protected<br />
+  tools.</li>
+</ul>
+<div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as myagent
+    participant B as Browser
+    participant O as GitHub OAuth<br/>Server
+    participant M as GitHub MCP<br/>Server
+
+    A->>M: Step 1 — Probe (no credentials)
+    M-->>A: 401 + resource metadata → endpoints
+
+    A->>B: Step 2 — Open browser (PKCE)
+    B->>U: Consent screen
+    U->>B: Approve
+    B-->>A: authorization code
+
+    A->>O: Step 3 — Exchange code for token
+    O-->>A: access_token
+    A->>M: Retry with Bearer token
+    M-->>A: Tool result
+</div>
+
+<p>Each step below is a standalone program that shows one leg of the sequence.</p>
 <hr />
-<h2 id="references">References</h2>
+<h3 id="step-1-probe-and-discover-step1py">Step 1 — Probe and discover (<code>step1.py</code>)</h3>
+<p>This step sends an unauthenticated request to the GitHub MCP server, then<br />
+follows the breadcrumbs in the <code>401</code> response to find the OAuth endpoints.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant A as myagent
+    participant O as GitHub OAuth<br/>Server
+    participant M as GitHub MCP<br/>Server
+
+    A->>M: initialize
+    M-->>A: 401 Unauthorized<br/>WWW-Authenticate: Bearer resource_metadata=...
+    A->>M: GET .well-known/oauth-protected-resource/mcp/
+    M-->>A: authorization_servers, scopes_supported
+</div>
+
+<pre><code class="language-bash">cd python
+uv run python m1/gh_auth/step1.py
+</code></pre>
+<pre style="max-height:320px;overflow-y:auto;background:#0d1117;color:#e6edf3;padding:16px;border-radius:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.6;white-space:pre-wrap;">Probing https://api.githubcopilot.com/mcp/  (no credentials)
+
+initialize  -> HTTP 401 Unauthorized
+
+WWW-Authenticate: Bearer error="invalid_request",
+  error_description="No access token was provided in this request",
+  resource_metadata="https://api.githubcopilot.com/.well-known/oauth-protected-resource/mcp/"
+
+Protected-resource metadata: https://api.githubcopilot.com/.well-known/oauth-protected-resource/mcp/
+  HTTP 200
+  resource: https://api.githubcopilot.com/mcp/
+  authorization_servers: ['https://github.com/login/oauth']
+  scopes_supported: ['repo', 'read:org', 'read:user', 'user:email', 'read:packages',
+                     'write:packages', 'read:project', 'project', 'gist',
+                     'notifications', 'workflow', 'codespace']
+
+----- Step 1 result -----
+  authorization_endpoint: https://github.com/login/oauth/authorize
+  token_endpoint:         https://github.com/login/oauth/access_token</pre>
+
+<p>The <code>WWW-Authenticate</code> header in the <code>401</code> points to the protected-resource<br />
+metadata URL. Fetching it returns the <code>authorization_servers</code> and<br />
+<code>scopes_supported</code> fields shown in the output. GitHub publishes no RFC 8414<br />
+discovery document at that server URL, so the final two lines — the<br />
+<code>authorization_endpoint</code> and <code>token_endpoint</code> — are derived from the issuer<br />
+rather than looked up. Those two endpoints and the scopes are everything<br />
+Step 2 needs.</p>
+<hr />
+<h3 id="step-2-get-the-users-consent-step2py">Step 2 — Get the user's consent (<code>step2.py</code>)</h3>
+<p>This step generates PKCE values, opens the browser for login and consent, and<br />
+captures the authorization code on a short-lived loopback listener.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as myagent
+    participant B as Browser
+    participant O as GitHub OAuth<br/>Server
+
+    Note over A: Generate PKCE<br/>(code_verifier + code_challenge)
+    Note over A: Start loopback listener<br/>on 127.0.0.1:&lt;port&gt;
+    A->>B: Open authorization URL
+    B->>O: GET /login/oauth/authorize<br/>client_id + code_challenge + scope
+    O->>U: Login and consent screen
+    U->>O: Approve read:user
+    O-->>B: Redirect to 127.0.0.1?code=...
+    B-->>A: authorization code
+</div>
+
+<pre><code class="language-bash">cd python
+uv run python m1/gh_auth/step2.py
+</code></pre>
+<pre><code>Redirect (loopback) listener: http://127.0.0.1:61814/
+Opening your browser to approve 'repo read:user' access...
+If it doesn't open, paste this URL:
+https://github.com/login/oauth/authorize?client_id=&amp;lt;YOUR_CLIENT_ID&amp;gt;&amp;redirect_uri=http%3A%2F%2F127.0.0.1%3A61814%2F&amp;response_type=code&amp;scope=repo+read%3Auser&amp;state=...&amp;code_challenge=...&amp;code_challenge_method=S256
+
+Captured authorization code (truncated): df2407422664...  [20 chars]
+It is short-lived and single-use. Step 3 will exchange it (with the
+code_verifier + client_secret) for an access token and retry tools/call.
+
+State saved to .m1_github_state.json — run Step 3 now (code expires in minutes).
+</code></pre>
+<p>Two things happened, and each is worth separating.</p>
+<p><strong>PKCE protected the code in transit.</strong> Before opening the browser, the script<br />
+generated two values:</p>
+<ul>
+<li>a <code>code_verifier</code> — a high-entropy secret it keeps in memory and never sends<br />
+  through the browser;</li>
+<li>a <code>code_challenge</code> — the SHA-256 hash of the verifier, which it <em>does</em> send<br />
+  in the authorization URL (<code>code_challenge_method=S256</code>).</li>
+</ul>
+<p>GitHub staples the challenge to the code it issues. In Step 3, redeeming the<br />
+code requires presenting the original verifier; GitHub re-hashes it and checks<br />
+it matches. The payoff: the authorization code travels through the browser and<br />
+a redirect URL — places it can leak — but a stolen code is useless without the<br />
+verifier, which never left the script.</p>
+<p><strong>The browser round-trip produced an authorization code.</strong> After you consented,<br />
+GitHub redirected back to a one-shot listener on <code>127.0.0.1</code> carrying the code.<br />
+The script also sent a random <code>state</code> value and checks that the redirect<br />
+returns the same one, which prevents a forged callback from injecting a code.</p>
+<blockquote>
+<p><strong>Note on the browser.</strong> The script calls <code>webbrowser.open()</code>, which uses<br />
+your operating system's default browser. If that opens the wrong account,<br />
+copy the URL printed after "If it doesn't open" and paste it into a browser<br />
+window where you are signed into the correct GitHub account.</p>
+</blockquote>
+<p>The captured string — <code>df2407422664...</code> — is an opaque, short-lived,<br />
+single-use authorization code. It has no decodable structure; it is a handle<br />
+that only GitHub's token endpoint can redeem, and only when presented alongside<br />
+the <code>code_verifier</code> from PKCE. Step 3 performs that exchange.</p>
+<p>The authorization code signifies that a real user approved the request. The<br />
+token itself is never sent through the browser — redirect URLs end up in<br />
+browser history and server logs, so the design keeps the token out of that<br />
+path entirely. The code crosses the browser boundary safely because it is<br />
+worthless without the verifier and client secret, which never left the script.</p>
+<hr />
+<h3 id="step-3-exchange-the-code-and-retry-step3py">Step 3 — Exchange the code and retry (<code>step3.py</code>)</h3>
+<p>This step POSTs the authorization code to GitHub's token endpoint, receives an<br />
+access token, and retries <code>tools/call</code> with <code>Authorization: Bearer</code>.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant A as myagent
+    participant O as GitHub OAuth<br/>Server
+    participant M as GitHub MCP<br/>Server
+
+    A->>O: POST token_endpoint<br/>code + code_verifier + client_secret
+    O-->>A: access_token
+    A->>M: initialize
+    M-->>A: 200 OK
+    A->>M: tools/call get_me<br/>Authorization: Bearer access_token
+    M->>O: Validate token
+    O-->>M: Token valid
+    M-->>A: Tool result (user profile)
+</div>
+
+<p>Run this immediately after Step 2 — the authorization code expires in minutes:</p>
+<pre><code class="language-bash">cd python
+uv run python m1/gh_auth/step3.py
+</code></pre>
+<pre><code>Token endpoint: https://github.com/login/oauth/access_token
+
+Exchanging authorization code for access token...
+Access token (truncated): gho_TGboFbwQ...  [40 chars]
+State file deleted (code was single-use).
+
+Retrying tools/call with Bearer token:
+tools/call  -&gt; HTTP 200 OK
+{&quot;login&quot;:&quot;your-github-username&quot;,&quot;id&quot;:123456789,&quot;profile_url&quot;:&quot;https://github.com/your-github-username&quot;,
+ &quot;avatar_url&quot;:&quot;https://avatars.githubusercontent.com/u/123456789?v=4&quot;,
+ &quot;details&quot;:{&quot;public_repos&quot;:24,&quot;public_gists&quot;:3,&quot;followers&quot;:18,&quot;following&quot;:12,
+            &quot;created_at&quot;:&quot;2021-04-10T14:30:00Z&quot;,&quot;updated_at&quot;:&quot;2026-06-01T09:15:00Z&quot;}}
+</code></pre>
+<p>The token exchange is a direct server-to-server POST — no browser involved.<br />
+The script sends the authorization code, the <code>code_verifier</code> from PKCE, the<br />
+<code>redirect_uri</code> (must match what Step 2 used), and the <code>client_secret</code>. GitHub<br />
+re-hashes the <code>code_verifier</code> against the <code>code_challenge</code> it stored when it<br />
+issued the code, and if they match, it returns an access token.</p>
+<p>The access token — <code>gho_TGboFbwQ...</code> — is the credential that authorizes the<br />
+agent to act. The <code>gho_</code> prefix identifies it as a GitHub OAuth token; it is<br />
+40 characters of opaque data, not a JWT. With it, the same requests that<br />
+returned <code>401</code> in Step 1 now succeed.</p>
+<p>Step 2 saved the authorization code and <code>code_verifier</code> to a temp file<br />
+(<code>.m1_github_state.json</code>) so Step 3 could read them as a separate program.<br />
+Step 3 deletes that file immediately after the exchange — the code is<br />
+single-use and is now spent.</p>
+<hr />
+<h2 id="recap_1">Recap</h2>
+<ul>
+<li>A protected MCP server gates every request behind a <code>401</code>. That <code>401</code> is<br />
+  self-describing: its <code>WWW-Authenticate</code> header points to resource metadata<br />
+  naming the <strong>authorization server</strong> and <strong>scopes</strong> (RFC 9728).</li>
+<li>Authorization servers vary in what they publish. GitHub does not publish<br />
+  an RFC 8414 discovery document; when discovery is absent, endpoints are<br />
+  derived from the issuer URL.</li>
+<li>OAuth proceeds in two halves: get the user's <strong>authorization code</strong> (Step 2),<br />
+  then exchange it for an <strong>access token</strong> (Step 3).</li>
+<li><strong>PKCE</strong> binds the code to a secret the client never transmits, so a leaked<br />
+  code is worthless on its own.</li>
+<li>Authorization codes and GitHub access tokens are <strong>opaque bearer handles</strong>;<br />
+  the server validates them by lookup, not by reading their contents.</li>
+<li>An agent can manage its own OAuth end-to-end — probe, consent, cache, connect<br />
+  — without any manual steps between the phases.</li>
+</ul>
+<h2 id="check-your-understanding">Check your understanding</h2>
+<div class="mcq-container" id="mcq-a2282616">
+    <div class="mcq-question">
+        <strong>Question:</strong> What does the RFC 9728 protected-resource metadata document provide?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, true, 'a2282616')"><strong>A)</strong> The authorization server name and the scopes the resource accepts</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'a2282616')"><strong>B)</strong> The list of MCP tools available at the resource</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'a2282616')"><strong>C)</strong> A signed JWT the client must include in the next request</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'a2282616')"><strong>D)</strong> The user identity and session token</div>
+    </div>
+    <div id="mcq-answer-a2282616" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: A</strong> ✅</div>
+        <div class="mcq-explanation">The protected-resource metadata (fetched from the URL in WWW-Authenticate) names the authorization server and the scopes it accepts — the two values needed to start an OAuth flow.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-963c1b52">
+    <div class="mcq-question">
+        <strong>Question:</strong> What attack does PKCE protect against?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '963c1b52')"><strong>A)</strong> Clock skew between the client and the authorization server</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '963c1b52')"><strong>B)</strong> An expired client secret being replayed by an attacker</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '963c1b52')"><strong>C)</strong> An attacker intercepting the authorization code and redeeming it before the client can</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '963c1b52')"><strong>D)</strong> A forged access token submitted directly to the resource server</div>
+    </div>
+    <div id="mcq-answer-963c1b52" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
+        <div class="mcq-explanation">PKCE binds the authorization code to a code_verifier that never leaves the client. An intercepted code is useless without the verifier — GitHub re-hashes it and rejects a mismatch at the token endpoint.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-98c31fda">
+    <div class="mcq-question">
+        <strong>Question:</strong> Why does github_agent.py load MCP tools inside a client.session() context manager?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '98c31fda')"><strong>A)</strong> GitHub enforces a one-tool-per-connection limit</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '98c31fda')"><strong>B)</strong> The context manager rotates the access token on every tool call</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '98c31fda')"><strong>C)</strong> The context manager signs each request with the OAuth token</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '98c31fda')"><strong>D)</strong> Tool calls require an active transport connection, which the context manager keeps open for the agent run</div>
+    </div>
+    <div id="mcq-answer-98c31fda" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: D</strong> ✅</div>
+        <div class="mcq-explanation">MultiServerMCPClient.session() opens and holds a transport connection. Loading tools and calling them both require that connection; closing it between the two silently breaks tool calls.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-079103c4">
+    <div class="mcq-question">
+        <strong>Question:</strong> GitHub does not publish an RFC 8414 authorization-server discovery document. How does step1.py resolve the OAuth endpoints?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '079103c4')"><strong>A)</strong> It hardcodes the endpoints as constants in the source file</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '079103c4')"><strong>B)</strong> It derives them from the issuer URL returned in the resource metadata</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '079103c4')"><strong>C)</strong> It asks the user to paste the endpoints from the GitHub settings page</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '079103c4')"><strong>D)</strong> It reads the endpoints from a GitHub OAuth App entry in the .env file</div>
+    </div>
+    <div id="mcq-answer-079103c4" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
+        <div class="mcq-explanation">The resource metadata names the issuer (https://github.com/login/oauth). Since GitHub publishes no discovery document at that base URL, step1.py appends /authorize and /access_token to construct the endpoints.</div>
+    </div>
+</div>
+
+<h2 id="references_1">References</h2>
 <p><strong>Documentation:</strong><br />
-- <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">Model Context Protocol spec</a><br />
-- <a href="https://github.com/langchain-ai/langchain-mcp-adapters" target="_blank" rel="noopener noreferrer">langchain-mcp-adapters (GitHub)</a><br />
-- <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer">MCP servers directory</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/mcp" target="_blank" rel="noopener noreferrer">deepagents MCP config reference</a></p>
+- <a href="https://docs.langchain.com/oss/python/deepagents/tools#mcp-tools" target="_blank" rel="noopener noreferrer">Deep Agents — MCP Tools</a><br />
+- <a href="https://github.com/langchain-ai/langchain-mcp-adapters" target="_blank" rel="noopener noreferrer">langchain-mcp-adapters</a><br />
+- <a href="https://github.com/modelcontextprotocol/python-sdk/blob/main/examples/clients/simple-auth-client/mcp_simple_auth_client/main.py" target="_blank" rel="noopener noreferrer">MCP Python SDK — simple-auth-client example</a><br />
+- <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol</a></p>
+<p><strong>RFCs:</strong><br />
+- <a href="https://datatracker.ietf.org/doc/html/rfc9728" target="_blank" rel="noopener noreferrer">RFC 9728 — OAuth 2.0 Protected Resource Metadata</a><br />
+- <a href="https://datatracker.ietf.org/doc/html/rfc8414" target="_blank" rel="noopener noreferrer">RFC 8414 — OAuth 2.0 Authorization Server Metadata</a><br />
+- <a href="https://datatracker.ietf.org/doc/html/rfc7636" target="_blank" rel="noopener noreferrer">RFC 7636 — PKCE</a></p>
+<p><strong>GitHub:</strong><br />
+- <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" target="_blank" rel="noopener noreferrer">Creating an OAuth App</a></p>
+</div>
 <script>
 (function () {
   var tabs = document.querySelectorAll('.lt-tab');

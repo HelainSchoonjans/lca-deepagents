@@ -720,19 +720,37 @@ By convention, memory files live in a <code>memories/</code> directory and the m
     </div>
 </div>
 
-<MCQ
-    question="What kinds of content belong in a memory file?"
-    choices='["Ephemeral task state that will only be needed during the current session", "API credentials and secrets the agent needs to call external services", "Project-specific instructions, stored preferences, and context the agent should recall across sessions", "The agent\'s tool definitions and allowed-tools list"]'
-    correctIndex={2}
-    explanation="Memory is designed for information the base model cannot know on its own and that should persist across sessions: project conventions, coding style, workflow rules, and stored preferences. Ephemeral task state belongs in the conversation; secrets belong in environment variables; tool definitions are handled by create_deep_agent."
-/>
+<div class="mcq-container" id="mcq-4a068dd0">
+    <div class="mcq-question">
+        <strong>Question:</strong> What kinds of content belong in a memory file?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '4a068dd0')"><strong>A)</strong> Ephemeral task state that will only be needed during the current session</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '4a068dd0')"><strong>B)</strong> API credentials and secrets the agent needs to call external services</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '4a068dd0')"><strong>C)</strong> Project-specific instructions, stored preferences, and context the agent should recall across sessions</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '4a068dd0')"><strong>D)</strong> Tool definitions and the allowed-tools list</div>
+    </div>
+    <div id="mcq-answer-4a068dd0" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
+        <div class="mcq-explanation">Memory is designed for information the base model cannot know on its own and that should persist across sessions: project conventions, coding style, workflow rules, and stored preferences. Ephemeral task state belongs in the conversation; secrets belong in environment variables; tool definitions are handled by create_deep_agent.</div>
+    </div>
+</div>
 
-<MCQ
-    question="When memory=[\"memories/AGENTS.md\"] is passed to create_deep_agent, what is created behind the scenes?"
-    choices='["A MemoryMiddleware that reads the file and injects its content into the system prompt on every call", "A FilesystemBackend rooted at memories/", "A checkpointer that snapshots the file\'s content between runs", "A SQLite database for storing and indexing the memory contents"]'
-    correctIndex={0}
-    explanation="Passing memory=[...] creates a MemoryMiddleware. On every LLM call the middleware reads each source file and wraps the combined content in an [agent_memory] block appended to the system prompt. Without this argument, MemoryMiddleware is not active and nothing persists."
-/>
+<div class="mcq-container" id="mcq-592242f9">
+    <div class="mcq-question">
+        <strong>Question:</strong> What does Deep Agents create when file paths are passed to the memory parameter of create_deep_agent?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, true, '592242f9')"><strong>A)</strong> A MemoryMiddleware that reads the file and injects its content into the system prompt on every call</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '592242f9')"><strong>B)</strong> A FilesystemBackend rooted at the memory directory</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '592242f9')"><strong>C)</strong> A checkpointer that snapshots memory file content between runs</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '592242f9')"><strong>D)</strong> A SQLite database for storing and indexing the memory contents</div>
+    </div>
+    <div id="mcq-answer-592242f9" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: A</strong> ✅</div>
+        <div class="mcq-explanation">Passing memory=[...] creates a MemoryMiddleware. On every LLM call the middleware reads each source file and wraps the combined content in an [agent_memory] block appended to the system prompt. Without this argument, MemoryMiddleware is not active and nothing persists.</div>
+    </div>
+</div>
 
 <div class="mcq-container" id="mcq-d7ec5d8f">
     <div class="mcq-question">
