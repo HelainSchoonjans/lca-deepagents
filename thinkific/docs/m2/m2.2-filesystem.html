@@ -699,12 +699,44 @@ A common combination: route `/skills/` to Store so files persist, but deny write
 </details>
 <h2 id="single-backend">Single backend</h2>
 <p>Pass any backend directly to <code>create_deep_agent</code>. Here the agent stores all files in the LangGraph store, persisted across threads.</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=StoreBackend(\n        namespace=lambda rt: (rt.server_info.user.identity,),\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [10, 12]}]"></div>
+<!-- code-highlight-0:10,12 -->
+<pre><code class="language-python"># python/m2/m2.2_agent.py
+from models import model
+from deepagents import create_deep_agent
+from deepagents.backends import StoreBackend
+from langgraph.store.memory import InMemoryStore
+
+agent = create_deep_agent(
+    model=model,
+    backend=StoreBackend(
+        namespace=lambda rt: (rt.server_info.user.identity,),
+    ),
+    store=InMemoryStore(),  # swap for PostgresStore in production
+)
+</code></pre>
 <p><code>rt</code> is the LangGraph runtime passed to the backend at invocation time. <code>rt.server_info.user.identity</code> is the caller's user ID; using it as the namespace key keeps each user's files isolated in the store.</p>
 <hr />
 <h2 id="composite-backend">Composite backend</h2>
 <p><code>CompositeBackend</code> routes path prefixes to different backends. Everything not matched by a route falls through to the <code>default</code>.</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),  # swap for PostgresStore in production\n)&quot;, &quot;highlights&quot;: [12, 13, 16]}]"></div>
+<!-- code-highlight-1:12,13,16 -->
+<pre><code class="language-python"># python/m2/m2.2_agent.py
+from models import model
+from deepagents import create_deep_agent
+from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
+from langgraph.store.memory import InMemoryStore
+
+agent = create_deep_agent(
+    model=model,
+    backend=CompositeBackend(
+        default=StateBackend(),
+        routes={
+            &quot;/memories/&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),
+            &quot;/skills/&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),
+        },
+    ),
+    store=InMemoryStore(),  # swap for PostgresStore in production
+)
+</code></pre>
 <ul>
 <li><code>/memories/</code> → durable store, persists across threads</li>
 <li><code>/skills/</code> → durable store, persists across threads</li>
@@ -744,7 +776,32 @@ A common combination: route `/skills/` to Store so files persist, but deny write
 </tr>
 </tbody>
 </table>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/m2.2_agent.py\nfrom models import model\nfrom deepagents import create_deep_agent, FilesystemPermission\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nagent = create_deep_agent(\n    model=model,\n    backend=CompositeBackend(\n        default=StateBackend(),\n        routes={\n            \&quot;/memories/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n            \&quot;/skills/\&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),\n        },\n    ),\n    store=InMemoryStore(),\n    permissions=[\n        FilesystemPermission(\n            operations=[\&quot;write\&quot;],\n            paths=[\&quot;/skills/**\&quot;],\n            mode=\&quot;deny\&quot;,\n        ),\n    ],\n)&quot;, &quot;highlights&quot;: [17, 18, 19, 20, 21, 22, 23]}]"></div>
+<!-- code-highlight-2:17,18,19,20,21,22,23 -->
+<pre><code class="language-python"># python/m2/m2.2_agent.py
+from models import model
+from deepagents import create_deep_agent, FilesystemPermission
+from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
+from langgraph.store.memory import InMemoryStore
+
+agent = create_deep_agent(
+    model=model,
+    backend=CompositeBackend(
+        default=StateBackend(),
+        routes={
+            &quot;/memories/&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),
+            &quot;/skills/&quot;: StoreBackend(namespace=lambda rt: (rt.server_info.user.identity,)),
+        },
+    ),
+    store=InMemoryStore(),
+    permissions=[
+        FilesystemPermission(
+            operations=[&quot;write&quot;],
+            paths=[&quot;/skills/**&quot;],
+            mode=&quot;deny&quot;,
+        ),
+    ],
+)
+</code></pre>
 <p>The agent can read <code>/skills/</code> but not write to it; skills are managed by application code, not the agent. <code>/memories/</code> remains fully read/write.</p>
 <hr />
 <h2 id="recap">Recap</h2>
@@ -777,7 +834,7 @@ A common combination: route `/skills/` to Store so files persist, but deny write
     </div>
     <div id="mcq-answer-9f0b7fd1" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: D</strong> ✅</div>
-        <div class="mcq-explanation">All backends implement the same interface: ls, read_file, write_file, edit_file, glob, grep. The agent code stays the same regardless of which backend you choose — swapping the backend is transparent to the agent.</div>
+        <div class="mcq-explanation">All backends implement the same interface: ls, read_file, write_file, edit_file, glob, grep. The agent code stays the same regardless of which backend you choose; swapping the backend is transparent to the agent.</div>
     </div>
 </div>
 
@@ -793,7 +850,7 @@ A common combination: route `/skills/` to Store so files persist, but deny write
     </div>
     <div id="mcq-answer-be509341" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
-        <div class="mcq-explanation">State keeps files in LangGraph state scoped to the current thread — they disappear when the thread ends. Store is backed by a database (PostgreSQL in production) and files persist across threads and sessions.</div>
+        <div class="mcq-explanation">State keeps files in LangGraph state scoped to the current thread; they disappear when the thread ends. Store is backed by a database (PostgreSQL in production) and files persist across threads and sessions.</div>
     </div>
 </div>
 
@@ -841,7 +898,7 @@ A common combination: route `/skills/` to Store so files persist, but deny write
     </div>
     <div id="mcq-answer-9c1b3716" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
-        <div class="mcq-explanation">The interrupt mode pauses for human approval instead of blocking silently. This is the same HITL pattern seen with write_sql — the operation is held until a human approves or cancels it.</div>
+        <div class="mcq-explanation">The interrupt mode pauses for human approval instead of blocking silently. This is the same HITL pattern seen with write_sql; the operation is held until a human approves or cancels it.</div>
     </div>
 </div>
 

@@ -666,7 +666,26 @@ graph TB
 <hr />
 <h2 id="configuring-a-langsmith-sandbox-as-a-tool">Configuring a LangSmith sandbox as a tool</h2>
 <p>Here's an example of a LangSmith sandbox being configured as a backend:</p>
-<div class="tabs-block" data-tabs="[{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m2/sandbox_agent.py\nfrom langsmith.sandbox import SandboxClient\nfrom deepagents.backends.langsmith import LangSmithSandbox\n\nclient = SandboxClient()\nls_sandbox = client.create_sandbox(name=\&quot;lca-deepagents-lab\&quot;, template_name=\&quot;deepagents-deploy\&quot;)\nbackend = LangSmithSandbox(sandbox=ls_sandbox)\n\nagent = create_deep_agent(\n    model=model,\n    backend=backend,\n)\n\ntry:\n    result = agent.invoke({\&quot;messages\&quot;: [{\&quot;role\&quot;: \&quot;user\&quot;, \&quot;content\&quot;: \&quot;...\&quot;}]})\n    print(result[\&quot;messages\&quot;][-1].content)\nfinally:\n    client.delete_sandbox(ls_sandbox.name)&quot;, &quot;highlights&quot;: [1, 2, 5, 6, 7, 11]}]"></div>
+<!-- code-highlight-0:1,2,5,6,7,11 -->
+<pre><code class="language-python"># python/m2/m2.3_sandbox_agent.py
+from langsmith.sandbox import SandboxClient
+from deepagents.backends.langsmith import LangSmithSandbox
+
+client = SandboxClient()
+ls_sandbox = client.create_sandbox(name=&quot;lca-deepagents-lab&quot;, template_name=&quot;deepagents-deploy&quot;)
+backend = LangSmithSandbox(sandbox=ls_sandbox)
+
+agent = create_deep_agent(
+    model=model,
+    backend=backend,
+)
+
+try:
+    result = agent.invoke({&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;}]})
+    print(result[&quot;messages&quot;][-1].content)
+finally:
+    client.delete_sandbox(ls_sandbox.name)
+</code></pre>
 <p>The <code>try/finally</code> block ensures the sandbox is deleted even if the agent raises. Sandboxes are billed resources; always clean them up.</p>
 <p><code>create_sandbox(template_name="deepagents-deploy")</code> provisions a sandbox image that includes Python and common packages. The sandbox starts fresh each run; no state persists between invocations unless you upload files first.</p>
 <hr />
@@ -758,8 +777,8 @@ graph TB
 <p>Build an agent that writes a Python script to a sandbox, executes it, and reports the output. You will see the write → execute sequence in LangSmith as a chain of tool calls.</p>
 <p>This lab uses <code>LangSmithSandbox</code>; commands run in an isolated LangSmith-managed environment, not on your local machine.</p>
 <hr />
-<p>Create <code>python/m2/sandbox_agent.py</code>:</p>
-<pre><code class="language-python"># python/m2/sandbox_agent.py
+<p>Create <code>python/m2/m2.3_sandbox_agent.py</code>:</p>
+<pre><code class="language-python"># python/m2/m2.3_sandbox_agent.py
 from deepagents import create_deep_agent
 from deepagents.backends.langsmith import LangSmithSandbox
 from langsmith.sandbox import SandboxClient
@@ -797,7 +816,7 @@ finally:
     client.delete_sandbox(ls_sandbox.name)
 </code></pre>
 <pre><code class="language-bash">cd python
-uv run ./m2/sandbox_agent.py
+uv run ./m2/m2.3_sandbox_agent.py
 </code></pre>
 <hr />
 <p><strong>What to check:</strong></p>
@@ -820,7 +839,7 @@ uv run ./m2/sandbox_agent.py
 <p>Build an agent that queries the Chinook music store database inside a sandbox and generates a chart. The agent installs its own dependencies, writes and runs Python, and you retrieve the output file from the sandbox.</p>
 <p>This lab introduces two new patterns: <strong>uploading files</strong> to a sandbox before the agent runs, and <strong>reading files</strong> back from the sandbox after it finishes.</p>
 <hr />
-<!-- code-highlight-2:13,14,16,17,55,56,57 -->
+<!-- code-highlight-3:13,14,16,17,55,56,57 -->
 <pre><code class="language-python"># python/m2/m2.3_sales_agent.py
 from pathlib import Path
 
@@ -974,6 +993,22 @@ Chart saved to python/m2/genre_revenue.png</pre>
     <div id="mcq-answer-638ff72b" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
         <div class="mcq-explanation">upload_files() seeds the sandbox filesystem before the agent starts. Without it the sandbox starts empty - the agent has no access to local files unless you explicitly upload them.</div>
+    </div>
+</div>
+
+<div class="mcq-container" id="mcq-e86bab32">
+    <div class="mcq-question">
+        <strong>Question:</strong> What is the key security difference between LocalShellBackend and a sandbox backend?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'e86bab32')"><strong>A)</strong> LocalShellBackend encrypts all file operations; sandbox backends do not</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e86bab32')"><strong>B)</strong> Sandbox backends require an API key; LocalShellBackend does not</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'e86bab32')"><strong>C)</strong> With LocalShellBackend, the execute tool runs with full host permissions and is not isolated from the rest of the system</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'e86bab32')"><strong>D)</strong> LocalShellBackend only allows read operations; sandbox backends allow both read and write</div>
+    </div>
+    <div id="mcq-answer-e86bab32" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
+        <div class="mcq-explanation">LocalShellBackend gives the execute tool full host permissions. root_dir limits filesystem tools but not execute, so the agent can run any command on your machine. A sandbox backend isolates execution entirely, making it safe for production use with untrusted input.</div>
     </div>
 </div>
 

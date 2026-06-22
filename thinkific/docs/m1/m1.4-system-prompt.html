@@ -665,6 +665,26 @@ Is there some particular aspect of these digital contraptions you wish to compre
 further?
 </code></pre>
 
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li><code>create_deep_agent</code> assembles the system prompt from three parts: <strong>USER</strong> (your <code>system_prompt</code> argument), <strong>BASE</strong> (the SDK's built-in behavior guidance), and <strong>SUFFIX</strong> (model-specific tuning from a HarnessProfile)</li>
+<li>The USER segment sits at the very front of the assembled prompt, ahead of BASE and SUFFIX</li>
+<li>Defining the <code>SYSTEM_PROMPT</code> string is not enough; it must be passed as <code>system_prompt=SYSTEM_PROMPT</code> to <code>create_deep_agent</code>; without it, the agent only sees the BASE instructions</li>
+<li>One string controls the agent's persona, domain, and constraints without touching tools, the model, or anything else</li>
+</ul>
+<hr />
+<h2 id="next">Next</h2>
+<p>The next lesson covers <strong>tools</strong>: how to extend the agent with custom Python functions, how the Tool Node executes them, and how to add Human-in-the-Loop checkpoints for write operations.</p>
+<hr />
+<h2 id="references">References</h2>
+<p><strong>Documentation:</strong><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/overview" target="_blank" rel="noopener noreferrer">Deep Agents overview</a><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/models" target="_blank" rel="noopener noreferrer">Models (Deep Agents)</a><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/customization#prompt-assembly" target="_blank" rel="noopener noreferrer">Customization &amp; prompt assembly (Deep Agents)</a><br />
+- <a href="https://docs.langchain.com/oss/python/deepagents/context-engineering" target="_blank" rel="noopener noreferrer">Context engineering (Deep Agents)</a><br />
+- <a href="https://github.com/langchain-ai/deepagents" target="_blank" rel="noopener noreferrer">deepagents README (GitHub)</a><br />
+- <a href="https://github.com/langchain-ai/deepagents/tree/main/libs/deepagents/deepagents/profiles/harness" target="_blank" rel="noopener noreferrer">Built-in harness profiles (GitHub)</a></p>
 </div>
 <div class="lt-panel" id="p-lab2" role="tabpanel">
 <h2 id="lab-swapping-personas">Lab: Swapping Personas</h2>
@@ -683,7 +703,18 @@ So we are going to swap out our butler persona for a pirate that yells at us. [C
 
 </details>
 <p>Open <code>python/m1/m1.4_scratch_agent_butler.py</code>; the <code>SYSTEM_PROMPT</code> is already defined and passed to <code>create_deep_agent</code>. Run it to see the butler in action, then try swapping the <code>SYSTEM_PROMPT</code> for one of the personas below and run it again:</p>
-<div class="language-tabs-block" data-languages="{&quot;Python&quot;: [{&quot;title&quot;: &quot;Python&quot;, &quot;language&quot;: &quot;python&quot;, &quot;code&quot;: &quot;# python/m1/m1.4_scratch_agent_butler.py\nSYSTEM_PROMPT = \&quot;You are a salty pirate captain...\&quot;  # \u2190 swap this\n\nfrom models import model\nfrom deepagents import create_deep_agent\nagent = create_deep_agent(\n    model=model,\n    system_prompt=SYSTEM_PROMPT,\n    name=\&quot;Butler Agent\&quot;,\n)&quot;, &quot;highlights&quot;: [2, 3, 6], &quot;noHeader&quot;: true}]}"></div>
+<!-- code-highlight-2:2,3,6 -->
+<pre><code class="language-python"># python/m1/m1.4_scratch_agent_butler.py
+SYSTEM_PROMPT = &quot;You are a salty pirate captain...&quot;  # ← swap this
+
+from models import model
+from deepagents import create_deep_agent
+agent = create_deep_agent(
+    model=model,
+    system_prompt=SYSTEM_PROMPT,
+    name=&quot;Butler Agent&quot;,
+)
+</code></pre>
 <details>
 <summary>Persona ideas [click to expand]</summary>
 <p><br></p>
@@ -783,31 +814,11 @@ that this single string is all you touched to redirect the agent's behavior.</p>
     question="You switch from a pirate persona to a cowboy persona by changing SYSTEM_PROMPT. What else in the assembled prompt changes?"
     choices='["The BASE instructions adapt to match the new persona", "Nothing; only your USER segment changes", "The SUFFIX is regenerated based on the persona", "The tool schemas update to reflect the new persona\'s capabilities"]'
     correctIndex={1}
-    explanation="Only your USER segment changes. Everything else stays put — BASE and SUFFIX are fixed. That single string is all you touched to redirect the agent's behavior."
+    explanation="Only your USER segment changes. Everything else stays put; BASE and SUFFIX are fixed. That single string is all you touched to redirect the agent's behavior."
 />
 
 </div>
 
-<hr />
-<h2 id="recap">Recap</h2>
-<ul>
-<li><code>create_deep_agent</code> assembles the system prompt from three parts: <strong>USER</strong> (your <code>system_prompt</code> argument), <strong>BASE</strong> (the SDK's built-in behavior guidance), and <strong>SUFFIX</strong> (model-specific tuning from a HarnessProfile)</li>
-<li>The USER segment sits at the very front of the assembled prompt, ahead of BASE and SUFFIX</li>
-<li>Defining the <code>SYSTEM_PROMPT</code> string is not enough; it must be passed as <code>system_prompt=SYSTEM_PROMPT</code> to <code>create_deep_agent</code>; without it, the agent only sees the BASE instructions</li>
-<li>One string controls the agent's persona, domain, and constraints without touching tools, the model, or anything else</li>
-</ul>
-<hr />
-<h2 id="next">Next</h2>
-<p>The next lesson covers <strong>tools</strong>: how to extend the agent with custom Python functions, how the Tool Node executes them, and how to add Human-in-the-Loop checkpoints for write operations.</p>
-<hr />
-<h2 id="references">References</h2>
-<p><strong>Documentation:</strong><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/overview" target="_blank" rel="noopener noreferrer">Deep Agents overview</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/models" target="_blank" rel="noopener noreferrer">Models (Deep Agents)</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/customization#prompt-assembly" target="_blank" rel="noopener noreferrer">Customization &amp; prompt assembly (Deep Agents)</a><br />
-- <a href="https://docs.langchain.com/oss/python/deepagents/context-engineering" target="_blank" rel="noopener noreferrer">Context engineering (Deep Agents)</a><br />
-- <a href="https://github.com/langchain-ai/deepagents" target="_blank" rel="noopener noreferrer">deepagents README (GitHub)</a><br />
-- <a href="https://github.com/langchain-ai/deepagents/tree/main/libs/deepagents/deepagents/profiles/harness" target="_blank" rel="noopener noreferrer">Built-in harness profiles (GitHub)</a></p>
 <script>
 (function () {
   var tabs = document.querySelectorAll('.lt-tab');
