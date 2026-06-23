@@ -689,19 +689,6 @@ further?
 <div class="lt-panel" id="p-lab2" role="tabpanel">
 <h2 id="lab-swapping-personas">Lab: Swapping Personas</h2>
 <p><strong>The discovery:</strong> <code>system_prompt</code> is how you orient your agent to the task at hand and pass it essential instructions. It is free-form text: use it to define the agent's role, scope its domain, or enforce constraints. The SDK places it as the <strong>USER</strong> segment at the very front of the assembled prompt, ahead of BASE.</p>
-<details class="video-walkthrough">
-<summary>Video Walk-through [click to expand] — script available, video later</summary>
-<br>
-
-**Script (will be recorded):** [Highlight lab text] So the system_prompt is how you orient your agent to the task at hand and pass it essential instructions. It's free-form text: use it to define the agent's role, scope its domain, or enforce constraints. The SDK places it as the USER segment at the very front of the assembled prompt, ahead of BASE.
-
-[Open scratch_agent_butler in VSCode]
-
-So we are going to swap out our butler persona for a pirate that yells at us. [Copy-paste the pirate persona, but add that must respond in all caps].
-
-[Show the answer in the terminal and in Langsmith]
-
-</details>
 <p>Open <code>python/m1/m1.4_scratch_agent_butler.py</code>; the <code>SYSTEM_PROMPT</code> is already defined and passed to <code>create_deep_agent</code>. Run it to see the butler in action, then try swapping the <code>SYSTEM_PROMPT</code> for one of the personas below and run it again:</p>
 <!-- code-highlight-2:2,3,6 -->
 <pre><code class="language-python"># python/m1/m1.4_scratch_agent_butler.py
