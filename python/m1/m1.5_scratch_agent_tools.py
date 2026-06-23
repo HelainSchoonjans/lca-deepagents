@@ -5,6 +5,7 @@ from pathlib import Path
 
 from deepagents import create_deep_agent
 from langchain_community.utilities import SQLDatabase
+from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import Command
@@ -51,7 +52,7 @@ agent = create_deep_agent(
     interrupt_on={"write_sql": True},
 )
 
-config = {"configurable": {"thread_id": "lab3"}}
+config: RunnableConfig = {"configurable": {"thread_id": "lab3"}}
 
 result = agent.invoke(
     {"messages": [{"role": "user", "content": "What genres are in the database? Then add a new genre called 'Synthwave'."}]},
