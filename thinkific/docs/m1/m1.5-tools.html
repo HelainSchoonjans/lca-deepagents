@@ -836,22 +836,22 @@ def get_stock_price(ticker: str) -&gt; str:
     question="Why does Human-in-the-Loop require a checkpointer?"
     choices='["To save graph state so execution can pause and resume from the same point after a human decision", "To log tool call arguments to a file for audit purposes", "To validate that the human\'s approval matches the tool schema", "To prevent the LLM from calling the tool more than once"]'
     correctIndex={0}
-    explanation="When interrupt() fires, the graph suspends and must save its current state so it can resume from exactly the same point once the human responds. A checkpointer handles that save-and-restore. Without one, the graph has no way to pause mid-run."
+    explanation="When the HITL middleware intercepts a tool call via interrupt_on, the graph suspends and must save its current state so it can resume from exactly the same point once the human responds. A checkpointer handles that save-and-restore. Without one, the graph has no way to pause mid-run."
 />
 
-<div class="mcq-container" id="mcq-997604bc">
+<div class="mcq-container" id="mcq-bc218ad9">
     <div class="mcq-question">
-        <strong>Question:</strong> In the SQL lab, write_sql calls interrupt() before db.run(). At that moment, has the database been modified?
+        <strong>Question:</strong> In the SQL lab, when write_sql is intercepted by the HITL middleware, has the database been modified?
     </div>
     <div class="mcq-choices">
-        <div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>A)</strong> Yes: the write runs first, then waits for approval to commit</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>B)</strong> It depends on the checkpointer used</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, true, '997604bc')"><strong>C)</strong> No: interrupt() fires before db.run(), so nothing has been written yet</div>
-<div class="mcq-choice" onclick="handleMcqClick(this, false, '997604bc')"><strong>D)</strong> Yes: a draft write is created and rolled back on rejection</div>
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, 'bc218ad9')"><strong>A)</strong> Yes: the write runs first, then waits for approval to commit</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'bc218ad9')"><strong>B)</strong> It depends on the checkpointer used</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, 'bc218ad9')"><strong>C)</strong> No: the middleware intercepts before db.run(), so nothing has been written yet</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'bc218ad9')"><strong>D)</strong> Yes: a draft write is created and rolled back on rejection</div>
     </div>
-    <div id="mcq-answer-997604bc" class="mcq-answer" style="display: none;">
+    <div id="mcq-answer-bc218ad9" class="mcq-answer" style="display: none;">
         <div class="mcq-answer-header"><strong>Answer: C</strong> ✅</div>
-        <div class="mcq-explanation">interrupt() fires before db.run(). The graph pauses and the pending SQL surfaces to your script. The database is untouched until you approve; only then does db.run() execute. If you reject, write_sql returns 'Write cancelled.' and db.run() is never called.</div>
+        <div class="mcq-explanation">The HITL middleware (configured via interrupt_on) intercepts the write_sql call before the Tool Node runs it. The graph pauses and the pending SQL surfaces to your script. The database is untouched until you approve; only then does db.run() execute. If you reject, the middleware returns a cancellation message and write_sql never runs.</div>
     </div>
 </div>
 
