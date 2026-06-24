@@ -1112,24 +1112,22 @@ print(result[&quot;messages&quot;][-1].content)
 <h3 id="run-it">Run it</h3>
 <pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m1/m1.5_scratch_agent_tools.py
 </code></pre>
-<p><strong>Code output:</strong></p>
-<pre class="no-copy"><code class="language-plaintext">**Top 5 Best-Selling Artists by Total Revenue:**
-
-1. **Iron Maiden** - $138.60
-2. **U2** - $105.93
-3. **Metallica** - $90.09
-4. **Led Zeppelin** - $86.13
-5. **Lost** - $81.59
-
-The SQL query joins the Artist, Album, Track, and InvoiceLine tables to
-calculate total revenue (UnitPrice × Quantity) per artist, then ranks by
-descending total.
-</code></pre>
 <p>The agent reads the genres first, then proposes an INSERT. The terminal pauses and prints the SQL. Type <code>yes</code> to approve or <code>no</code> to cancel, then note the result: the agent's final message will confirm whether the genre was added.</p>
+<div class="video-container" style="max-width: 750px;">
+    <div class="video-wrapper">
+        <iframe
+            src="https://share.descript.com/embed/Uexh9ZSQsp5"
+            frameborder="0"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
 <div class="callout">
 <strong>What is happening</strong><br>
 The agent calls <code>read_sql</code> to inspect the genres table, then issues a <code>write_sql</code> tool_call. Before the Tool Node runs it, the HITL middleware (configured via <code>interrupt_on</code>) intercepts and suspends the graph: no write has happened yet. Your script surfaces the pending action, waits for input, and passes your decision back via <code>Command(resume={"decisions": [...]})</code>. On approve the Tool Node runs <code>write_sql</code> normally; on reject the middleware returns a cancellation message and the tool never executes. Open the run in <strong>LangSmith</strong> to see the pause and resume as distinct steps in the trace.
 </div>
+
 <h3 id="take-it-further-build-your-own-tools">Take it further: build your own tools</h3>
 <p>The same <code>@tool</code> pattern works for anything Python can do. Describe what you want to your coding agent and let it write the implementation, then drop it into <code>create_deep_agent(tools=[...])</code>.</p>
 <p>Three ideas to get started:</p>
