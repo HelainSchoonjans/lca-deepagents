@@ -46,6 +46,7 @@ checkpointer = MemorySaver()
 
 agent = create_deep_agent(
     model=model,
+    name="SQL Agent",
     tools=[read_sql, write_sql],
     system_prompt=SYSTEM_PROMPT,
     checkpointer=checkpointer,
