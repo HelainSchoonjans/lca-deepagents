@@ -16,7 +16,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom-client.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
         /* LCA Blue hljs theme */
@@ -811,19 +811,37 @@ that this single string is all you touched to redirect the agent's behavior.</p>
     </div>
 </div>
 
-<MCQ
-    question="What is the BASE segment of the assembled prompt?"
-    choices='["The system_prompt string you pass to create_deep_agent", "The tool schemas appended by the SDK before each LLM call", "A model-specific tuning block provided by a HarnessProfile", "The SDK\'s built-in BASE_AGENT_PROMPT, the behavior guidance that is always present"]'
-    correctIndex={3}
-    explanation="BASE is the SDK's built-in BASE_AGENT_PROMPT. It contains behavior guidance that is always present, regardless of what you pass as system_prompt."
-/>
+<div class="mcq-container" id="mcq-9dfd7ad1">
+    <div class="mcq-question">
+        <strong>Question:</strong> What is the BASE segment of the assembled prompt?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '9dfd7ad1')"><strong>A)</strong> The system_prompt string you pass to create_deep_agent</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '9dfd7ad1')"><strong>B)</strong> The tool schemas appended by the SDK before each LLM call</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '9dfd7ad1')"><strong>C)</strong> A model-specific tuning block provided by a HarnessProfile</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '9dfd7ad1')"><strong>D)</strong> The SDK&#39;s built-in BASE_AGENT_PROMPT, the behavior guidance that is always present</div>
+    </div>
+    <div id="mcq-answer-9dfd7ad1" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: D</strong> ✅</div>
+        <div class="mcq-explanation">BASE is the SDK's built-in BASE_AGENT_PROMPT. It contains behavior guidance that is always present, regardless of what you pass as system_prompt.</div>
+    </div>
+</div>
 
-<MCQ
-    question="You switch from a pirate persona to a cowboy persona by changing SYSTEM_PROMPT. What else in the assembled prompt changes?"
-    choices='["The BASE instructions adapt to match the new persona", "Nothing; only your USER segment changes", "The SUFFIX is regenerated based on the persona", "The tool schemas update to reflect the new persona\'s capabilities"]'
-    correctIndex={1}
-    explanation="Only your USER segment changes. Everything else stays put; BASE and SUFFIX are fixed. That single string is all you touched to redirect the agent's behavior."
-/>
+<div class="mcq-container" id="mcq-6010fa53">
+    <div class="mcq-question">
+        <strong>Question:</strong> You switch from a pirate persona to a cowboy persona by changing SYSTEM_PROMPT. What else in the assembled prompt changes?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, false, '6010fa53')"><strong>A)</strong> The BASE instructions adapt to match the new persona</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, true, '6010fa53')"><strong>B)</strong> Nothing; only your USER segment changes</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '6010fa53')"><strong>C)</strong> The SUFFIX is regenerated based on the persona</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, '6010fa53')"><strong>D)</strong> The tool schemas update to reflect the new persona&#39;s capabilities</div>
+    </div>
+    <div id="mcq-answer-6010fa53" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: B</strong> ✅</div>
+        <div class="mcq-explanation">Only your USER segment changes. Everything else stays put; BASE and SUFFIX are fixed. That single string is all you touched to redirect the agent's behavior.</div>
+    </div>
+</div>
 
 </div>
 

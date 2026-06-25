@@ -16,7 +16,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom-client.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
         /* LCA Blue hljs theme */
@@ -756,6 +756,16 @@ By convention, memory files live in a <code>memories/</code> directory and the m
 <div class="lt-panel" id="p-lab" role="tabpanel">
 <h2 id="lab-coding-assistant-with-memory">Lab: Coding Assistant with Memory</h2>
 <p>Both files are already in the repo: <code>python/m3/m3.3_memory_agent.py</code> and <code>python/m3/memories/AGENTS.md</code>. Open them to see how they're wired up, then run the agent directly. The first invoke answers a question using the file's content; the second triggers a memory write. You can also swap in your own <code>AGENTS.md</code> content, or use a coding agent to explore and extend the setup.</p>
+<div class="video-container" style="max-width: 750px;">
+    <div class="video-wrapper">
+        <iframe
+            src="https://share.descript.com/embed/0rmWKU64h0G"
+            frameborder="0"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
 <hr />
 <h3 id="run-it">Run it</h3>
 <pre><code class="language-bash">cd ~/Documents/Github/lca-deepagents/python &amp;&amp; uv run ./m3/m3.3_memory_agent.py
@@ -763,15 +773,16 @@ By convention, memory files live in a <code>memories/</code> directory and the m
 <p>After both invokes complete, open <code>python/m3/memories/AGENTS.md</code> and verify the ruff note was written in.</p>
 <hr />
 <h3 id="what-to-look-for-in-langsmith">What to look for in LangSmith</h3>
+<p>Both invokes run as a single LangGraph trace with two model calls. Open the trace in LangSmith.</p>
 <p><strong>Memory is always present:</strong></p>
-<p>Open the first run and expand the system message on the first LLM call. Scroll to the bottom. You will see an <code>[agent_memory]</code> block containing the raw content of <code>AGENTS.md</code>. This block is injected by <code>MemoryMiddleware</code> and appears on every call in every run.</p>
+<p>Click the first <code>ChatAnthropic</code> call → <strong>Input</strong> tab → expand the System message → scroll to the bottom. You will see an <code>[agent_memory]</code> block containing the raw content of <code>AGENTS.md</code>. This is what <code>MemoryMiddleware</code> injects on every LLM call, regardless of what the user asked.</p>
 <p><strong>The memory write:</strong></p>
-<p>In the second run, find the <code>edit_file</code> tool call. It will target <code>memories/AGENTS.md</code> and contain the updated content including the ruff note. That call is the moment the agent persists the new information.</p>
-<p>Open a third run using the same agent after the write and confirm the updated content appears in the <code>[agent_memory]</code> block.</p>
+<p>Scroll down to the second model call (the "remember ruff" turn). In the <strong>Output</strong> tab, the agent first calls <code>read_file</code> on <code>memories/AGENTS.md</code> to read the current content, then <code>edit_file</code> to write the updated version. The <code>edit_file</code> call is the moment the new information is persisted.</p>
 <div class="callout">
 <strong>Memory vs Skills in traces</strong><br>
 Memory content is visible in the system message of <em>every</em> LLM call in every run. Skills content only appears as a <code>read_file</code> tool call in the specific run where the skill was activated. If you see a large block in the system prompt that is always there, that is memory. If you see a <code>read_file</code> mid-run, that is a skill activation.
 </div>
+
 </div>
 <script>
 (function () {

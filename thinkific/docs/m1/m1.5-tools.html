@@ -16,7 +16,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom-client.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
         /* LCA Blue hljs theme */
@@ -832,12 +832,21 @@ def get_stock_price(ticker: str) -&gt; str:
     </div>
 </div>
 
-<MCQ
-    question="Why does Human-in-the-Loop require a checkpointer?"
-    choices='["To save graph state so execution can pause and resume from the same point after a human decision", "To log tool call arguments to a file for audit purposes", "To validate that the human\'s approval matches the tool schema", "To prevent the LLM from calling the tool more than once"]'
-    correctIndex={0}
-    explanation="When the HITL middleware intercepts a tool call via interrupt_on, the graph suspends and must save its current state so it can resume from exactly the same point once the human responds. A checkpointer handles that save-and-restore. Without one, the graph has no way to pause mid-run."
-/>
+<div class="mcq-container" id="mcq-d6845eff">
+    <div class="mcq-question">
+        <strong>Question:</strong> Why does Human-in-the-Loop require a checkpointer?
+    </div>
+    <div class="mcq-choices">
+        <div class="mcq-choice" onclick="handleMcqClick(this, true, 'd6845eff')"><strong>A)</strong> To save graph state so execution can pause and resume from the same point after a human decision</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'd6845eff')"><strong>B)</strong> To log tool call arguments to a file for audit purposes</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'd6845eff')"><strong>C)</strong> To validate that the human&#39;s approval matches the tool schema</div>
+<div class="mcq-choice" onclick="handleMcqClick(this, false, 'd6845eff')"><strong>D)</strong> To prevent the LLM from calling the tool more than once</div>
+    </div>
+    <div id="mcq-answer-d6845eff" class="mcq-answer" style="display: none;">
+        <div class="mcq-answer-header"><strong>Answer: A</strong> ✅</div>
+        <div class="mcq-explanation">When the HITL middleware intercepts a tool call via interrupt_on, the graph suspends and must save its current state so it can resume from exactly the same point once the human responds. A checkpointer handles that save-and-restore. Without one, the graph has no way to pause mid-run.</div>
+    </div>
+</div>
 
 <div class="mcq-container" id="mcq-bc218ad9">
     <div class="mcq-question">

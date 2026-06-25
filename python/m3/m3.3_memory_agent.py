@@ -31,6 +31,7 @@ backend = FilesystemBackend(root_dir=str(m3_dir), virtual_mode=True)
 
 agent = create_deep_agent(
     model=model,
+    name="Memory Agent",
     backend=backend,
     memory=["memories/AGENTS.md"],
     system_prompt="You are a helpful coding assistant for this project.",
