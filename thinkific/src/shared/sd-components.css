@@ -223,6 +223,9 @@ details.video-walkthrough {
 details.video-walkthrough > summary { color: #BE185D; }
 details[open].video-walkthrough > summary { border-bottom-color: #F4ABCD; }
 
+/* ── Tip box: remove bottom margin on last paragraph ── */
+.tip p:last-child { margin-bottom: 0; }
+
 /* ── Code-block copy button: always-visible icon, never overlapping the code ── */
 /* Extra top padding reserves a band for the button so the first line stays clear. */
 pre { padding-top: 2.85rem; }
