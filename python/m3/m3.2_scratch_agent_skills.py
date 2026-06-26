@@ -16,5 +16,5 @@ agent = create_deep_agent(
     system_prompt="You are a sales assistant.",
 )
 
-result = agent.invoke({"messages": [{"role": "user", "content": "Write a cold outreach message for a prospect at a mid-size logistics company"}]})
+result = agent.invoke({"messages": [{"role": "user", "content": "Qualify this lead: Acme Corp, they are considering our CRM product."}]})
 print(result["messages"][-1].content)
