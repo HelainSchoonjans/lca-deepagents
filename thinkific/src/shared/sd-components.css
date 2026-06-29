@@ -249,3 +249,27 @@ pre .copy-button-inline:hover {
   opacity: 1;
   background-color: rgba(127, 200, 255, 0.30);
 }
+
+/* ── Back to Top button ── */
+.back-to-top-btn {
+  display: block;
+  width: 100%;
+  margin: 52px 0 8px;
+  padding: 20px 24px;
+  background: #006DDD;
+  color: #F2FAFF;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, transform 0.1s;
+  text-align: center;
+}
+.back-to-top-btn:hover {
+  background: #0059b3;
+  transform: translateY(-2px);
+}
+.back-to-top-btn:active { transform: translateY(0); }

@@ -1,3 +1,33 @@
+// ── Back to Top button ───────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  var panel = document.querySelector('.lt-panel');
+  if (!panel) return;
+
+  var hasLab = false, hasQuiz = false;
+  document.querySelectorAll('.lt-tab').forEach(function (t) {
+    var p = t.getAttribute('data-p') || '';
+    if (p.startsWith('lab')) hasLab = true;
+    if (p === 'quiz') hasQuiz = true;
+  });
+
+  var label = '↑  Back to top';
+  if (hasLab && hasQuiz) label += ': Lab & Quiz';
+  else if (hasLab)       label += ': Lab';
+  else if (hasQuiz)      label += ': Quiz';
+
+  var btn = document.createElement('button');
+  btn.className = 'back-to-top-btn';
+  btn.textContent = label;
+  btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'instant' }); });
+
+  var refH2 = null;
+  panel.querySelectorAll('h2').forEach(function (h) {
+    if (h.textContent.trim() === 'References') refH2 = h;
+  });
+  if (refH2) panel.insertBefore(btn, refH2);
+  else panel.appendChild(btn);
+});
+
 // ── SVG fragment helpers ──────────────────────────────────────────────────────
 
 function solidArrow(x1, x2, y, lbl, lx, a, fs) {
