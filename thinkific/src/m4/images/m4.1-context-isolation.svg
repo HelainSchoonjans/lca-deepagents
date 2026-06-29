@@ -29,12 +29,12 @@
 
   <!-- arrows -->
   <line x1="290" y1="305" x2="468" y2="160" stroke="#7FC8FF" stroke-width="1.8"/>
-  <polygon points="463,154 470,159 462,164" fill="#7FC8FF"/>
-  <text x="372" y="222" text-anchor="middle" font-size="9" fill="#7FC8FF" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">1 task message</text>
+  <polygon points="468,160 457,162 463,170" fill="#7FC8FF"/>
+  <text x="370" y="221" text-anchor="middle" font-size="9" fill="#7FC8FF" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" transform="rotate(-39, 370, 221)">1 task message</text>
 
-  <line x1="468" y1="200" x2="290" y2="329" stroke="#99D3FF" stroke-width="1.8" stroke-dasharray="5 3"/>
-  <polygon points="296,323 288,328 297,333" fill="#99D3FF"/>
-  <text x="372" y="280" text-anchor="middle" font-size="9" fill="#99D3FF" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">1 result back</text>
+  <line x1="468" y1="184" x2="290" y2="329" stroke="#99D3FF" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <polygon points="290,329 295,319 301,327" fill="#99D3FF"/>
+  <text x="392" y="272" text-anchor="middle" font-size="9" fill="#99D3FF" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" transform="rotate(-39, 392, 272)">1 result back</text>
 
   <!-- SUBAGENT (own small context + own tools) -->
   <rect x="470" y="118" width="232" height="200" rx="10" fill="#0D1322" stroke="#7FC8FF" stroke-width="1.5"/>
