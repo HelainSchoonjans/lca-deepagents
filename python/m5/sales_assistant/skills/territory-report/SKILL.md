@@ -22,7 +22,8 @@ to combine results.
 
 ## 2. Write the report
 
-- `write_file` a clear Markdown report to `/outputs/territory_report.md`:
+- Use the code interpreter to get today's date: `new Date().toISOString().slice(0, 10)`.
+- `write_file` a clear Markdown report to `/outputs/territory_report-<date>.md`:
   headline totals, a top-customers list, and a revenue-by-genre table.
 
 ## 3. Chart (optional)

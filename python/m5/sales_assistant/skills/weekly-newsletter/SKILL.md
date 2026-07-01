@@ -31,7 +31,8 @@ A parallel-research task. Coordinate; let the researchers do the digging.
 ## 4. Render and save
 
 - Call `markdown_to_html` on the assembled Markdown.
-- `write_file` the returned HTML to `/outputs/newsletter.html`.
+- Use the code interpreter to get today's date: `new Date().toISOString().slice(0, 10)`.
+- `write_file` the returned HTML to `/outputs/newsletter-<date>.html`.
 
 ## Done
 

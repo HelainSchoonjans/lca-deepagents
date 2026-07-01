@@ -14,6 +14,7 @@ assistant still works, it just doesn't draw a picture.
 from __future__ import annotations
 
 import json
+import uuid
 from pathlib import Path
 
 from langchain_core.tools import tool
@@ -38,8 +39,6 @@ def render_chart(
     if len(labels) != len(values) or not labels:
         return json.dumps({"error": "labels and values must be non-empty and equal length."})
 
-    # Imported lazily so the rest of the assistant doesn't depend on the
-    # sandbox SDK being importable.
     try:
         from deepagents.backends.langsmith import LangSmithSandbox  # noqa: F401
         from langsmith.sandbox import SandboxClient
@@ -54,12 +53,21 @@ def render_chart(
         chart_type=json.dumps(chart_type),
     )
 
+    def _run(sandbox, cmd: str) -> None:
+        result = sandbox.run(cmd)
+        if result.exit_code != 0:
+            raise RuntimeError(
+                f"Command failed (exit {result.exit_code}): {cmd}\n"
+                f"stdout: {result.stdout}\nstderr: {result.stderr}"
+            )
+
+    sandbox_name = f"lca-chart-{uuid.uuid4().hex[:8]}"
     client = SandboxClient()
-    sandbox = client.create_sandbox(name="lca-territory-chart")
+    sandbox = client.create_sandbox(name=sandbox_name)
     try:
-        sandbox.run("pip install matplotlib -q")
+        _run(sandbox, "pip3 install matplotlib --break-system-packages")
         sandbox.write("/render_chart.py", script.encode("utf-8"))
-        sandbox.run("python /render_chart.py")
+        _run(sandbox, "python3 /render_chart.py")
         png = sandbox.read("/chart.png")
         _OUTPUTS.mkdir(exist_ok=True)
         out_path = _OUTPUTS / safe_name
