@@ -51,8 +51,8 @@ def render_chart(
         chart_type=json.dumps(chart_type),
     )
 
-    def _run(sandbox, cmd: str) -> None:
-        result = sandbox.run(cmd)
+    def _run(sandbox, cmd: str, timeout: int = 60) -> None:
+        result = sandbox.run(cmd, timeout=timeout)
         if result.exit_code != 0:
             raise RuntimeError(
                 f"Command failed (exit {result.exit_code}): {cmd}\n"
@@ -63,7 +63,7 @@ def render_chart(
     client = SandboxClient()
     sandbox = client.create_sandbox(name=sandbox_name)
     try:
-        _run(sandbox, "python3 -c 'import matplotlib' 2>/dev/null || pip3 install matplotlib --break-system-packages")
+        _run(sandbox, "pip3 install matplotlib --break-system-packages", timeout=180)
         sandbox.write("/render_chart.py", script.encode("utf-8"))
         _run(sandbox, "python3 /render_chart.py")
         png = sandbox.read("/chart.png")
