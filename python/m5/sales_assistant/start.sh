@@ -35,17 +35,4 @@ done
 echo "Mail server up (PID $MAIL_PID). Starting langgraph dev ..."
 cd "$SCRIPT_DIR"
 
-if [ -z "$ENABLE_SANDBOX" ]; then
-    ENABLE_SANDBOX=$(uv run python -c "
-import os; from dotenv import load_dotenv; load_dotenv()
-print(os.environ.get('ENABLE_SANDBOX', ''))
-" 2>/dev/null)
-fi
-
-if [ -n "$ENABLE_SANDBOX" ]; then
-    echo "ENABLE_SANDBOX set — using sandbox agent (langgraph_sandbox.json)"
-    uv run langgraph dev --config langgraph_sandbox.json
-else
-    echo "No sandbox — using standard agent (langgraph.json)"
-    uv run langgraph dev
-fi
+uv run langgraph dev
