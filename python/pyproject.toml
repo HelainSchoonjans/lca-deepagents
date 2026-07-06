@@ -28,6 +28,7 @@ dependencies = [
     "tavily-python",
     "markdown",
     "nh3",
+    "matplotlib>=3.11.0",
 ]
 
 [tool.ruff]

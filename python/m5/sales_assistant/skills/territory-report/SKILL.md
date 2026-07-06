@@ -1,12 +1,12 @@
 ---
 name: territory-report
-description: "Build a report on the rep's sales territory — revenue, top customers, top genres, and trends for Jane's book of business — with an optional chart. Use when asked for a territory report, sales summary, performance numbers, or 'how is my book doing'."
+description: "Build a report on the rep's sales territory — revenue, top customers, top genres, and trends for Jane's book of business — with a chart. Use when asked for a territory report, sales summary, performance numbers, or 'how is my book doing'."
 ---
 
 # Territory Report
 
-A metrics task. The numbers always come from the database; the chart is
-optional.
+A metrics task. The numbers come from the database; the chart is rendered
+from them.
 
 ## 1. Gather the metrics
 
@@ -26,16 +26,12 @@ to combine results.
 - `write_file` a clear Markdown report to `/outputs/territory_report-<date>.md`:
   headline totals, a top-customers list, and a revenue-by-genre table.
 
-## 3. Chart (optional)
+## 3. Chart
 
-- **If `retrieve_output` is available** (sandbox mode): use `execute_code` to
-  generate a matplotlib pie chart of revenue by genre, save it to
-  `/retrieve/territory_chart.png`, then call `retrieve_output` to copy it
-  locally. Reference the image in the report.
-- **Otherwise**, skip the image — the Markdown report is the deliverable.
-  Note in the report that charting is not available in this environment.
+Call `render_pie_chart` with the revenue-by-genre labels and values, saved as
+`territory_chart.png`. Reference the image in the report.
 
 ## Done
 
-Tell Jane where the report (and chart, if any) was saved, with the headline
-revenue number.
+Tell Jane where the report and chart were saved, with the headline revenue
+number.

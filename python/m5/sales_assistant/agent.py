@@ -1,11 +1,11 @@
-# python/m5/sales_assistant/agent_no_sandbox.py
-"""Chinook Sales Assistant — no-sandbox variant.
+# python/m5/sales_assistant/agent.py
+"""Chinook Sales Assistant.
 
-Uses a local FilesystemBackend and QuickJS code interpreter. No LangSmith
-sandbox required. Charts are not available in this configuration.
+Uses a local FilesystemBackend, a QuickJS code interpreter for arithmetic
+and data prep, and a dedicated chart tool for rendering.
 
 Start with:
-    ./start_no_sandbox.sh
+    ./start.sh
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ from deepagents.backends import FilesystemBackend
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_quickjs import CodeInterpreterMiddleware
 from subagents import build_subagents
+from tools.chart import render_pie_chart
 from tools.html import markdown_to_html
 
 from models import strong_model
@@ -47,7 +48,7 @@ async def make_graph():
     mail_tools = await client.get_tools()
     return create_deep_agent(
         model=strong_model,
-        tools=[markdown_to_html] + mail_tools,
+        tools=[markdown_to_html, render_pie_chart] + mail_tools,
         system_prompt=SYSTEM_PROMPT,
         subagents=build_subagents(_backend, enable_search=_enable_search, mail_tools=mail_tools),
         skills=["/skills"],
