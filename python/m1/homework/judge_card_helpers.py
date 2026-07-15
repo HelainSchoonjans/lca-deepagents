@@ -194,16 +194,29 @@ def render_result_card(
 # bars). Add an entry for your own persona if you want a distinct theme:
 # PERSONA_STYLES["your_persona_name"] = {...}.
 PERSONA_STYLES: dict[str, dict] = {
-    "JUDGE-9000": {
-        "color": "\033[95m",  # bright magenta/purple
+    "Captain Hardcode": {
+        "mascot": "\n".join([
+            ' .------.',
+            "|▒▒▒▒▒▒▒▒|",
+            "|▒ x  x ▒|",
+            "|▒▒▒▒▒▒▒▒|",
+            "|▒▒ XX ▒▒|",
+            "|▒▒▒▒▒▒▒▒|",
+            " '------'",
+            "    ||",
+            "    ||",
+        ]),
+        "color": "\033[96m",  # bright cyan
     },
     "Nefer-Ka": {
         "mascot": "\n".join([
             ' .-""""-.',
+            "|        |",
             "|▒▒▒▒▒▒▒▒|",
-            "|X      X|",
+            "| X    X |",
             "|▒▒▒▒▒▒▒▒|",
             "|▒▒▒▒▒▒▒▒|",
+            "|        |",
             "       ||",
             "       ||",
             "        '",
@@ -302,7 +315,7 @@ def run_judge(
                 else:
                     print(f"  {key}: {value}")
             choice = input("Approve, edit, or reject? (approve/edit/reject): ").strip().lower()
-            if choice in ("approve", "yes", "y"):
+            if choice in ("approve", "accept", "yes", "y"):
                 decisions.append({"type": "approve"})
             elif choice in ("edit", "e"):
                 edited_args = dict(req["args"])
