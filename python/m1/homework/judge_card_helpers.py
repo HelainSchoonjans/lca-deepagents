@@ -402,15 +402,21 @@ def run_judge(
                             print(f"{indent}{line}")
                     else:
                         print(f"  {key}: {value}")
-            choice = input("Approve, edit, or reject? (approve/edit/reject): ").strip().lower()
-            if choice in ("approve", "accept", "yes", "y"):
-                decisions.append({"type": "approve"})
-            elif choice in ("edit", "e"):
-                edited_args = dict(req["args"])
-                edited_args["caption"] = input("New caption: ")
-                decisions.append({"type": "edit", "edited_action": {"name": req["name"], "args": edited_args}})
-            else:
-                decisions.append({"type": "reject", "message": "User rejected this card before it posted."})
+            while True:
+                choice = input("Approve, edit, or reject? (approve/edit/reject): ").strip().lower()
+                if choice in ("approve", "accept", "yes", "y"):
+                    decisions.append({"type": "approve"})
+                    break
+                elif choice in ("edit", "e"):
+                    edited_args = dict(req["args"])
+                    edited_args["caption"] = input("New caption: ")
+                    decisions.append({"type": "edit", "edited_action": {"name": req["name"], "args": edited_args}})
+                    break
+                elif choice in ("reject", "r", "no", "n"):
+                    decisions.append({"type": "reject", "message": "User rejected this card before it posted."})
+                    break
+                else:
+                    print("  Please type approve, edit, or reject.")
         result = agent.invoke(Command(resume={"decisions": decisions}), config=config, version="v2")
 
     print_boxed(judge_name, result.value["messages"][-1].content)
