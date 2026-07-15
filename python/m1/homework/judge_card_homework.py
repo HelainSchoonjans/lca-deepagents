@@ -204,9 +204,11 @@ def score_and_match(answers: list[tuple[int, int, int]]) -> dict:
 #   3. Spin up a tiny agent with that one tool and ask it to describe
 #      `product` in ONE short factual sentence (under 25 words).
 #   4. Return that sentence, stripped of extra whitespace.
-# Wrap the async call with asyncio.run(...) since this tool itself must
-# stay synchronous. On any failure (no network, tool error), fall back to
-# PLACEHOLDER_FACT so the homework stays runnable either way.
+# This tool itself must stay synchronous, so put the MCP/agent calls in a
+# separate `async def` helper (same shape as m1.6's `async def main(): ...`)
+# and call that helper with asyncio.run(...) from inside fetch_product_fact.
+# On any failure (no network, tool error), fall back to PLACEHOLDER_FACT so
+# the homework stays runnable either way.
 # ════════════════════════════════════════════════════════════════════════
 
 # No login, API key, or account needed here - docs.langchain.com/mcp is a
@@ -229,9 +231,6 @@ def fetch_product_fact(product: str) -> str:
 # Add another persona key here (try "ancient_mummy" or "savage_critic",
 # already written above) so it runs in its own thread. You'll get multiple
 # cards to compare side by side, judging the same quiz answers.
-# TODO 5 (Lesson 1.8, Human-in-the-Loop: Decision Types)
-# Set interrupt_on in the run_judge() call below so post_card requires
-# approval before anything "publishes."
 # ════════════════════════════════════════════════════════════════════════
 
 JUDGES_TO_RUN = ["your_persona"]  # TODO 4: e.g. ["your_persona", "ancient_mummy"]
@@ -257,6 +256,6 @@ if __name__ == "__main__":
             user_prompt=user_prompt,
             tools=[score_and_match, fetch_product_fact, render_card, post_card],
             model=model,  # TODO 6 (Lesson 1.3, Models, optional): from models import strong_model and try it here
-            interrupt_on=None,  # TODO 5: gate post_card, e.g. {"post_card": True}
+            interrupt_on=None,  # TODO 5 (Lesson 1.8, Human-in-the-Loop: Decision Types): gate post_card, e.g. {"post_card": True}
         )
     print(f"\nCards saved to {OUTPUT_DIR}/")
