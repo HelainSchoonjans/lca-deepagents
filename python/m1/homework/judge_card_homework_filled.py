@@ -11,50 +11,17 @@ from langchain_core.tools import tool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
 from deepagents import create_deep_agent
-from judge_card_helpers import OUTPUT_DIR, TRAIT_AXES, PRODUCT_MATCHES, post_card, render_card, run_judge, run_quiz
+from judge_card_helpers import (
+    OUTPUT_DIR,
+    TRAIT_AXES,
+    PRODUCT_MATCHES,
+    TOOL_SEQUENCE,
+    post_card,
+    render_card,
+    run_judge,
+    run_quiz,
+)
 from models import model
-
-TOOL_SEQUENCE = """
-This is a single-shot judgment call: you will not get a reply if you ask a
-question, and refusing or asking for more information is not an option.
-Always call the matched product by the exact name score_and_match
-returned (e.g. "Fleet") - never an older or alternate name for it (e.g.
-"Agent Builder"), even if you recall one from your own knowledge. Never
-use an em dash (—) or a hyphen used as a standalone connector (" - ")
-anywhere in your verdict or caption text. Use only a comma, a period, a
-colon, or a semicolon to join clauses instead.
-These steps are a strict dependency chain, not independent work you can
-parallelize: each one needs the previous one's actual result (the fact,
-the trait_scores, the render_card success) before it can run. Call
-exactly one of these tools per turn and wait for its result before
-calling the next one - never call two of them in the same response, even
-if you're confident you already know what the next call's arguments
-will be.
-1. Call score_and_match with the quiz answers list you were given, exactly
-   as given.
-2. Call fetch_product_fact with the product name score_and_match returned.
-3. Decide a "builder (developer) type" headline and a one-line verdict in
-   your voice, using the trait_scores and the fact you just got. Open the
-   verdict by naming the matched product directly (e.g. "Fleet is your
-   match" or, in a pirate's voice, "Ye've earned Fleet, matey"), then
-   explain why in one clause grounded in the fact you fetched - don't
-   bury the product in a dependent clause at the end.
-4. Call render_card with your builder_type, your judge_name, your verdict,
-   the trait_scores, and the product.
-5. Once that succeeds, call post_card with a one-line caption. Unlike
-   your verdict, write this one in plain, casual, polished modern
-   English, not your persona's voice - the way you'd actually post it
-   yourself. It should read like a real completion announcement: you
-   just finished Module 1 of LangChain's Deep Agents course, built this
-   homework, and got named your builder_type. Name the product
-   score_and_match matched you with explicitly and plainly (e.g.
-   "assigned: Fleet"), then give one concrete reason it fits, not a
-   vague invented tagline about what the product does. E.g. "Just
-   finished Module 1 of LangChain's Deep Agents course and built a quiz
-   that judges your dev habits. Got named The Pragmatic Orchestrator and
-   assigned Fleet, no-code agents with built-in approvals. Feels about
-   right."
-"""
 
 # TODO 1 filled in: three shipped personas, plus "your_persona" (here,
 # Pixel: the exact opposite energy of the other three).
