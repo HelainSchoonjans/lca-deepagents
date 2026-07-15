@@ -184,6 +184,7 @@ def render_result_card(
         if i < len(bar_lines) - 1:
             bar_block.append(separator)
 
+    verdict = re.sub(r"\s*—\s*", " - ", verdict)
     wrapped = textwrap.wrap(verdict, width=44) or [""]
     wrapped[0] = f'"{wrapped[0]}'
     wrapped[-1] = f'{wrapped[-1]}"'
@@ -267,7 +268,7 @@ def print_boxed(label: str, text: str, width: int = 56) -> None:
     a blank line between) so a long reply reads as short lines instead of
     one dense paragraph. Used for the agent's own replies (e.g. the final
     wrap-up, or its follow-up if you reject a card)."""
-    text = text.replace("**", "")
+    text = re.sub(r"\s*—\s*", " - ", text.replace("**", ""))
     sentences = [s for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s]
     body: list[str] = []
     for sentence in sentences:
@@ -294,6 +295,7 @@ def render_mock_post(caption: str, *, posted: bool) -> str:
     the HITL approval prompt, before you've decided) or a "Posted" card
     (shown after post_card actually runs). Returns the plain text too."""
     width = 46
+    caption = re.sub(r"\s*—\s*", " - ", caption)
     wrapped = textwrap.wrap(caption, width=width - 2) or [""]
     lines = [
         "┌" + "─" * width + "┐",
